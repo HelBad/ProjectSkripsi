@@ -37,10 +37,10 @@
             android:minHeight="?attr/actionBarSize"
             app:title="Daftar Menu" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/gambarUtama"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_below="@id/toolbarUtama"
             android:layout_marginBottom="10dp" />
     </RelativeLayout>
