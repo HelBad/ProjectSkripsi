@@ -6,84 +6,54 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import java.lang.Math.abs
+import com.example.projectskripsi.adapter.SliderAdapter
+import com.example.projectskripsi.adapter.SliderItem
+import com.example.projectskripsi.fragment.FragmentBeranda
+import com.example.projectskripsi.fragment.FragmentPesanan
+import com.example.projectskripsi.fragment.FragmentProfil
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ActivityUtama : AppCompatActivity() {
-    lateinit var actionBar: Toolbar
     lateinit var alertDialog: AlertDialog.Builder
-    private lateinit var viewPager2: ViewPager2
-    private val sliderHandler = Handler()
+    lateinit var bottomNav: BottomNavigationView
+
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when(item.itemId) {
+            R.id.beranda -> {
+                replaceFragment(FragmentBeranda())
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.pesanan -> {
+                replaceFragment(FragmentPesanan())
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.akun -> {
+                replaceFragment(FragmentProfil())
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_utama)
 
-        actionBar = findViewById(R.id.toolbarUtama)
-        (this as AppCompatActivity).setSupportActionBar(actionBar)
+        bottomNav = findViewById(R.id.bottomNav)
         alertDialog = AlertDialog.Builder(this)
-
-        viewPager2 = findViewById(R.id.gambarUtama)
-        val sliderItems: MutableList<SliderItem> = ArrayList()
-        sliderItems.add(SliderItem(R.drawable.sampel))
-        sliderItems.add(SliderItem(R.drawable.sampel))
-        sliderItems.add(SliderItem(R.drawable.sampel))
-        viewPager2.adapter = SliderAdapter(sliderItems, viewPager2)
-//        viewPager2.clipToPadding = false
-//        viewPager2.clipChildren = false
-//        viewPager2.offscreenPageLimit = 3
-//        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-//        val compositePageTransformer = CompositePageTransformer()
-//        compositePageTransformer.addTransformer(MarginPageTransformer(30))
-//        compositePageTransformer.addTransformer { page, position ->
-//            val r = 1 - abs(position)
-//            page.scaleY = 0.85f + r * 0.25f
-//        }
-//        viewPager2.setPageTransformer(compositePageTransformer)
-        viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                sliderHandler.removeCallbacks(sliderRunnable)
-                sliderHandler.postDelayed(sliderRunnable, 3000)
-            }
-        })
+        bottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        replaceFragment(FragmentBeranda())
     }
 
-    private val sliderRunnable = Runnable {
-        viewPager2.currentItem = viewPager2.currentItem + 1
-    }
-//    override fun onPause() {
-//        super.onPause()
-//        sliderHandler.postDelayed(sliderRunnable, 3000)
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        sliderHandler.postDelayed(sliderRunnable, 3000)
-//    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_utama, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.aksiProfil) {
-            val intent = Intent(this, ActivityProfil::class.java)
-            startActivity(intent)
-            finish()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentTransition = supportFragmentManager.beginTransaction()
+        fragmentTransition.replace(R.id.fragmentContainer, fragment)
+        fragmentTransition.commit()
     }
 
     override fun onBackPressed() {

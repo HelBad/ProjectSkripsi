@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.adapter
 
 class SliderItem internal constructor(
     val image: Int

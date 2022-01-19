@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFFF6333</color>
-    <color name="colorPrimaryDark">#FFFF511A</color>
-    <color name="colorAccent">#FFD81B60</color>
+<!--    <color name="colorPrimary">#FFFF6333</color>-->
+<!--    <color name="colorPrimaryDark">#FFFF511A</color>-->
+<!--    <color name="colorAccent">#FFD81B60</color>-->
+    <color name="colorPrimary">#FF239D58</color>
+    <color name="colorPrimaryDark">#FF22844D</color>
+    <color name="colorAccent">#FFFF6333</color>
 
     <color name="gray">#FF5B5B5B</color>
-    <color name="primaryTransparent">#92FF6333</color>
+<!--    <color name="primaryTransparent">#92FF6333</color>-->
+    <color name="primaryTransparent">#92239D58</color>
     <color name="whiteTransparent">#92FFFFFF</color>
-    <color name="warnaNutrisi1">#9FDAB0</color>
-    <color name="warnaNutrisi2">#F76FFC</color>
-    <color name="warnaNutrisi3">#FEEAB0</color>
-    <color name="warnaNutrisi4">#21A7CC</color>
+    <color name="warnaNutrisi1">#FF9FDAB0</color>
+    <color name="warnaNutrisi2">#FFF76FFC</color>
+    <color name="warnaNutrisi3">#FFFEEAB0</color>
+    <color name="warnaNutrisi4">#FF21A7CC</color>
 </resources>

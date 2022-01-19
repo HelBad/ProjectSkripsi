@@ -12,10 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ActivityProfil"
-            android:exported="false" />
-        <activity
-            android:name=".ActivityPesanan"
+            android:name=".ActivityCheckout"
             android:exported="false" />
         <activity
             android:name=".ActivityUtama"

@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.projectskripsi.R
 
 class SliderAdapter internal constructor(
     sliderItems: MutableList<SliderItem>, viewPager2: ViewPager2): RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
