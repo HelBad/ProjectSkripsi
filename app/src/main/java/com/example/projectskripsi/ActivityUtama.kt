@@ -32,7 +32,7 @@ class ActivityUtama : AppCompatActivity() {
                 replaceFragment(FragmentPesanan())
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.akun -> {
+            R.id.profil -> {
                 replaceFragment(FragmentProfil())
                 return@OnNavigationItemSelectedListener true
             }

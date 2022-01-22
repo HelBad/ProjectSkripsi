@@ -5,19 +5,23 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.projectskripsi.ActivityDetail
 import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.SliderAdapter
 import com.example.projectskripsi.adapter.SliderItem
+import com.example.projectskripsi.model.Menu
+import com.example.projectskripsi.adapter.ViewholderBeranda
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.google.firebase.database.FirebaseDatabase
 
 class FragmentBeranda : Fragment() {
-    lateinit var actionBar: Toolbar
-    lateinit var alertDialog: AlertDialog.Builder
-    private lateinit var viewPager2: ViewPager2
+    lateinit var viewPager2: ViewPager2
     private val sliderHandler = Handler()
+    lateinit var mLayoutManager: LinearLayoutManager
+    lateinit var mRecyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_beranda, container, false)
@@ -26,27 +30,12 @@ class FragmentBeranda : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        actionBar = requireActivity().findViewById(R.id.toolbarUtama)
-        (activity as AppCompatActivity).setSupportActionBar(actionBar)
-        alertDialog = AlertDialog.Builder(requireActivity())
-
         viewPager2 = requireActivity().findViewById(R.id.gambarUtama)
         val sliderItems: MutableList<SliderItem> = ArrayList()
         sliderItems.add(SliderItem(R.drawable.sampel))
         sliderItems.add(SliderItem(R.drawable.sampel))
         sliderItems.add(SliderItem(R.drawable.sampel))
         viewPager2.adapter = SliderAdapter(sliderItems, viewPager2)
-//        viewPager2.clipToPadding = false
-//        viewPager2.clipChildren = false
-//        viewPager2.offscreenPageLimit = 3
-//        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-//        val compositePageTransformer = CompositePageTransformer()
-//        compositePageTransformer.addTransformer(MarginPageTransformer(30))
-//        compositePageTransformer.addTransformer { page, position ->
-//            val r = 1 - abs(position)
-//            page.scaleY = 0.85f + r * 0.25f
-//        }
-//        viewPager2.setPageTransformer(compositePageTransformer)
         viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -54,18 +43,42 @@ class FragmentBeranda : Fragment() {
                 sliderHandler.postDelayed(sliderRunnable, 3000)
             }
         })
+
+        mLayoutManager = LinearLayoutManager(requireActivity())
+        mRecyclerView = requireView().findViewById(R.id.recyclerBeranda)
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.layoutManager = mLayoutManager
     }
 
     private val sliderRunnable = Runnable {
         viewPager2.currentItem = viewPager2.currentItem + 1
     }
-//    override fun onPause() {
-//        super.onPause()
-//        sliderHandler.postDelayed(sliderRunnable, 3000)
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        sliderHandler.postDelayed(sliderRunnable, 3000)
-//    }
+
+    override fun onStart() {
+        super.onStart()
+        val query = FirebaseDatabase.getInstance().getReference("menu")
+        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Menu, ViewholderBeranda>(
+            Menu::class.java,
+            R.layout.menu_listmenu,
+            ViewholderBeranda::class.java,
+            query
+        ) {
+            override fun populateViewHolder(viewHolder: ViewholderBeranda, model: Menu, position:Int) {
+                viewHolder.setDetails(model)
+            }
+            override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewholderBeranda {
+                val viewHolder = super.onCreateViewHolder(parent, viewType)
+                viewHolder.setOnClickListener(object: ViewholderBeranda.ClickListener {
+                    override fun onItemClick(view:View, position:Int) {
+                        val intent = Intent(view.context, ActivityDetail::class.java)
+                        intent.putExtra("id_menu", viewHolder.menu.id_menu)
+                        startActivity(intent)
+                    }
+                    override fun onItemLongClick(view:View, position:Int) {}
+                })
+                return viewHolder
+            }
+        }
+        mRecyclerView.adapter = firebaseRecyclerAdapter
+    }
 }

@@ -11,7 +11,7 @@
         android:icon="@drawable/nav_pesanan" />
 
     <item
-            android:id="@+id/akun"
-            android:title="Akun"
+            android:id="@+id/profil"
+            android:title="Profil"
             android:icon="@drawable/nav_profil" />
 </menu>

@@ -11,9 +11,9 @@ class User {
     lateinit var telp: String
     lateinit var level: String
 
-    constructor(){}
+    constructor() {}
     constructor(id_user:String, nama:String, email:String, password:String, tgl_lahir:String, gender:String,
-                alamat:String, telp: String, level: String){
+                alamat:String, telp: String, level: String) {
         this.id_user = id_user
         this.nama = nama
         this.email = email

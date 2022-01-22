@@ -3,52 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.FragmentBeranda">
     <RelativeLayout
-        android:id="@+id/layoutToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/dec_gradasi"/>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarBeranda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/dec_gradasi">
-        <ImageView
-            android:id="@+id/circle1"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="-30dp"
-            android:layout_marginRight="-80dp"
-            android:background="@drawable/dec_circle"
-            android:backgroundTint="@android:color/white"/>
+        android:background="@android:color/transparent"
+        android:minHeight="?attr/actionBarSize">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Daftar Menu"
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
+    </androidx.appcompat.widget.Toolbar>
 
-        <ImageView
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginTop="-50dp"
-            android:layout_marginRight="-50dp"
-            android:layout_toLeftOf="@+id/circle1"
-            android:background="@drawable/dec_circle_trans"
-            android:backgroundTint="@color/whiteTransparent"/>
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarUtama"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:minHeight="?attr/actionBarSize"
-            app:title="Daftar Menu" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/gambarUtama"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@id/toolbarUtama"
-            android:layout_marginBottom="10dp" />
-    </RelativeLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/gambarUtama"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/toolbarBeranda"
+        android:layout_marginBottom="5dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listPromo"
+        android:id="@+id/recyclerBeranda"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layoutToolbar"
+        android:layout_height="match_parent"
+        android:layout_below="@id/gambarUtama"
         android:layout_marginBottom="10dp" />
 </RelativeLayout>
