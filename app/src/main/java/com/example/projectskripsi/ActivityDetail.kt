@@ -123,21 +123,21 @@ class ActivityDetail : AppCompatActivity() {
         ref.child(id_user).child(id_keranjang).setValue(addData)
     }
 
-    fun cekData() {
+    private fun cekData() {
         FirebaseDatabase.getInstance().getReference("keranjang").child(SP.getString("id_user", "").toString())
             .orderByChild("id_menu").equalTo(id_menu)
-            .addValueEventListener( object : ValueEventListener{
+            .addValueEventListener( object : ValueEventListener {
                 override fun onDataChange(datasnapshot: DataSnapshot) {
                     if(datasnapshot.exists()) {
-                        for (snapshot1 in datasnapshot.children){
+                        for (snapshot1 in datasnapshot.children) {
                             val allocation = snapshot1.getValue(Keranjang::class.java)
-                            if(allocation!!.id_keranjang.isNotEmpty()){
+                            if(allocation!!.id_keranjang.isNotEmpty()) {
                                 jumlahDetail.text = Editable.Factory.getInstance().newEditable(allocation.jumlah)
                             }
                         }
                     }
                 }
-                override fun onCancelled(p0: DatabaseError) { }
+                override fun onCancelled(databaseError: DatabaseError) { }
             })
     }
 }
