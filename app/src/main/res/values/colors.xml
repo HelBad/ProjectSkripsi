@@ -12,7 +12,10 @@
     <color name="primaryTransparent">#92239D58</color>
     <color name="whiteTransparent">#92FFFFFF</color>
     <color name="warnaNutrisi1">#FF9FDAB0</color>
-    <color name="warnaNutrisi2">#FFF76FFC</color>
+    <color name="warnaNutrisi2">#FFFF99CC</color>
     <color name="warnaNutrisi3">#FFFEEAB0</color>
-    <color name="warnaNutrisi4">#FF21A7CC</color>
+    <color name="warnaNutrisi4">#FF99CCFF</color>
+    <color name="warnaNutrisi5">#FFCC99FF</color>
+    <color name="warnaNutrisi6">#FFF9966B</color>
+
 </resources>
