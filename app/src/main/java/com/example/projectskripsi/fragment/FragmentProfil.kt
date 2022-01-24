@@ -169,7 +169,7 @@ class FragmentProfil : Fragment() {
         val updateData = User(id_user, profilNama.text.toString(), profilEmail.text.toString(),
             profilPassword.text.toString(), profilTanggal.text.toString(), profilGender.text.toString(),
             profilAlamat.text.toString(), profilTelp.text.toString(),
-            SP.getString("role", "").toString())
+            SP.getString("level", "").toString())
         val ref = FirebaseDatabase.getInstance().getReference("user")
         ref.child(id_user).setValue(updateData).addOnSuccessListener {
             val editor = SP.edit()

@@ -36,9 +36,10 @@ class ActivityDetail : AppCompatActivity() {
     lateinit var databaseDetail: DatabaseReference
     lateinit var SP: SharedPreferences
     var formatNumber: NumberFormat = DecimalFormat("#,###")
-    var count = 0
-    var id_menu = ""
+    var countJumlah = 0
     var id_keranjang = ""
+    var id_menu = ""
+    var statusKeranjang = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,22 +62,22 @@ class ActivityDetail : AppCompatActivity() {
 
         btnPesan.visibility = View.INVISIBLE
         tambahDetail.setOnClickListener {
-            count = jumlahDetail.text.toString().toInt()
-            count++
-            jumlahDetail.setText(count.toString())
+            countJumlah = jumlahDetail.text.toString().toInt()
+            countJumlah++
+            jumlahDetail.setText(countJumlah.toString())
             btnPesan.visibility = View.VISIBLE
         }
         kurangDetail.setOnClickListener {
             if (jumlahDetail.text.toString() == "0") {
             } else if (jumlahDetail.text.toString() == "1") {
-                count = jumlahDetail.text.toString().toInt()
-                count--
-                jumlahDetail.setText(count.toString())
+                countJumlah = jumlahDetail.text.toString().toInt()
+                countJumlah--
+                jumlahDetail.setText(countJumlah.toString())
                 btnPesan.visibility = View.INVISIBLE
             } else {
-                count = jumlahDetail.text.toString().toInt()
-                count--
-                jumlahDetail.setText(count.toString())
+                countJumlah = jumlahDetail.text.toString().toInt()
+                countJumlah--
+                jumlahDetail.setText(countJumlah.toString())
                 btnPesan.visibility = View.VISIBLE
             }
         }
@@ -117,22 +118,28 @@ class ActivityDetail : AppCompatActivity() {
     private fun buatPesanan() {
         val id_user = SP.getString("id_user", "").toString().trim()
         val ref = FirebaseDatabase.getInstance().getReference("keranjang")
-        id_keranjang  = ref.push().key.toString()
 
-        val addData = Keranjang(id_keranjang, id_user, id_menu, jumlahDetail.text.toString())
-        ref.child(id_user).child(id_keranjang).setValue(addData)
+        if(statusKeranjang == "ada") {
+            val jumlah = jumlahDetail.text.toString()
+            ref.child(id_user).child(id_keranjang).child("jumlah").setValue(jumlah)
+        } else {
+            id_keranjang  = ref.push().key.toString()
+            val addData = Keranjang(id_keranjang, id_user, id_menu, jumlahDetail.text.toString())
+            ref.child(id_user).child(id_keranjang).setValue(addData)
+        }
     }
 
     private fun cekData() {
         FirebaseDatabase.getInstance().getReference("keranjang").child(SP.getString("id_user", "").toString())
-            .orderByChild("id_menu").equalTo(id_menu)
-            .addValueEventListener( object : ValueEventListener {
+            .orderByChild("id_menu").equalTo(id_menu).addValueEventListener( object : ValueEventListener {
                 override fun onDataChange(datasnapshot: DataSnapshot) {
                     if(datasnapshot.exists()) {
                         for (snapshot1 in datasnapshot.children) {
                             val allocation = snapshot1.getValue(Keranjang::class.java)
                             if(allocation!!.id_keranjang.isNotEmpty()) {
                                 jumlahDetail.text = Editable.Factory.getInstance().newEditable(allocation.jumlah)
+                                id_keranjang = allocation.id_keranjang
+                                statusKeranjang = "ada"
                             }
                         }
                     }

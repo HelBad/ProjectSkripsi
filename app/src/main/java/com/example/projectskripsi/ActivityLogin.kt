@@ -77,7 +77,7 @@ class ActivityLogin : AppCompatActivity() {
                                 editor.putString("gender", us.gender)
                                 editor.putString("alamat", us.alamat)
                                 editor.putString("telp", us.telp)
-                                editor.putString("role", us.level)
+                                editor.putString("level", us.level)
                                 editor.apply()
 
                                 if(us.level == "Pengguna") {
