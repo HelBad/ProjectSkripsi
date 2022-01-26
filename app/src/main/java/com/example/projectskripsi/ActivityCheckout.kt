@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.Manifest.permission
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.location.Address
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -184,9 +185,9 @@ class ActivityCheckout : AppCompatActivity() {
                 val viewHolder = super.onCreateViewHolder(parent, viewType)
                 viewHolder.setOnClickListener(object: ViewholderCheckout.ClickListener {
                     override fun onItemClick(view: View, position:Int) {
-//                        val intent = Intent(view.context, ActivityDetail::class.java)
-//                        intent.putExtra("id_menu", viewHolder.menu.id_menu)
-//                        startActivity(intent)
+                        val intent = Intent(view.context, ActivityDetail::class.java)
+                        intent.putExtra("id_menu", viewHolder.keranjang.id_menu)
+                        startActivity(intent)
                     }
                     override fun onItemLongClick(view: View, position:Int) {}
                 })
