@@ -2,16 +2,13 @@ package com.example.projectskripsi
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.*
 import com.example.projectskripsi.model.Keranjang
 import com.example.projectskripsi.model.Menu
-import com.example.projectskripsi.model.User
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
@@ -39,6 +36,7 @@ class ActivityDetail : AppCompatActivity() {
     var countJumlah = 0
     var id_keranjang = ""
     var id_menu = ""
+    var harga_menu = 0
     var statusKeranjang = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,6 +99,7 @@ class ActivityDetail : AppCompatActivity() {
                     kaloriDetail.text = allocation.kalori_menu
                     kolesterolDetail.text = allocation.kolesterol_menu
                     deskripsiDetail.text = allocation.deskripsi
+                    harga_menu = allocation.harga.toInt()
                     hargaDetail.text = "Rp. " + formatNumber.format(allocation.harga.toInt()) + ",00"
                     Picasso.get().load(allocation.gambar).into(imgDetail)
 
@@ -117,14 +116,16 @@ class ActivityDetail : AppCompatActivity() {
 
     private fun buatPesanan() {
         val id_user = SP.getString("id_user", "").toString().trim()
+        val total = (harga_menu * jumlahDetail.text.toString().toInt()).toString()
         val ref = FirebaseDatabase.getInstance().getReference("keranjang")
 
         if(statusKeranjang == "ada") {
             val jumlah = jumlahDetail.text.toString()
             ref.child(id_user).child(id_keranjang).child("jumlah").setValue(jumlah)
+            ref.child(id_user).child(id_keranjang).child("total").setValue(total)
         } else {
             id_keranjang  = ref.push().key.toString()
-            val addData = Keranjang(id_keranjang, id_user, id_menu, jumlahDetail.text.toString())
+            val addData = Keranjang(id_keranjang, id_user, id_menu, jumlahDetail.text.toString(), total)
             ref.child(id_user).child(id_keranjang).setValue(addData)
         }
     }

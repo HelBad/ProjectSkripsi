@@ -27,7 +27,7 @@ class SliderAdapter internal constructor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
         return SliderViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.menu_utama, parent, false
+                R.layout.menu_tentang, parent, false
             )
         )
     }
