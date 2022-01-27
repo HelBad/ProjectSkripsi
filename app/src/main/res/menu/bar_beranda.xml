@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/about"
-        android:title="Tentang Kami"
+        android:id="@+id/restoran"
+        android:title="Tentang Restoran"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/nutrisi"
+        android:title="Tentang Nutrisi"
         app:showAsAction="never" />
 </menu>

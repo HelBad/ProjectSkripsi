@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.Manifest.permission
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import android.location.Address
 import androidx.core.app.ActivityCompat
@@ -20,6 +21,7 @@ import android.location.Geocoder
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import com.example.projectskripsi.adapter.ViewholderCheckout
 import com.example.projectskripsi.model.Keranjang
@@ -37,6 +39,7 @@ import com.google.firebase.database.ValueEventListener
 class ActivityCheckout : AppCompatActivity() {
     lateinit var databaseCo: DatabaseReference
     lateinit var SP: SharedPreferences
+    lateinit var alertDialog: AlertDialog.Builder
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
     lateinit var identitasCo: TextView
@@ -71,6 +74,7 @@ class ActivityCheckout : AppCompatActivity() {
         btnLayoutCo = findViewById(R.id.btnLayoutCo)
         kosongCo = findViewById(R.id.kosongCo)
 
+        alertDialog = AlertDialog.Builder(this)
         SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
         databaseCo = FirebaseDatabase.getInstance().getReference("keranjang")
             .child(SP.getString("id_user", "").toString())
@@ -127,9 +131,23 @@ class ActivityCheckout : AppCompatActivity() {
         listKeranjang()
 
         btnPesanCo.setOnClickListener {
-            if(validate()){
-                buatPesanan()
-            }
+            alertDialog.setMessage("Pesanan akan langsung diproses dan tidak dapat dibatalkan. Cek kembali pesanan anda, Apakah sudah sesuai ?").setCancelable(false)
+                .setPositiveButton("YA", object: DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, id:Int) {
+                        if(validate()){
+                            buatPesanan()
+                            val intent = Intent(this@ActivityCheckout, ActivityUtama::class.java)
+                            intent.putExtra("pesanan", "true")
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                })
+                .setNegativeButton("TIDAK", object: DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, id:Int) {
+                        dialog.cancel()
+                    }
+                }).create().show()
         }
     }
 

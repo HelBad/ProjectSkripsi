@@ -29,8 +29,10 @@ class ActivityDetail : AppCompatActivity() {
     lateinit var kurangDetail: ImageView
     lateinit var tambahDetail: ImageView
     lateinit var btnPesan: Button
+    lateinit var btnHapus: Button
 
     lateinit var databaseDetail: DatabaseReference
+    lateinit var databaseRef: DatabaseReference
     lateinit var SP: SharedPreferences
     var formatNumber: NumberFormat = DecimalFormat("#,###")
     var countJumlah = 0
@@ -57,33 +59,14 @@ class ActivityDetail : AppCompatActivity() {
         kurangDetail = findViewById(R.id.kurangDetail)
         tambahDetail = findViewById(R.id.tambahDetail)
         btnPesan = findViewById(R.id.btnPesan)
+        btnHapus = findViewById(R.id.btnHapus)
 
-        btnPesan.visibility = View.INVISIBLE
-        tambahDetail.setOnClickListener {
-            countJumlah = jumlahDetail.text.toString().toInt()
-            countJumlah++
-            jumlahDetail.setText(countJumlah.toString())
-            btnPesan.visibility = View.VISIBLE
-        }
-        kurangDetail.setOnClickListener {
-            if (jumlahDetail.text.toString() == "0") {
-            } else if (jumlahDetail.text.toString() == "1") {
-                countJumlah = jumlahDetail.text.toString().toInt()
-                countJumlah--
-                jumlahDetail.setText(countJumlah.toString())
-                btnPesan.visibility = View.INVISIBLE
-            } else {
-                countJumlah = jumlahDetail.text.toString().toInt()
-                countJumlah--
-                jumlahDetail.setText(countJumlah.toString())
-                btnPesan.visibility = View.VISIBLE
-            }
-        }
+        SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
+        databaseRef = FirebaseDatabase.getInstance().getReference("keranjang").child(SP.getString("id_user", "").toString())
         loadData()
     }
 
     private fun loadData() {
-        SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
         databaseDetail = FirebaseDatabase.getInstance().getReference("menu")
         val query = databaseDetail.orderByKey().equalTo(intent.getStringExtra("id_menu").toString())
         query.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -104,8 +87,13 @@ class ActivityDetail : AppCompatActivity() {
                     Picasso.get().load(allocation.gambar).into(imgDetail)
 
                     cekData()
+                    setJumlah()
                     btnPesan.setOnClickListener {
                         buatPesanan()
+                        finish()
+                    }
+                    btnHapus.setOnClickListener {
+                        databaseRef.child(id_keranjang).removeValue()
                         finish()
                     }
                 }
@@ -117,35 +105,73 @@ class ActivityDetail : AppCompatActivity() {
     private fun buatPesanan() {
         val id_user = SP.getString("id_user", "").toString().trim()
         val total = (harga_menu * jumlahDetail.text.toString().toInt()).toString()
-        val ref = FirebaseDatabase.getInstance().getReference("keranjang")
 
         if(statusKeranjang == "ada") {
             val jumlah = jumlahDetail.text.toString()
-            ref.child(id_user).child(id_keranjang).child("jumlah").setValue(jumlah)
-            ref.child(id_user).child(id_keranjang).child("total").setValue(total)
+            databaseRef.child(id_keranjang).child("jumlah").setValue(jumlah)
+            databaseRef.child(id_keranjang).child("total").setValue(total)
         } else {
-            id_keranjang  = ref.push().key.toString()
+            id_keranjang  = databaseRef.push().key.toString()
             val addData = Keranjang(id_keranjang, id_user, id_menu, jumlahDetail.text.toString(), total)
-            ref.child(id_user).child(id_keranjang).setValue(addData)
+            databaseRef.child(id_keranjang).setValue(addData)
         }
     }
 
     private fun cekData() {
-        FirebaseDatabase.getInstance().getReference("keranjang").child(SP.getString("id_user", "").toString())
-            .orderByChild("id_menu").equalTo(id_menu).addValueEventListener( object : ValueEventListener {
-                override fun onDataChange(datasnapshot: DataSnapshot) {
-                    if(datasnapshot.exists()) {
-                        for (snapshot1 in datasnapshot.children) {
-                            val allocation = snapshot1.getValue(Keranjang::class.java)
-                            if(allocation!!.id_keranjang.isNotEmpty()) {
-                                jumlahDetail.text = Editable.Factory.getInstance().newEditable(allocation.jumlah)
-                                id_keranjang = allocation.id_keranjang
-                                statusKeranjang = "ada"
-                            }
+        databaseRef.orderByChild("id_menu").equalTo(id_menu).addValueEventListener( object : ValueEventListener {
+            override fun onDataChange(datasnapshot: DataSnapshot) {
+                if(datasnapshot.exists()) {
+                    for (snapshot1 in datasnapshot.children) {
+                        val allocation = snapshot1.getValue(Keranjang::class.java)
+                        if(allocation!!.id_keranjang.isNotEmpty()) {
+                            jumlahDetail.text = Editable.Factory.getInstance().newEditable(allocation.jumlah)
+                            id_keranjang = allocation.id_keranjang
+                            statusKeranjang = "ada"
                         }
                     }
                 }
-                override fun onCancelled(databaseError: DatabaseError) { }
-            })
+            }
+            override fun onCancelled(databaseError: DatabaseError) { }
+        })
+    }
+
+    private fun setJumlah() {
+        btnPesan.visibility = View.INVISIBLE
+        btnHapus.visibility = View.GONE
+        tambahDetail.setOnClickListener {
+            countJumlah = jumlahDetail.text.toString().toInt()
+            countJumlah++
+            jumlahDetail.setText(countJumlah.toString())
+            btnPesan.visibility = View.VISIBLE
+            btnHapus.visibility = View.GONE
+        }
+        kurangDetail.setOnClickListener {
+            if (jumlahDetail.text.toString() == "0") {
+                if(statusKeranjang == "ada") {
+                    btnHapus.visibility = View.VISIBLE
+                    btnPesan.visibility = View.GONE
+                } else {
+                    btnPesan.visibility = View.INVISIBLE
+                    btnHapus.visibility = View.GONE
+                }
+            } else if (jumlahDetail.text.toString() == "1") {
+                countJumlah = jumlahDetail.text.toString().toInt()
+                countJumlah--
+                jumlahDetail.setText(countJumlah.toString())
+                if(statusKeranjang == "ada") {
+                    btnHapus.visibility = View.VISIBLE
+                    btnPesan.visibility = View.GONE
+                } else {
+                    btnPesan.visibility = View.INVISIBLE
+                    btnHapus.visibility = View.GONE
+                }
+            } else {
+                countJumlah = jumlahDetail.text.toString().toInt()
+                countJumlah--
+                jumlahDetail.setText(countJumlah.toString())
+                btnPesan.visibility = View.VISIBLE
+                btnHapus.visibility = View.GONE
+            }
+        }
     }
 }

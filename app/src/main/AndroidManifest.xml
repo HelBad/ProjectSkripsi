@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ActivityTentang"
+            android:name=".ActivityNutrisi"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityRestoran"
             android:exported="false" />
         <activity
             android:name=".ActivityDetail"

@@ -7,13 +7,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.projectskripsi.adapter.SliderAdapter
 import com.example.projectskripsi.adapter.SliderItem
 
-class ActivityTentang : AppCompatActivity() {
+class ActivityRestoran : AppCompatActivity() {
     lateinit var viewPager2: ViewPager2
     private val sliderHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tentang)
+        setContentView(R.layout.activity_restoran)
 
         viewPager2 = findViewById(R.id.gambarTentang)
         val sliderItems: MutableList<SliderItem> = ArrayList()

@@ -9,10 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectskripsi.ActivityCheckout
-import com.example.projectskripsi.ActivityDetail
-import com.example.projectskripsi.ActivityTentang
-import com.example.projectskripsi.R
+import com.example.projectskripsi.*
 import com.example.projectskripsi.model.Menu
 import com.example.projectskripsi.adapter.ViewholderBeranda
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -71,8 +68,12 @@ class FragmentBeranda : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.about) {
-            val intent = Intent(activity, ActivityTentang::class.java)
+        if (id == R.id.restoran) {
+            val intent = Intent(activity, ActivityRestoran::class.java)
+            startActivity(intent)
+            return true
+        } else if (id == R.id.nutrisi) {
+            val intent = Intent(activity, ActivityNutrisi::class.java)
             startActivity(intent)
             return true
         }

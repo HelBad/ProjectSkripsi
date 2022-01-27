@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityTentang">
+    tools:context=".ActivityRestoran">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -48,7 +48,8 @@
             android:layout_marginRight="20dp"
             android:text="Ruko, Jl. Kapten Tendean No.118, Tosaren, Kec. Pesantren, Kota Kediri, Jawa Timur 64133"
             android:textColor="@color/gray"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -79,7 +80,8 @@
                 android:layout_gravity="center_vertical"
                 android:text=" warungapung2kediri@gmail.com"
                 android:textColor="@color/gray"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +103,8 @@
                 android:layout_gravity="center_vertical"
                 android:text=" +62 812-3176-5412"
                 android:textColor="@color/gray"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,7 +126,8 @@
                 android:layout_gravity="center_vertical"
                 android:text=" Lesehan Apung 2"
                 android:textColor="@color/gray"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -146,7 +150,8 @@
                 android:layout_gravity="center_vertical"
                 android:text=" @warungapung2kediri"
                 android:textColor="@color/gray"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
