@@ -23,7 +23,7 @@
         <Button
             android:id="@+id/btnDiproses"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:text="DIPROSES"
@@ -33,7 +33,7 @@
         <Button
             android:id="@+id/btnSelesai"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:text="SELESAI"
@@ -43,7 +43,7 @@
         <Button
             android:id="@+id/btnDibatalkan"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:text="DIBATALKAN"

@@ -62,7 +62,8 @@ class ActivityDetail : AppCompatActivity() {
         btnHapus = findViewById(R.id.btnHapus)
 
         SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
-        databaseRef = FirebaseDatabase.getInstance().getReference("keranjang").child(SP.getString("id_user", "").toString())
+        databaseRef = FirebaseDatabase.getInstance().getReference("keranjang")
+            .child("ready").child(SP.getString("id_user", "").toString())
         loadData()
     }
 
@@ -106,7 +107,7 @@ class ActivityDetail : AppCompatActivity() {
         val id_user = SP.getString("id_user", "").toString().trim()
         val total = (harga_menu * jumlahDetail.text.toString().toInt()).toString()
 
-        if(statusKeranjang == "ada") {
+        if(statusKeranjang == "ready") {
             val jumlah = jumlahDetail.text.toString()
             databaseRef.child(id_keranjang).child("jumlah").setValue(jumlah)
             databaseRef.child(id_keranjang).child("total").setValue(total)
@@ -126,7 +127,7 @@ class ActivityDetail : AppCompatActivity() {
                         if(allocation!!.id_keranjang.isNotEmpty()) {
                             jumlahDetail.text = Editable.Factory.getInstance().newEditable(allocation.jumlah)
                             id_keranjang = allocation.id_keranjang
-                            statusKeranjang = "ada"
+                            statusKeranjang = "ready"
                         }
                     }
                 }
@@ -147,7 +148,7 @@ class ActivityDetail : AppCompatActivity() {
         }
         kurangDetail.setOnClickListener {
             if (jumlahDetail.text.toString() == "0") {
-                if(statusKeranjang == "ada") {
+                if(statusKeranjang == "ready") {
                     btnHapus.visibility = View.VISIBLE
                     btnPesan.visibility = View.GONE
                 } else {
@@ -158,7 +159,7 @@ class ActivityDetail : AppCompatActivity() {
                 countJumlah = jumlahDetail.text.toString().toInt()
                 countJumlah--
                 jumlahDetail.setText(countJumlah.toString())
-                if(statusKeranjang == "ada") {
+                if(statusKeranjang == "ready") {
                     btnHapus.visibility = View.VISIBLE
                     btnPesan.visibility = View.GONE
                 } else {

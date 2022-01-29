@@ -2,7 +2,8 @@ package com.example.projectskripsi.model
 
 class Pesanan {
     lateinit var id_pesanan: String
-    lateinit var keranjang: ArrayList<Keranjang>
+    lateinit var id_user: String
+    lateinit var id_keranjang: String
     lateinit var catatan: String
     lateinit var waktu: String
     lateinit var lokasi: String
@@ -12,11 +13,11 @@ class Pesanan {
     lateinit var status: String
 
     constructor() {}
-    constructor(
-        id_pesanan: String, keranjang: ArrayList<Keranjang>, catatan: String, waktu: String,
+    constructor(id_pesanan: String, id_user: String, id_keranjang: String, catatan: String, waktu: String,
         lokasi: String, subtotal: String, ongkir: String, total_bayar: String, status: String) {
         this.id_pesanan = id_pesanan
-        this.keranjang = keranjang
+        this.id_user = id_user
+        this.id_keranjang = id_keranjang
         this.catatan = catatan
         this.waktu = waktu
         this.lokasi = lokasi

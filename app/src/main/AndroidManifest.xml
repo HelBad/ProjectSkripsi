@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ActivityRiwayat"
+            android:exported="false" />
+        <activity
             android:name=".ActivityNutrisi"
             android:exported="false" />
         <activity

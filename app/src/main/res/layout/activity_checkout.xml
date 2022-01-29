@@ -96,32 +96,15 @@
                     android:layout_marginLeft="10dp"
                     app:srcCompat="@drawable/ic_jarak" />
 
-                <RadioGroup
-                    android:id="@+id/radioJarakCo"
+                <TextView
+                    android:id="@+id/jarakCo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/km5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="5dp"
-                        android:text="Dibawah 10 km"
-                        android:textColor="@color/gray"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
-
-                    <RadioButton
-                        android:id="@+id/km10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="5dp"
-                        android:text="Diatas 10 km"
-                        android:textColor="@color/gray"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
-                </RadioGroup>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/gray"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout

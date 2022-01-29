@@ -1,36 +1,36 @@
 package com.example.projectskripsi
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.Manifest.permission
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.location.Address
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.*
-import java.text.SimpleDateFormat
-import java.util.*
 import android.location.Geocoder
+import android.location.Location
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.adapter.ViewholderCheckout
 import com.example.projectskripsi.model.Keranjang
 import com.example.projectskripsi.model.Pesanan
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.android.gms.location.*
-import com.google.android.gms.location.LocationServices
+import com.google.firebase.database.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DataSnapshot
@@ -44,7 +44,7 @@ class ActivityCheckout : AppCompatActivity() {
     lateinit var mRecyclerView: RecyclerView
     lateinit var identitasCo: TextView
     lateinit var lokasiCo: TextView
-    lateinit var radioJarakCo: RadioGroup
+    lateinit var jarakCo: TextView
     lateinit var keteranganCo: EditText
     lateinit var subtotalCo: TextView
     lateinit var ongkirCo: TextView
@@ -55,6 +55,8 @@ class ActivityCheckout : AppCompatActivity() {
     lateinit var kosongCo: TextView
 
     var formatter: NumberFormat = DecimalFormat("#,###")
+    var id_keranjang = ""
+    var total = 0
     var ongkir = 0
 
     @SuppressLint("MissingPermission")
@@ -64,7 +66,7 @@ class ActivityCheckout : AppCompatActivity() {
 
         identitasCo = findViewById(R.id.identitasCo)
         lokasiCo = findViewById(R.id.lokasiCo)
-        radioJarakCo = findViewById(R.id.radioJarakCo)
+        jarakCo = findViewById(R.id.jarakCo)
         keteranganCo = findViewById(R.id.keteranganCo)
         subtotalCo = findViewById(R.id.subtotalCo)
         ongkirCo = findViewById(R.id.ongkirCo)
@@ -77,7 +79,7 @@ class ActivityCheckout : AppCompatActivity() {
         alertDialog = AlertDialog.Builder(this)
         SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
         databaseCo = FirebaseDatabase.getInstance().getReference("keranjang")
-            .child(SP.getString("id_user", "").toString())
+            .child("ready").child(SP.getString("id_user", "").toString())
         val nama = SP.getString("nama", "")
         val telp = SP.getString("telp", "")
         identitasCo.text = "$nama ($telp)"
@@ -86,30 +88,6 @@ class ActivityCheckout : AppCompatActivity() {
         mRecyclerView = findViewById(R.id.recyclerCo)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
-
-        databaseCo.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var total = 0
-                for (ds in dataSnapshot.children) {
-                    val keranjang = ds.getValue(Keranjang::class.java)
-                    val mTotalPrice = Integer.valueOf(keranjang!!.total)
-                    total += mTotalPrice
-                    subtotalCo.text = "Rp. " + formatter.format(total) + ",00"
-
-                    radioJarakCo.setOnCheckedChangeListener { group, checkedId ->
-                        val radioButton = findViewById<RadioButton>(checkedId)
-                        if(radioButton.text.toString() == "Dibawah 10 km") {
-                            ongkir = 5000
-                        } else {
-                            ongkir = 10000
-                        }
-                        ongkirCo.text = "Rp. " + formatter.format(ongkir) + ",00"
-                        totalCo.text = "Rp. " + formatter.format(total + ongkir) + ",00"
-                    }
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
 
         val mLocationRequest: LocationRequest = LocationRequest.create()
         mLocationRequest.interval = 60000
@@ -129,6 +107,20 @@ class ActivityCheckout : AppCompatActivity() {
 
         checkPermissions()
         listKeranjang()
+
+        databaseCo.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    val keranjang = ds.getValue(Keranjang::class.java)
+                    id_keranjang = keranjang!!.id_keranjang
+                    val mTotalPrice = Integer.valueOf(keranjang.total)
+                    total += mTotalPrice
+                    subtotalCo.text = "Rp. " + formatter.format(total) + ",00"
+                    totalCo.text = "Rp. " + formatter.format(total + ongkir) + ",00"
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
 
         btnPesanCo.setOnClickListener {
             alertDialog.setMessage("Pesanan akan langsung diproses dan tidak dapat dibatalkan. Cek kembali pesanan anda, Apakah sudah sesuai ?").setCancelable(false)
@@ -169,21 +161,41 @@ class ActivityCheckout : AppCompatActivity() {
                 val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)
                 val address: String = addresses[0].getAddressLine(0)
                 lokasiCo.text = address
+
+                val df = DecimalFormat("#.##")
+                val latitude1 = addresses[0].latitude
+                val longitude1 = addresses[0].longitude
+
+                val loc1 = Location("")
+                loc1.latitude = latitude1
+                loc1.longitude = longitude1
+                val loc2 = Location("")
+                loc2.latitude = -7.834607
+                loc2.longitude = 112.031276
+                val distanceInMeters: Float = loc1.distanceTo(loc2)
+                jarakCo.text = df.format(distanceInMeters / 1000).toString() + " km"
+
+                if(distanceInMeters in 0.00..10.00) {
+                    ongkir = 5000
+                } else if(distanceInMeters in 10.01..20.00) {
+                    ongkir = 10000
+                } else {
+                    ongkir = 20000
+                }
+                ongkirCo.text = "Rp. " + formatter.format(ongkir) + ",00"
             }
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if(requestCode == 1) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if(ContextCompat.checkSelfPermission(this,
                         permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
                     getLocations()
                 } else {
-                    Toast.makeText(this, "Permission Danied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Permission Gagal", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -216,8 +228,8 @@ class ActivityCheckout : AppCompatActivity() {
     }
 
     private fun validate(): Boolean {
-        if(totalCo.text.toString() == "") {
-            Toast.makeText(this, "Pilih Jarak yang sesuai", Toast.LENGTH_SHORT).show()
+        if(lokasiCo.text.toString() == "") {
+            Toast.makeText(this, "Alamat masih kosong", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -229,20 +241,20 @@ class ActivityCheckout : AppCompatActivity() {
         val id_pesanan  = ref.push().key.toString()
         val time = SimpleDateFormat("dd MMM YYYY, hh:mm aa")
         val currentTime = time.format(Date())
-        val keranjang = arrayListOf<Keranjang>()
 
-        val addData = Pesanan(id_pesanan, keranjang, keteranganCo.text.toString(),
-            currentTime.toString(), lokasiCo.text.toString(), subtotalCo.text.toString(),
-            ongkirCo.text.toString(), totalCo.text.toString(), "Diproses")
-        ref.child(id_pesanan).setValue(addData)
+        val addData = Pesanan(id_pesanan, SP.getString("id_user", "").toString(),
+            id_keranjang, keteranganCo.text.toString(), currentTime.toString(), lokasiCo.text.toString(),
+            total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses")
+        ref.child("diproses").child(id_pesanan).setValue(addData)
 
         databaseCo.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                ref.child(id_pesanan).child("keranjang").setValue(dataSnapshot.value)
+                FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
+                    .child(SP.getString("id_user", "").toString() + " | $id_keranjang").setValue(dataSnapshot.value)
+                databaseCo.removeValue()
             }
             override fun onCancelled(databaseError: DatabaseError) {}
         })
-        databaseCo.removeValue()
     }
 
     override fun onStart() {
