@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.pengguna
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.widget.*
+import com.example.projectskripsi.R
 import com.example.projectskripsi.model.Keranjang
 import com.example.projectskripsi.model.Menu
 import com.google.firebase.database.*

@@ -1,4 +1,4 @@
-package com.example.projectskripsi.fragment
+package com.example.projectskripsi.pengguna.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.*
 import com.example.projectskripsi.model.Menu
 import com.example.projectskripsi.adapter.ViewholderBeranda
+import com.example.projectskripsi.pengguna.ActivityCheckout
+import com.example.projectskripsi.pengguna.ActivityDetail
+import com.example.projectskripsi.pengguna.ActivityNutrisi
+import com.example.projectskripsi.pengguna.ActivityRestoran
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.FirebaseDatabase
 

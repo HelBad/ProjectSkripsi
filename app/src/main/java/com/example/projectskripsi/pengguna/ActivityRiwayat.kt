@@ -1,0 +1,128 @@
+package com.example.projectskripsi.pengguna
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectskripsi.R
+import com.example.projectskripsi.adapter.ViewholderCheckout
+import com.example.projectskripsi.model.Keranjang
+import com.example.projectskripsi.model.Pesanan
+import com.example.projectskripsi.model.User
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.google.firebase.database.*
+import java.text.DecimalFormat
+import java.text.NumberFormat
+
+class ActivityRiwayat : AppCompatActivity() {
+    lateinit var mLayoutManager: LinearLayoutManager
+    lateinit var mRecyclerView: RecyclerView
+    lateinit var identitasRiwayat: TextView
+    lateinit var lokasiRiwayat: TextView
+    lateinit var waktuRiwayat: TextView
+    lateinit var keteranganRiwayat: TextView
+    lateinit var subtotalRiwayat: TextView
+    lateinit var ongkirRiwayat: TextView
+    lateinit var totalRiwayat: TextView
+
+    var formatter: NumberFormat = DecimalFormat("#,###")
+    var id_user = ""
+    var id_keranjang = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_riwayat)
+
+        identitasRiwayat = findViewById(R.id.identitasRiwayat)
+        lokasiRiwayat = findViewById(R.id.lokasiRiwayat)
+        waktuRiwayat = findViewById(R.id.waktuRiwayat)
+        keteranganRiwayat = findViewById(R.id.keteranganRiwayat)
+        subtotalRiwayat = findViewById(R.id.subtotalRiwayat)
+        ongkirRiwayat = findViewById(R.id.ongkirRiwayat)
+        totalRiwayat = findViewById(R.id.totalRiwayat)
+
+        mLayoutManager = LinearLayoutManager(this)
+        mRecyclerView = findViewById(R.id.recyclerRiwayat)
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.layoutManager = mLayoutManager
+
+        loadData()
+    }
+
+    private fun loadData() {
+        FirebaseDatabase.getInstance().getReference("pesanan").child(intent.getStringExtra("status").toString())
+            .orderByKey().equalTo(intent.getStringExtra("id_pesanan").toString())
+            .addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onDataChange(datasnapshot: DataSnapshot) {
+                    for (snapshot1 in datasnapshot.children) {
+                        val pesanan = snapshot1.getValue(Pesanan::class.java)
+                        lokasiRiwayat.text = pesanan!!.lokasi
+                        waktuRiwayat.text = pesanan.waktu
+                        if(pesanan.catatan == "") {
+                            keteranganRiwayat.text = "-"
+                        } else {
+                            keteranganRiwayat.text = pesanan.catatan
+                        }
+                        subtotalRiwayat.text = "Rp. " + formatter.format(pesanan.subtotal.toInt()) + ",00"
+                        ongkirRiwayat.text = "Rp. " + formatter.format(pesanan.ongkir.toInt()) + ",00"
+                        totalRiwayat.text = "Rp. " + formatter.format(pesanan.total_bayar.toInt()) + ",00"
+
+                        FirebaseDatabase.getInstance().getReference("user").orderByKey()
+                            .equalTo(pesanan.id_user).addListenerForSingleValueEvent(object: ValueEventListener {
+                                override fun onDataChange(datasnapshot: DataSnapshot) {
+                                    for (snapshot2 in datasnapshot.children) {
+                                        val user = snapshot2.getValue(User::class.java)
+                                        val nama = user!!.nama
+                                        val telp = user.telp
+                                        identitasRiwayat.text = "$nama ($telp)"
+                                    }
+                                }
+                                override fun onCancelled(databaseError: DatabaseError) {}
+                            })
+
+                        FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
+                            .child(pesanan.id_user + " | " + pesanan.id_keranjang).orderByKey()
+                            .equalTo(pesanan.id_keranjang).addListenerForSingleValueEvent(object: ValueEventListener {
+                                override fun onDataChange(datasnapshot: DataSnapshot) {
+                                    for (snapshot3 in datasnapshot.children) {
+                                        val keranjang = snapshot3.getValue(Keranjang::class.java)
+                                        id_keranjang = keranjang!!.id_keranjang
+                                        id_user = keranjang.id_user
+                                        listKeranjang()
+                                    }
+                                }
+                                override fun onCancelled(databaseError: DatabaseError) {}
+                            })
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    private fun listKeranjang() {
+        val query = FirebaseDatabase.getInstance().getReference("keranjang")
+            .child("kosong").child("$id_user | $id_keranjang")
+        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Keranjang, ViewholderCheckout>(
+            Keranjang::class.java,
+            R.layout.menu_checkout,
+            ViewholderCheckout::class.java,
+            query
+        ) {
+            override fun populateViewHolder(viewHolder: ViewholderCheckout, model: Keranjang, position:Int) {
+                viewHolder.setDetails(model)
+            }
+            override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewholderCheckout {
+                val viewHolder = super.onCreateViewHolder(parent, viewType)
+                viewHolder.setOnClickListener(object: ViewholderCheckout.ClickListener {
+                    override fun onItemClick(view: View, position:Int) {}
+                    override fun onItemLongClick(view: View, position:Int) {}
+                })
+                return viewHolder
+            }
+        }
+        mRecyclerView.adapter = firebaseRecyclerAdapter
+    }
+}

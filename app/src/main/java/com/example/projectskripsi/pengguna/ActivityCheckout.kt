@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.pengguna
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.ViewholderCheckout
 import com.example.projectskripsi.model.Keranjang
 import com.example.projectskripsi.model.Pesanan
@@ -244,7 +245,7 @@ class ActivityCheckout : AppCompatActivity() {
 
         val addData = Pesanan(id_pesanan, SP.getString("id_user", "").toString(),
             id_keranjang, keteranganCo.text.toString(), currentTime.toString(), lokasiCo.text.toString(),
-            total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses")
+            total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", "")
         ref.child("diproses").child(id_pesanan).setValue(addData)
 
         databaseCo.addListenerForSingleValueEvent(object : ValueEventListener {

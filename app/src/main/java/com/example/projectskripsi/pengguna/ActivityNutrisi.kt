@@ -1,7 +1,8 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.pengguna
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.projectskripsi.R
 
 class ActivityNutrisi : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

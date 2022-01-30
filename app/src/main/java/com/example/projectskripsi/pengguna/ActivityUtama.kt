@@ -1,21 +1,14 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.pengguna
 
 import android.content.DialogInterface
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
-import com.example.projectskripsi.adapter.SliderAdapter
-import com.example.projectskripsi.adapter.SliderItem
-import com.example.projectskripsi.fragment.FragmentBeranda
-import com.example.projectskripsi.fragment.FragmentPesanan
-import com.example.projectskripsi.fragment.FragmentProfil
+import com.example.projectskripsi.R
+import com.example.projectskripsi.pengguna.fragment.FragmentBeranda
+import com.example.projectskripsi.pengguna.fragment.FragmentPesanan
+import com.example.projectskripsi.pengguna.fragment.FragmentProfil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ActivityUtama : AppCompatActivity() {

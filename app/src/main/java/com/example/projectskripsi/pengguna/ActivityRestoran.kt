@@ -1,9 +1,10 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.pengguna
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import androidx.viewpager2.widget.ViewPager2
+import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.SliderAdapter
 import com.example.projectskripsi.adapter.SliderItem
 

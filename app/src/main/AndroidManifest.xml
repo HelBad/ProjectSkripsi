@@ -14,22 +14,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ActivityRiwayat"
+            android:name=".pengguna.ActivityRiwayat"
             android:exported="false" />
         <activity
-            android:name=".ActivityNutrisi"
+            android:name=".pengguna.ActivityNutrisi"
             android:exported="false" />
         <activity
-            android:name=".ActivityRestoran"
+            android:name=".pengguna.ActivityRestoran"
             android:exported="false" />
         <activity
-            android:name=".ActivityDetail"
+            android:name=".pengguna.ActivityDetail"
             android:exported="false" />
         <activity
-            android:name=".ActivityCheckout"
+            android:name=".pengguna.ActivityCheckout"
             android:exported="false" />
         <activity
-            android:name=".ActivityUtama"
+            android:name=".pengguna.ActivityUtama"
             android:exported="false" />
         <activity
             android:name=".ActivityRegister"
