@@ -14,6 +14,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".admin.ActivityDetail"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ActivityEdit"
+            android:exported="false" />
+        <activity
+            android:name=".admin.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ActivityUtama"
+            android:exported="false" />
+        <activity
             android:name=".pengguna.ActivityRiwayat"
             android:exported="false" />
         <activity

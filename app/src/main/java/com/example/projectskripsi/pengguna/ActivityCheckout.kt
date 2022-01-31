@@ -90,6 +90,19 @@ class ActivityCheckout : AppCompatActivity() {
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
 
+        databaseCo.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    val keranjang = ds.getValue(Keranjang::class.java)
+                    id_keranjang = keranjang!!.id_keranjang
+                    val mTotalPrice = Integer.valueOf(keranjang.total)
+                    total += mTotalPrice
+                    subtotalCo.text = "Rp. " + formatter.format(total) + ",00"
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
         val mLocationRequest: LocationRequest = LocationRequest.create()
         mLocationRequest.interval = 60000
         mLocationRequest.fastestInterval = 5000
@@ -108,20 +121,6 @@ class ActivityCheckout : AppCompatActivity() {
 
         checkPermissions()
         listKeranjang()
-
-        databaseCo.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (ds in dataSnapshot.children) {
-                    val keranjang = ds.getValue(Keranjang::class.java)
-                    id_keranjang = keranjang!!.id_keranjang
-                    val mTotalPrice = Integer.valueOf(keranjang.total)
-                    total += mTotalPrice
-                    subtotalCo.text = "Rp. " + formatter.format(total) + ",00"
-                    totalCo.text = "Rp. " + formatter.format(total + ongkir) + ",00"
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
 
         btnPesanCo.setOnClickListener {
             alertDialog.setMessage("Pesanan akan langsung diproses dan tidak dapat dibatalkan. Cek kembali pesanan anda, Apakah sudah sesuai ?").setCancelable(false)
@@ -184,6 +183,7 @@ class ActivityCheckout : AppCompatActivity() {
                     ongkir = 20000
                 }
                 ongkirCo.text = "Rp. " + formatter.format(ongkir) + ",00"
+                totalCo.text = "Rp. " + formatter.format(total + ongkir) + ",00"
             }
         }
     }

@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.model.User
-import com.example.projectskripsi.pengguna.ActivityUtama
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -61,6 +60,8 @@ class ActivityLogin : AppCompatActivity() {
     }
 
     private fun login() {
+        btnLogin.isClickable = false
+        Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
         FirebaseDatabase.getInstance().getReference("user").orderByChild("email")
             .equalTo(emailLogin.text.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {}
@@ -83,18 +84,24 @@ class ActivityLogin : AppCompatActivity() {
 
                                 if(us.level == "Pengguna") {
                                     btnLogin.isClickable = false
-                                    Toast.makeText(this@ActivityLogin, "Login sukses", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(this@ActivityLogin, ActivityUtama::class.java)
+                                    val intent = Intent(this@ActivityLogin,
+                                        com.example.projectskripsi.pengguna.ActivityUtama::class.java)
                                     startActivity(intent)
                                     finish()
-                                } else {
-                                    Toast.makeText(this@ActivityLogin, "Email salah", Toast.LENGTH_SHORT).show()
+                                } else if(us.level == "Admin") {
+                                    btnLogin.isClickable = false
+                                    val intent = Intent(this@ActivityLogin,
+                                        com.example.projectskripsi.admin.ActivityUtama::class.java)
+                                    startActivity(intent)
+                                    finish()
                                 }
                             } else {
+                                btnLogin.isClickable = true
                                 Toast.makeText(this@ActivityLogin, "Password salah", Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else {
+                        btnLogin.isClickable = true
                         Toast.makeText(this@ActivityLogin, "Email salah", Toast.LENGTH_SHORT).show()
                     }
                 }
