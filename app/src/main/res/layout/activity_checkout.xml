@@ -118,7 +118,7 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    app:srcCompat="@drawable/ic_edit" />
+                    app:srcCompat="@drawable/ic_catatan" />
 
                 <EditText
                     android:id="@+id/keteranganCo"

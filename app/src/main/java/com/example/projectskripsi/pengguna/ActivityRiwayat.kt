@@ -1,9 +1,12 @@
 package com.example.projectskripsi.pengguna
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +21,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class ActivityRiwayat : AppCompatActivity() {
+    lateinit var SP: SharedPreferences
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
     lateinit var identitasRiwayat: TextView
@@ -27,6 +31,8 @@ class ActivityRiwayat : AppCompatActivity() {
     lateinit var subtotalRiwayat: TextView
     lateinit var ongkirRiwayat: TextView
     lateinit var totalRiwayat: TextView
+    lateinit var layoutLaporanRiwayat: LinearLayout
+    lateinit var laporanRiwayat: TextView
 
     var formatter: NumberFormat = DecimalFormat("#,###")
     var id_user = ""
@@ -43,12 +49,15 @@ class ActivityRiwayat : AppCompatActivity() {
         subtotalRiwayat = findViewById(R.id.subtotalRiwayat)
         ongkirRiwayat = findViewById(R.id.ongkirRiwayat)
         totalRiwayat = findViewById(R.id.totalRiwayat)
+        layoutLaporanRiwayat = findViewById(R.id.layoutLaporanRiwayat)
+        laporanRiwayat = findViewById(R.id.laporanRiwayat)
 
         mLayoutManager = LinearLayoutManager(this)
         mRecyclerView = findViewById(R.id.recyclerRiwayat)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
 
+        SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
         loadData()
     }
 
@@ -69,19 +78,15 @@ class ActivityRiwayat : AppCompatActivity() {
                         subtotalRiwayat.text = "Rp. " + formatter.format(pesanan.subtotal.toInt()) + ",00"
                         ongkirRiwayat.text = "Rp. " + formatter.format(pesanan.ongkir.toInt()) + ",00"
                         totalRiwayat.text = "Rp. " + formatter.format(pesanan.total_bayar.toInt()) + ",00"
+                        if(pesanan.keterangan == "") {
+                            laporanRiwayat.text = "-"
+                        } else {
+                            laporanRiwayat.text = pesanan.keterangan
+                        }
 
-                        FirebaseDatabase.getInstance().getReference("user").orderByKey()
-                            .equalTo(pesanan.id_user).addListenerForSingleValueEvent(object: ValueEventListener {
-                                override fun onDataChange(datasnapshot: DataSnapshot) {
-                                    for (snapshot2 in datasnapshot.children) {
-                                        val user = snapshot2.getValue(User::class.java)
-                                        val nama = user!!.nama
-                                        val telp = user.telp
-                                        identitasRiwayat.text = "$nama ($telp)"
-                                    }
-                                }
-                                override fun onCancelled(databaseError: DatabaseError) {}
-                            })
+                        val nama = SP.getString("nama", "")
+                        val telp = SP.getString("telp", "")
+                        identitasRiwayat.text = "$nama ($telp)"
 
                         FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
                             .child(pesanan.id_user + " | " + pesanan.id_keranjang).orderByKey()
@@ -124,5 +129,14 @@ class ActivityRiwayat : AppCompatActivity() {
             }
         }
         mRecyclerView.adapter = firebaseRecyclerAdapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(intent.getStringExtra("status").toString() == "dibatalkan") {
+            layoutLaporanRiwayat.visibility = View.VISIBLE
+        } else {
+            layoutLaporanRiwayat.visibility = View.GONE
+        }
     }
 }

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pengguna.ActivityRiwayat">
+    tools:context=".admin.ActivityRiwayat">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarRiwayat"
@@ -16,16 +16,18 @@
         app:title="Detail Pesanan" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/idLayoutCo"
+        android:id="@+id/idLayoutRiwayat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbarRiwayat">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="15dp"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -62,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -85,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -184,6 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="90dp"
                             android:layout_height="wrap_content"
@@ -215,6 +221,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="90dp"
                             android:layout_height="wrap_content"
@@ -267,6 +274,19 @@
                     android:backgroundTint="@android:color/transparent"
                     android:textColor="@color/gray"
                     android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/editLaporanRiwayat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="Tambahkan Keterangan Transaksi"
+                    android:textColor="@color/gray"
+                    android:textSize="15dp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -276,5 +296,48 @@
         android:id="@+id/recyclerRiwayat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/idLayoutCo" />
+        android:layout_above="@+id/btnLayoutRiwayat"
+        android:layout_below="@+id/idLayoutRiwayat" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btnLayoutRiwayat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        app:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnBatal"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/dec_button"
+                android:backgroundTint="@color/colorAccent"
+                android:text="DIBATALKAN"
+                android:textColor="@android:color/white"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnSelesai"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/dec_button"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="SELESAI"
+                android:textColor="@android:color/white"
+                android:textSize="15dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>
