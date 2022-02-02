@@ -18,12 +18,10 @@ import java.text.NumberFormat
 class ActivityDetail : AppCompatActivity() {
     lateinit var namaDetail: TextView
     lateinit var imgDetail: ImageView
-    lateinit var lemakDetail: TextView
+    lateinit var mineralDetail: TextView
     lateinit var proteinDetail: TextView
+    lateinit var lemakDetail: TextView
     lateinit var karbohidratDetail: TextView
-    lateinit var seratDetail: TextView
-    lateinit var kaloriDetail: TextView
-    lateinit var kolesterolDetail: TextView
     lateinit var deskripsiDetail: TextView
     lateinit var hargaDetail: TextView
     lateinit var jumlahDetail: EditText
@@ -48,12 +46,10 @@ class ActivityDetail : AppCompatActivity() {
 
         namaDetail = findViewById(R.id.namaDetail)
         imgDetail = findViewById(R.id.imgDetail)
-        lemakDetail = findViewById(R.id.lemakDetail)
+        mineralDetail = findViewById(R.id.mineralDetail)
         proteinDetail = findViewById(R.id.proteinDetail)
+        lemakDetail = findViewById(R.id.lemakDetail)
         karbohidratDetail = findViewById(R.id.karbohidratDetail)
-        seratDetail = findViewById(R.id.seratDetail)
-        kaloriDetail = findViewById(R.id.kaloriDetail)
-        kolesterolDetail = findViewById(R.id.kolesterolDetail)
         deskripsiDetail = findViewById(R.id.deskripsiDetail)
         hargaDetail = findViewById(R.id.hargaDetail)
         jumlahDetail = findViewById(R.id.jumlahDetail)
@@ -77,12 +73,10 @@ class ActivityDetail : AppCompatActivity() {
                     val allocation = snapshot1.getValue(Menu::class.java)
                     id_menu = allocation!!.id_menu
                     namaDetail.text = allocation.nama_menu
-                    lemakDetail.text = allocation.lemak_menu
-                    proteinDetail.text = allocation.protein_menu
-                    karbohidratDetail.text = allocation.karbohidrat_menu
-                    seratDetail.text = allocation.serat_menu
-                    kaloriDetail.text = allocation.kalori_menu
-                    kolesterolDetail.text = allocation.kolesterol_menu
+                    mineralDetail.text = allocation.mineral
+                    proteinDetail.text = allocation.protein
+                    lemakDetail.text = allocation.lemak
+                    karbohidratDetail.text = allocation.karbohidrat
                     deskripsiDetail.text = allocation.deskripsi
                     harga_menu = allocation.harga.toInt()
                     hargaDetail.text = "Rp. " + formatNumber.format(allocation.harga.toInt()) + ",00"

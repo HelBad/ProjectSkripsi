@@ -39,8 +39,8 @@ class ActivityUtama : AppCompatActivity() {
 
         bottomNav = findViewById(R.id.bottomNav)
         alertDialog = AlertDialog.Builder(this)
-        bottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         replaceFragment(FragmentBeranda())
+        bottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     private fun replaceFragment(fragment: Fragment) {

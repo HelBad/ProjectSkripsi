@@ -219,6 +219,7 @@ class ActivityCheckout : AppCompatActivity() {
                         val intent = Intent(view.context, ActivityDetail::class.java)
                         intent.putExtra("id_menu", viewHolder.keranjang.id_menu)
                         startActivity(intent)
+                        finish()
                     }
                     override fun onItemLongClick(view: View, position:Int) {}
                 })
