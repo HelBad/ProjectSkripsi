@@ -124,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="gr"
+                        android:text="gram"
                         android:textColor="@android:color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -268,7 +268,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="Karbohidrat"
+                        android:text="Mineral"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -278,7 +278,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
-                        android:text="Disarankan, 40% kalori kita bersumber dari karbohidrat. Manusia hanya membutuhkan 1,500 kal per hari. Dengan acuan 40%, kita membutuhkan 600 kalori per hari dari karbohidrat atau setara dengan 3 porsi nasi putih per hari."
+                        android:text="Mineral umumnya yang dibutuhkan dalam jumlah 100 mg per hari. Mineral banyak didapatkan dari tanaman yang tumbuh dalam tanah seperti jahe, kunyit, wortel, buah bit, kacang-kacangan, kacang mede, dan juga sayuran berwarna hijau gelap seperti kale."
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -312,7 +312,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
-                        android:text="Tubuh membutuhkan 0.8gr protein dari setiap 1kg berat tubuh. Jadi protein yang dibutuhkan sekitar 36-44 gram setiap hari. Sebagai acuan, 36-44 gram protein setara dengan 1-2 dada ayam."
+                        android:text="Tubuh membutuhkan 0.8gr protein dari setiap 1kg berat tubuh. Jadi protein yang dibutuhkan sekitar 36-44 gram setiap hari atau setara dengan 1-2 dada ayam."
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -346,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
-                        android:text="Rata-rata orang dewasa sebaiknya mengkonsumsi 30% lemak, 30% protein, dan 40% karbohidrat. Lemak yang dikonsumsi sebaiknya mengandung omega 3 dan minyak nabati. Dengan acuan 1,500 kalori per hari, 30% lemak setara dengan 450 kalori atau 3 sendok olive oil atau 6 sendok makan selai kacang dalam sehari."
+                        android:text="Rata-rata orang dewasa sebaiknya mengkonsumsi 30% lemak setara dengan 450 kalori atau 3 sendok olive oil atau 6 sendok makan selai kacang dalam sehari. Lemak yang dikonsumsi sebaiknya mengandung omega 3 dan minyak nabati."
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -370,7 +370,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="Mineral"
+                        android:text="Karbohidrat"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -380,7 +380,71 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
-                        android:text="Mineral umumnya yang dibutuhkan dalam jumlah 100 mg per hari. Mineral banyak didapatkan dari tanaman yang tumbuh dalam tanah seperti jahe, kunyit, wortel, buah bit, kacang-kacangan, kacang mede, dan juga sayuran berwarna hijau gelap seperti kale."
+                        android:text="Disarankan tiap hari, 40% dari 1.500 kal kita bersumber dari karbohidrat. Sehingga, kita membutuhkan 600 kalori per hari dari karbohidrat atau setara dengan 3 porsi nasi putih per hari."
+                        android:textColor="@color/gray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="Nutrisi Lainnya"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/white"
+                        android:text="Terdapat Nutrisi lainnya yang dibutuhkan oleh tubuh setiap hari , seperti :"
+                        android:textColor="@color/gray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/white"
+                        android:text="- Vitamin : untuk metabolisme tubuh dan merawat sel tubuh"
+                        android:textColor="@color/gray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/white"
+                        android:text="- Serat : untuk membantu penyerapan nutrisi di usus, menjaga aktifitas usus tetap optimal, mengendalikan imunitas dan keseimbangan bakteri usus, serta melindungi sel-sel tubuh"
+                        android:textColor="@color/gray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/white"
+                        android:text="- Air : mencegah gangguan dan kerusakan pada banyak sel dan organ seperti otak, mata, darah, dan saluran pencernaan. Kita dianjurkan untuk minum 8 gelas air per hari (2-3 liter)"
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />
