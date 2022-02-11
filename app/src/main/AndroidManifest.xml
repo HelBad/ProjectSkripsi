@@ -8,9 +8,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/img_logo"
+        android:label="Nutrifood"
+        android:roundIcon="@drawable/img_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -21,9 +21,6 @@
             android:exported="false" />
         <activity
             android:name=".admin.ActivityEdit"
-            android:exported="false" />
-        <activity
-            android:name=".admin.MainActivity"
             android:exported="false" />
         <activity
             android:name=".admin.ActivityUtama"
@@ -51,7 +48,10 @@
             android:exported="false" />
         <activity
             android:name=".ActivityLogin"
-            android:exported="true">
+            android:exported="false" />
+        <activity
+            android:name=".ActivityLoading"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

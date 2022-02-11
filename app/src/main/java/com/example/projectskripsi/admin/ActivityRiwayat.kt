@@ -1,5 +1,8 @@
 package com.example.projectskripsi.admin
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -40,6 +43,7 @@ class ActivityRiwayat : AppCompatActivity() {
     lateinit var btnLayoutRiwayat: CardView
     lateinit var btnBatal: Button
     lateinit var btnSelesai: Button
+    lateinit var imgCopyLokasi: ImageView
 
     var formatter: NumberFormat = DecimalFormat("#,###")
     var id_user = ""
@@ -65,6 +69,7 @@ class ActivityRiwayat : AppCompatActivity() {
         btnLayoutRiwayat = findViewById(R.id.btnLayoutRiwayat)
         btnBatal = findViewById(R.id.btnBatal)
         btnSelesai = findViewById(R.id.btnSelesai)
+        imgCopyLokasi = findViewById(R.id.imgCopyLokasi)
 
         mLayoutManager = LinearLayoutManager(this)
         mRecyclerView = findViewById(R.id.recyclerRiwayat)
@@ -73,6 +78,18 @@ class ActivityRiwayat : AppCompatActivity() {
 
         alertDialog = AlertDialog.Builder(this)
         loadData()
+
+        imgCopyLokasi.setOnClickListener {
+            copyTextToClipboard()
+        }
+    }
+
+    private fun copyTextToClipboard() {
+        val textToCopy = lokasiRiwayat.text
+        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", textToCopy)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(this, "Teks berhasil disalin", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadData() {
