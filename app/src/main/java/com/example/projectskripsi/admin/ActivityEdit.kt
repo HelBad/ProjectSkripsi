@@ -22,9 +22,9 @@ class ActivityEdit : AppCompatActivity() {
     lateinit var deskripsiMenu: EditText
     lateinit var hargaMenu: EditText
     lateinit var gambarMenu: TextView
-    lateinit var mineralMenu: EditText
-    lateinit var proteinMenu: EditText
     lateinit var lemakMenu: EditText
+    lateinit var proteinMenu: EditText
+    lateinit var kaloriMenu: EditText
     lateinit var karbohidratMenu: EditText
     lateinit var btnSimpan: Button
 
@@ -44,9 +44,9 @@ class ActivityEdit : AppCompatActivity() {
         deskripsiMenu = findViewById(R.id.deskripsiMenu)
         hargaMenu = findViewById(R.id.hargaMenu)
         gambarMenu = findViewById(R.id.gambarMenu)
-        mineralMenu = findViewById(R.id.mineralMenu)
-        proteinMenu = findViewById(R.id.proteinMenu)
         lemakMenu = findViewById(R.id.lemakMenu)
+        proteinMenu = findViewById(R.id.proteinMenu)
+        kaloriMenu = findViewById(R.id.kaloriMenu)
         karbohidratMenu = findViewById(R.id.karbohidratMenu)
         btnSimpan = findViewById(R.id.btnSimpan)
 
@@ -114,9 +114,9 @@ class ActivityEdit : AppCompatActivity() {
                         val allocation = snapshot1.getValue(Menu::class.java)
                         namaMenu.text = Editable.Factory.getInstance().newEditable(allocation!!.nama_menu)
                         deskripsiMenu.text = Editable.Factory.getInstance().newEditable(allocation.deskripsi)
-                        mineralMenu.text = Editable.Factory.getInstance().newEditable(allocation.mineral)
-                        proteinMenu.text = Editable.Factory.getInstance().newEditable(allocation.protein)
                         lemakMenu.text = Editable.Factory.getInstance().newEditable(allocation.lemak)
+                        proteinMenu.text = Editable.Factory.getInstance().newEditable(allocation.protein)
+                        kaloriMenu.text = Editable.Factory.getInstance().newEditable(allocation.kalori)
                         karbohidratMenu.text = Editable.Factory.getInstance().newEditable(allocation.karbohidrat)
                         hargaMenu.text = Editable.Factory.getInstance().newEditable(allocation.harga)
                         gambarMenu.text = allocation.gambar
@@ -144,16 +144,16 @@ class ActivityEdit : AppCompatActivity() {
             Toast.makeText(this, "Gambar masih kosong", Toast.LENGTH_SHORT).show()
             return false
         }
-        if(mineralMenu.text.toString() == "") {
-            Toast.makeText(this, "Jumlah mineral kosong", Toast.LENGTH_SHORT).show()
+        if(lemakMenu.text.toString() == "") {
+            Toast.makeText(this, "Jumlah lemak kosong", Toast.LENGTH_SHORT).show()
             return false
         }
         if(proteinMenu.text.toString() == "") {
             Toast.makeText(this, "Jumlah protein kosong", Toast.LENGTH_SHORT).show()
             return false
         }
-        if(lemakMenu.text.toString() == "") {
-            Toast.makeText(this, "Jumlah lemak kosong", Toast.LENGTH_SHORT).show()
+        if(kaloriMenu.text.toString() == "") {
+            Toast.makeText(this, "Jumlah kalori kosong", Toast.LENGTH_SHORT).show()
             return false
         }
         if(karbohidratMenu.text.toString() == "") {
@@ -168,15 +168,15 @@ class ActivityEdit : AppCompatActivity() {
             id_menu = intent.getStringExtra("id_menu").toString()
             databaseReference.child(id_menu).child("nama_menu").setValue(namaMenu.text.toString())
             databaseReference.child(id_menu).child("deskripsi").setValue(deskripsiMenu.text.toString())
-            databaseReference.child(id_menu).child("mineral").setValue(mineralMenu.text.toString())
-            databaseReference.child(id_menu).child("protein").setValue(proteinMenu.text.toString())
             databaseReference.child(id_menu).child("lemak").setValue(lemakMenu.text.toString())
+            databaseReference.child(id_menu).child("protein").setValue(proteinMenu.text.toString())
+            databaseReference.child(id_menu).child("kalori").setValue(kaloriMenu.text.toString())
             databaseReference.child(id_menu).child("karbohidrat").setValue(karbohidratMenu.text.toString())
             databaseReference.child(id_menu).child("harga").setValue(hargaMenu.text.toString())
             databaseReference.child(id_menu).child("gambar").setValue(gambarMenu.text.toString())
         } else {
             val addData = Menu(id_menu, namaMenu.text.toString(), deskripsiMenu.text.toString(),
-                mineralMenu.text.toString(), proteinMenu.text.toString(), lemakMenu.text.toString(),
+                lemakMenu.text.toString(), proteinMenu.text.toString(), kaloriMenu.text.toString(),
                 karbohidratMenu.text.toString(), hargaMenu.text.toString(), gambarMenu.text.toString())
             databaseReference.child(id_menu).setValue(addData)
         }

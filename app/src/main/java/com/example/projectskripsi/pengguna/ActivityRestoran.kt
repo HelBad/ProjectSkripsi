@@ -18,9 +18,12 @@ class ActivityRestoran : AppCompatActivity() {
 
         viewPager2 = findViewById(R.id.gambarTentang)
         val sliderItems: MutableList<SliderItem> = ArrayList()
-        sliderItems.add(SliderItem(R.drawable.sampel))
-        sliderItems.add(SliderItem(R.drawable.sampel))
-        sliderItems.add(SliderItem(R.drawable.sampel))
+        sliderItems.add(SliderItem(R.drawable.img_restoran_1))
+        sliderItems.add(SliderItem(R.drawable.img_restoran_2))
+        sliderItems.add(SliderItem(R.drawable.img_restoran_3))
+        sliderItems.add(SliderItem(R.drawable.img_restoran_4))
+        sliderItems.add(SliderItem(R.drawable.img_restoran_5))
+        sliderItems.add(SliderItem(R.drawable.img_restoran_6))
         viewPager2.adapter = SliderAdapter(sliderItems, viewPager2)
         viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

@@ -14,7 +14,7 @@
         android:id="@+id/imageSlider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/sampel"
+        android:src="@drawable/img_restoran_1"
         android:scaleType="fitXY"
         android:adjustViewBounds="true">
     </ImageView>

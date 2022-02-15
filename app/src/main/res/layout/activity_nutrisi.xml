@@ -42,7 +42,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/img_mineral" />
+                android:src="@drawable/img_lemak" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Mineral"
+                    android:text="Lemak"
                     android:textSize="15dp" />
 
                 <LinearLayout
@@ -64,7 +64,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="100"
+                        android:text="50"
                         android:textColor="@android:color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="mg"
+                        android:text="gram"
                         android:textColor="@android:color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -151,7 +151,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/img_lemak" />
+                android:src="@drawable/img_kalori" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -163,7 +163,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lemak"
+                    android:text="Kalori"
                     android:textSize="15dp" />
 
                 <LinearLayout
@@ -173,7 +173,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="450"
+                        android:text="1500"
                         android:textColor="@android:color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -224,7 +224,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="600"
+                        android:text="150"
                         android:textColor="@android:color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -233,7 +233,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="kal"
+                        android:text="gram"
                         android:textColor="@android:color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
@@ -268,7 +268,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="Mineral"
+                        android:text="Lemak"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -278,7 +278,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
-                        android:text="Mineral umumnya yang dibutuhkan dalam jumlah 100 mg per hari. Mineral banyak didapatkan dari tanaman yang tumbuh dalam tanah seperti jahe, kunyit, wortel, buah bit, kacang-kacangan, kacang mede, dan juga sayuran berwarna hijau gelap seperti kale."
+                        android:text="Rata-rata orang dewasa sebaiknya mengkonsumsi 50 gram lemak setara dengan 450 kalori atau 3 sendok olive oil atau 6 sendok makan selai kacang dalam sehari. Lemak yang dikonsumsi sebaiknya mengandung omega 3 dan minyak nabati."
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -336,40 +336,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="Lemak"
-                        android:textColor="@android:color/black"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="@android:color/white"
-                        android:text="Rata-rata orang dewasa sebaiknya mengkonsumsi 30% lemak setara dengan 450 kalori atau 3 sendok olive oil atau 6 sendok makan selai kacang dalam sehari. Lemak yang dikonsumsi sebaiknya mengandung omega 3 dan minyak nabati."
-                        android:textColor="@color/gray"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                app:cardBackgroundColor="@android:color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:text="Karbohidrat"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
@@ -380,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
-                        android:text="Disarankan tiap hari, 40% dari 1.500 kal kita bersumber dari karbohidrat. Sehingga, kita membutuhkan 600 kalori per hari dari karbohidrat atau setara dengan 3 porsi nasi putih per hari."
+                        android:text="Disarankan tiap hari, 40% dari 1.500 kal kita bersumber dari karbohidrat. Sehingga, kita membutuhkan 150 gram atau 600 kalori per hari dari karbohidrat atau setara dengan 3 porsi nasi putih per hari."
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />
@@ -415,6 +381,16 @@
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/white"
                         android:text="Terdapat Nutrisi lainnya yang dibutuhkan oleh tubuh setiap hari , seperti :"
+                        android:textColor="@color/gray"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/white"
+                        android:text="- Mineral : umumnya yang dibutuhkan dalam jumlah 100 mg per hari"
                         android:textColor="@color/gray"
                         android:textSize="15dp"
                         android:textStyle="bold" />

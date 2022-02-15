@@ -18,9 +18,9 @@ import java.text.NumberFormat
 class ActivityDetail : AppCompatActivity() {
     lateinit var namaDetail: TextView
     lateinit var imgDetail: ImageView
-    lateinit var mineralDetail: TextView
-    lateinit var proteinDetail: TextView
     lateinit var lemakDetail: TextView
+    lateinit var proteinDetail: TextView
+    lateinit var kaloriDetail: TextView
     lateinit var karbohidratDetail: TextView
     lateinit var deskripsiDetail: TextView
     lateinit var hargaDetail: TextView
@@ -46,9 +46,9 @@ class ActivityDetail : AppCompatActivity() {
 
         namaDetail = findViewById(R.id.namaDetail)
         imgDetail = findViewById(R.id.imgDetail)
-        mineralDetail = findViewById(R.id.mineralDetail)
-        proteinDetail = findViewById(R.id.proteinDetail)
         lemakDetail = findViewById(R.id.lemakDetail)
+        proteinDetail = findViewById(R.id.proteinDetail)
+        kaloriDetail = findViewById(R.id.kaloriDetail)
         karbohidratDetail = findViewById(R.id.karbohidratDetail)
         deskripsiDetail = findViewById(R.id.deskripsiDetail)
         hargaDetail = findViewById(R.id.hargaDetail)
@@ -73,9 +73,9 @@ class ActivityDetail : AppCompatActivity() {
                     val allocation = snapshot1.getValue(Menu::class.java)
                     id_menu = allocation!!.id_menu
                     namaDetail.text = allocation.nama_menu
-                    mineralDetail.text = allocation.mineral
-                    proteinDetail.text = allocation.protein
                     lemakDetail.text = allocation.lemak
+                    proteinDetail.text = allocation.protein
+                    kaloriDetail.text = allocation.kalori
                     karbohidratDetail.text = allocation.karbohidrat
                     deskripsiDetail.text = allocation.deskripsi
                     harga_menu = allocation.harga.toInt()

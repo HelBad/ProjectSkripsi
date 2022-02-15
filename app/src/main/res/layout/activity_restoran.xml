@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:minHeight="?attr/actionBarSize"
-        app:title="Warung Apung Kediri" />
+        app:title="Warung Apung 2" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/gambarTentang"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="Ruko, Jl. Kapten Tendean No.118, Tosaren, Kec. Pesantren, Kota Kediri, Jawa Timur 64133"
+            android:text="Jl. Kapten Tendean No.118, Tosaren, Kec. Pesantren, Kota Kediri, Jawa Timur 64133"
             android:textColor="@color/gray"
             android:textSize="16dp"
             android:textStyle="bold" />
@@ -60,29 +60,6 @@
             android:textColor="@android:color/black"
             android:textSize="18dp"
             android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_email" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:text=" warungapung2kediri@gmail.com"
-                android:textColor="@color/gray"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -124,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
-                android:text=" Lesehan Apung 2"
+                android:text=" Warung Apung"
                 android:textColor="@color/gray"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -148,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
-                android:text=" @warungapung2kediri"
+                android:text=" @warungapung2"
                 android:textColor="@color/gray"
                 android:textSize="16dp"
                 android:textStyle="bold" />

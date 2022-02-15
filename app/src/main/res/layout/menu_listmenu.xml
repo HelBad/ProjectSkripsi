@@ -16,7 +16,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/sampel" />
+            android:src="@drawable/img_restoran_1" />
 
         <LinearLayout
             android:layout_width="match_parent"

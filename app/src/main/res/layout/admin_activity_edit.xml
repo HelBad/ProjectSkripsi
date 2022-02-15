@@ -174,84 +174,10 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Mineral (mg)"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:text=":"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/mineralMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@android:color/white"
-                    android:gravity="center_vertical"
-                    android:hint="Masukkan Mineral"
-                    android:inputType="number"
-                    android:textColor="@color/gray"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Protein (gram)"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:text=":"
-                    android:textColor="@android:color/black"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/proteinMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@android:color/white"
-                    android:gravity="center_vertical"
-                    android:hint="Masukkan Protein"
-                    android:inputType="number"
-                    android:textColor="@color/gray"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Lemak (kal)"
+                    android:text="Lemak (g)"
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
                     android:textStyle="bold" />
@@ -285,10 +211,84 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="120dp"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Karbohidrat (kal)"
+                    android:text="Protein (g)"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:text=":"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/proteinMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/white"
+                    android:gravity="center_vertical"
+                    android:hint="Masukkan Protein"
+                    android:inputType="number"
+                    android:textColor="@color/gray"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Kalori (kal)"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:text=":"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/kaloriMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/white"
+                    android:gravity="center_vertical"
+                    android:hint="Masukkan Kalori"
+                    android:inputType="number"
+                    android:textColor="@color/gray"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Karbohidrat (g)"
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
                     android:textStyle="bold" />
