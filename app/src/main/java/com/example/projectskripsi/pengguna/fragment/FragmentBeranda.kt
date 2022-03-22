@@ -2,6 +2,7 @@ package com.example.projectskripsi.pengguna.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,12 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.*
 import com.example.projectskripsi.model.Menu
 import com.example.projectskripsi.adapter.ViewholderBeranda
+import com.example.projectskripsi.model.Penyakit
 import com.example.projectskripsi.pengguna.ActivityCheckout
 import com.example.projectskripsi.pengguna.ActivityDetail
 import com.example.projectskripsi.pengguna.ActivityNutrisi
 import com.example.projectskripsi.pengguna.ActivityRestoran
 import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class FragmentBeranda : Fragment() {
     lateinit var mLayoutManager: LinearLayoutManager
@@ -25,6 +30,7 @@ class FragmentBeranda : Fragment() {
     lateinit var keranjangBeranda: ImageView
     lateinit var spinnerBeranda: Spinner
     lateinit var penyakitBeranda: TextView
+    var listPenyakit = arrayListOf<Penyakit>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_beranda, container, false)
@@ -46,14 +52,13 @@ class FragmentBeranda : Fragment() {
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
 
-        val genderUser = arrayOf("Sehat", "Obesitas", "Diabetes", "Asam Lambung")
-        spinnerBeranda.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, genderUser)
+        val rekomendasiPenyakit = arrayOf("Sehat", "Obesitas", "Diabetes", "Anemia")
+        spinnerBeranda.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, rekomendasiPenyakit)
         spinnerBeranda.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                penyakitBeranda.text = "Baik Untuk Penyakit"
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                penyakitBeranda.text = genderUser[position]
+                penyakitBeranda.text = rekomendasiPenyakit[position]
+                loadMenu(rekomendasiPenyakit[position])
             }
         }
 
@@ -86,6 +91,22 @@ class FragmentBeranda : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        val queryPenyakit = FirebaseDatabase.getInstance().getReference("penyakit")
+        queryPenyakit.addValueEventListener( object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()) {
+                    for (snap in snapshot.children) {
+                        val value = snap.getValue(Penyakit::class.java)
+                        listPenyakit.add(value!!)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+        loadMenu("Sehat")
+    }
+
+    fun loadMenu(kategori: String){
         val query = FirebaseDatabase.getInstance().getReference("menu")
         val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Menu, ViewholderBeranda>(
             Menu::class.java,
@@ -93,8 +114,8 @@ class FragmentBeranda : Fragment() {
             ViewholderBeranda::class.java,
             query
         ) {
-            override fun populateViewHolder(viewHolder: ViewholderBeranda, model: Menu, position:Int) {
-                viewHolder.setDetails(model)
+            override fun populateViewHolder(viewHolder: ViewholderBeranda ,model: Menu, position:Int) {
+                viewHolder.setDetails(model, listPenyakit, kategori)
             }
             override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewholderBeranda {
                 val viewHolder = super.onCreateViewHolder(parent, viewType)

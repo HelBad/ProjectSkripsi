@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.adapter.ViewholderBeranda
+import com.example.projectskripsi.adapter.ViewholderBerandaAdmin
 import com.example.projectskripsi.admin.ActivityEdit
 import com.example.projectskripsi.model.Menu
 import com.example.projectskripsi.admin.ActivityDetail
@@ -57,18 +57,18 @@ class FragmentBeranda : Fragment() {
     override fun onStart() {
         super.onStart()
         val query = FirebaseDatabase.getInstance().getReference("menu")
-        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Menu, ViewholderBeranda>(
+        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Menu, ViewholderBerandaAdmin>(
             Menu::class.java,
-            R.layout.menu_listmenu,
-            ViewholderBeranda::class.java,
+            R.layout.menu_admin_listmenu,
+            ViewholderBerandaAdmin::class.java,
             query
         ) {
-            override fun populateViewHolder(viewHolder: ViewholderBeranda, model: Menu, position:Int) {
+            override fun populateViewHolder(viewHolder: ViewholderBerandaAdmin, model: Menu, position:Int) {
                 viewHolder.setDetails(model)
             }
-            override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewholderBeranda {
+            override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewholderBerandaAdmin {
                 val viewHolder = super.onCreateViewHolder(parent, viewType)
-                viewHolder.setOnClickListener(object: ViewholderBeranda.ClickListener {
+                viewHolder.setOnClickListener(object: ViewholderBerandaAdmin.ClickListener {
                     override fun onItemClick(view:View, position:Int) {
                         val intent = Intent(view.context, ActivityDetail::class.java)
                         intent.putExtra("id_menu", viewHolder.menu.id_menu)

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
 import com.example.projectskripsi.model.Menu
+import com.example.projectskripsi.model.Penyakit
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -82,6 +83,20 @@ class ActivityDetail : AppCompatActivity() {
                                         .child(intent.getStringExtra("id_menu").toString()).removeValue()
                                     FirebaseStorage.getInstance().getReference("menu")
                                         .child(intent.getStringExtra("id_menu").toString()).delete()
+                                    FirebaseDatabase.getInstance().getReference("penyakit")
+                                        .orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
+                                        .addListenerForSingleValueEvent(object: ValueEventListener {
+                                            override fun onDataChange(datasnapshot: DataSnapshot) {
+                                                for (snapshot1 in datasnapshot.children) {
+                                                    val allocation = snapshot1.getValue(Penyakit::class.java)
+                                                    val id_penyakit = allocation!!.id_penyakit
+                                                    FirebaseDatabase.getInstance().getReference("penyakit")
+                                                        .child(id_penyakit).removeValue()
+
+                                                }
+                                            }
+                                            override fun onCancelled(databaseError: DatabaseError) {}
+                                        })
                                     finish()
                                 }
                             })

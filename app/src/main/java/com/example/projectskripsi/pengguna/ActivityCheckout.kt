@@ -145,7 +145,7 @@ class ActivityCheckout : AppCompatActivity() {
 
     private fun checkPermissions() {
         if(ContextCompat.checkSelfPermission(this,
-                permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(permission.ACCESS_FINE_LOCATION), 1)
         } else {
             getLocations()

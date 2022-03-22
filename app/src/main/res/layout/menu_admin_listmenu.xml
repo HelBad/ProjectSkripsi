@@ -10,7 +10,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp">
         <ImageView
-            android:id="@+id/imgListmenu"
+            android:id="@+id/imgListmenuAdmin"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerVertical="true"
@@ -23,10 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/imgListmenu"
+            android:layout_toRightOf="@+id/imgListmenuAdmin"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/namaListmenu"
+                android:id="@+id/namaListmenuAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -36,7 +36,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/hargaListmenu"
+                android:id="@+id/hargaListmenuAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -46,22 +46,12 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/deskripsiListmenu"
+                android:id="@+id/deskripsiListmenuAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Terdapat berbagai macam sayuran, daging ayam pilihan, serta kaya akan bumbu rempah"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/kategoriListmenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="Kategori : Baik"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15dp"
-                android:textStyle="bold"/>
         </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
 import com.example.projectskripsi.model.Menu
+import com.example.projectskripsi.model.Penyakit
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -31,10 +32,12 @@ class ActivityEdit : AppCompatActivity() {
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var databaseReference: DatabaseReference
     lateinit var storageReference: StorageReference
+    lateinit var databaseAi: DatabaseReference
     lateinit var uri: Uri
     var url: Uri? = null
     var statusMenu = ""
     var id_menu = ""
+    var id_penyakit = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,7 @@ class ActivityEdit : AppCompatActivity() {
         alertDialog = AlertDialog.Builder(this)
         databaseReference = FirebaseDatabase.getInstance().getReference("menu")
         storageReference = FirebaseStorage.getInstance().getReference("menu")
+        databaseAi = FirebaseDatabase.getInstance().getReference("penyakit")
         loadMenu()
 
         gambarMenu.setOnClickListener {
@@ -68,6 +72,7 @@ class ActivityEdit : AppCompatActivity() {
                     override fun onClick(dialog: DialogInterface, id:Int) {
                         if(validate()) {
                             tambahData()
+                            rekomendasi()
                             val intent = Intent(this@ActivityEdit, ActivityUtama::class.java)
                             startActivity(intent)
                             finish()
@@ -166,6 +171,7 @@ class ActivityEdit : AppCompatActivity() {
     private fun tambahData() {
         if(statusMenu == "ada") {
             id_menu = intent.getStringExtra("id_menu").toString()
+            databaseReference.child(id_menu).child("id_menu").setValue(id_menu)
             databaseReference.child(id_menu).child("nama_menu").setValue(namaMenu.text.toString())
             databaseReference.child(id_menu).child("deskripsi").setValue(deskripsiMenu.text.toString())
             databaseReference.child(id_menu).child("lemak").setValue(lemakMenu.text.toString())
@@ -175,10 +181,85 @@ class ActivityEdit : AppCompatActivity() {
             databaseReference.child(id_menu).child("harga").setValue(hargaMenu.text.toString())
             databaseReference.child(id_menu).child("gambar").setValue(gambarMenu.text.toString())
         } else {
+            id_menu  = databaseReference.push().key.toString()
             val addData = Menu(id_menu, namaMenu.text.toString(), deskripsiMenu.text.toString(),
                 lemakMenu.text.toString(), proteinMenu.text.toString(), kaloriMenu.text.toString(),
                 karbohidratMenu.text.toString(), hargaMenu.text.toString(), gambarMenu.text.toString())
             databaseReference.child(id_menu).setValue(addData)
+        }
+    }
+
+    private fun rekomendasi() {
+        val jumlahData = 4
+        var lemak = 0
+        var protein = 0
+        var kalori = 0
+        var karbohidrat = 0
+
+        val lemakSehat = 0
+        val proteinSehat = 0
+        val kaloriSehat = 0
+        val karbohidratSehat = 0
+        val lemakPenyakit1 = 1
+        val proteinPenyakit1 = 1
+        val kaloriPenyakit1 = 1
+        val karbohidratPenyakit1 = 1
+        val lemakPenyakit2 = -1
+        val proteinPenyakit2 = -1
+        val kaloriPenyakit2 = -1
+        val karbohidratPenyakit2 = -1
+
+        when {
+            lemakMenu.text.toString().toInt() < 11 -> { lemak = -1 }
+            lemakMenu.text.toString().toInt() in 11..22 -> { lemak = 0 }
+            lemakMenu.text.toString().toInt() > 22 -> { lemak = 1 }
+        }
+        when {
+            proteinMenu.text.toString().toInt() < 7 -> { protein = -1 }
+            proteinMenu.text.toString().toInt() in 7..20 -> { protein = 0 }
+            proteinMenu.text.toString().toInt() > 20 -> { protein = 1 }
+        }
+        when {
+            kaloriMenu.text.toString().toInt() < 350 -> { kalori = -1 }
+            kaloriMenu.text.toString().toInt() in 350..650 -> { kalori = 0 }
+            kaloriMenu.text.toString().toInt() > 650 -> { kalori = 1 }
+        }
+        when {
+            karbohidratMenu.text.toString().toInt() < 35 -> { karbohidrat = -1 }
+            karbohidratMenu.text.toString().toInt() in 35..65 -> { karbohidrat = 0 }
+            karbohidratMenu.text.toString().toInt() > 65 -> { karbohidrat = 1 }
+        }
+
+        val sehat = (jumlahData * ((lemakSehat - lemak) + (proteinSehat - protein)
+                + (kaloriSehat - kalori) + (karbohidratSehat - karbohidrat)) / jumlahData)
+        val diabetes = (jumlahData * ((lemakPenyakit1 - lemak) + (proteinPenyakit1 - protein)
+                + (kaloriPenyakit1 - kalori) + (karbohidratPenyakit1 - karbohidrat)) / jumlahData)
+        val obesitas = (jumlahData * ((lemakPenyakit1 - lemak) + (proteinPenyakit1 - protein)
+                + (kaloriPenyakit1 - kalori) + (karbohidratPenyakit1 - karbohidrat)) / jumlahData)
+        val anemia = (jumlahData * ((lemakPenyakit2 - lemak) + (proteinPenyakit2 - protein)
+                + (kaloriPenyakit2 - kalori) + (karbohidratPenyakit2 - karbohidrat)) / jumlahData)
+
+        if(statusMenu == "ada") {
+            databaseAi.orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
+                .addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(datasnapshot: DataSnapshot) {
+                        for (snapshot1 in datasnapshot.children) {
+                            val allocation = snapshot1.getValue(Penyakit::class.java)
+                            id_penyakit = allocation!!.id_penyakit
+                            databaseAi.child(id_penyakit).child("id_penyakit").setValue(id_penyakit)
+                            databaseAi.child(id_penyakit).child("id_menu").setValue(id_menu)
+                            databaseAi.child(id_penyakit).child("sehat").setValue(sehat.toString())
+                            databaseAi.child(id_penyakit).child("diabetes").setValue(diabetes.toString())
+                            databaseAi.child(id_penyakit).child("obesitas").setValue(obesitas.toString())
+                            databaseAi.child(id_penyakit).child("anemia").setValue(anemia.toString())
+                        }
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+        } else {
+            id_penyakit  = databaseAi.push().key.toString()
+            val addData = Penyakit(id_penyakit, id_menu, sehat.toString(), diabetes.toString(), obesitas.toString(), anemia.toString())
+            databaseAi.child(id_penyakit).setValue(addData)
         }
     }
 }
