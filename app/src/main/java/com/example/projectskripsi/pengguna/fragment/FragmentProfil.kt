@@ -58,35 +58,11 @@ class FragmentProfil : Fragment() {
         alertDialog = AlertDialog.Builder(requireActivity())
         SP = requireActivity().applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
 
-        profilNama.setText(SP.getString("nama", ""))
-        profilEmail.setText(SP.getString("email", ""))
-        profilPassword.setText(SP.getString("password", ""))
-        profilTanggal.text = SP.getString("tgl_lahir", "")
-        profilGender.text = SP.getString("gender", "")
-        profilAlamat.setText(SP.getString("alamat", ""))
-        profilTelp.setText(SP.getString("telp", ""))
-
+        loadData()
         profilTanggal.setOnClickListener {
-            val date = DatePickerDialog(requireActivity(), {
-                    view, year, month, dayOfMonth -> val selectedDate = Calendar.getInstance()
-                selectedDate.set(Calendar.YEAR, year)
-                selectedDate.set(Calendar.MONTH, month)
-                selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                profilTanggal.text = formateDate.format(selectedDate.time)
-            }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
-            date.show()
+            setTanggal()
         }
-
-        val genderUser = arrayOf("Laki-laki", "Perempuan")
-        profilSpinner.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, genderUser)
-        profilSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                profilGender.text = "Masukkan Jenis Kelamin"
-            }
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                profilGender.text = genderUser[position]
-            }
-        }
+        jenisKelamin()
 
         btnKeluar.setOnClickListener {
             alertDialog.setTitle("Keluar Akun")
@@ -134,6 +110,44 @@ class FragmentProfil : Fragment() {
         }
     }
 
+    //Load Data User
+    private fun loadData() {
+        profilNama.setText(SP.getString("nama", ""))
+        profilEmail.setText(SP.getString("email", ""))
+        profilPassword.setText(SP.getString("password", ""))
+        profilTanggal.text = SP.getString("tgl_lahir", "")
+        profilGender.text = SP.getString("gender", "")
+        profilAlamat.setText(SP.getString("alamat", ""))
+        profilTelp.setText(SP.getString("telp", ""))
+    }
+
+    //Set Tanggal
+    private fun setTanggal() {
+        val date = DatePickerDialog(requireActivity(), {
+                view, year, month, dayOfMonth -> val selectedDate = Calendar.getInstance()
+            selectedDate.set(Calendar.YEAR, year)
+            selectedDate.set(Calendar.MONTH, month)
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            profilTanggal.text = formateDate.format(selectedDate.time)
+        }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
+        date.show()
+    }
+
+    //Pilih Jenis Kelamin
+    private fun jenisKelamin() {
+        val genderUser = arrayOf("Laki-laki", "Perempuan")
+        profilSpinner.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, genderUser)
+        profilSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                profilGender.text = "Masukkan Jenis Kelamin"
+            }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                profilGender.text = genderUser[position]
+            }
+        }
+    }
+
+    //Validasi Data Akun
     private fun validate(): Boolean {
         if(profilNama.text.toString() == "") {
             Toast.makeText(activity, "Nama masih kosong", Toast.LENGTH_SHORT).show()
@@ -162,6 +176,7 @@ class FragmentProfil : Fragment() {
         return true
     }
 
+    //Simpan Data Akun
     private fun saveData() {
         val id_user = SP.getString("id_user", "").toString()
         val updateData = User(id_user, profilNama.text.toString(), profilEmail.text.toString(),

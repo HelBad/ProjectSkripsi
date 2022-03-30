@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectskripsi.R
 
-class SliderAdapter internal constructor(
-    sliderItems: MutableList<SliderItem>, viewPager2: ViewPager2): RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
+class SliderAdapter internal constructor(sliderItems: MutableList<SliderItem>, viewPager2: ViewPager2):
+    RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
     private val sliderItems: List<SliderItem>
     private val viewPager2: ViewPager2
     init {

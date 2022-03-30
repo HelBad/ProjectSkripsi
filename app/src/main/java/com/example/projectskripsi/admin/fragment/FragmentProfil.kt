@@ -87,6 +87,7 @@ class FragmentProfil : Fragment() {
         }
     }
 
+    //Validasi Data User
     private fun validate(): Boolean {
         if(profilEmail.text.toString() == "") {
             Toast.makeText(activity, "Email masih kosong", Toast.LENGTH_SHORT).show()
@@ -99,6 +100,7 @@ class FragmentProfil : Fragment() {
         return true
     }
 
+    //Simpan Perubahan Data User
     private fun saveData() {
         val id_user = SP.getString("id_user", "").toString()
         val updateData = User(id_user, SP.getString("nama", "").toString(), profilEmail.text.toString(),

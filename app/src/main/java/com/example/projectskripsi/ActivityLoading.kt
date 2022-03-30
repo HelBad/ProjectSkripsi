@@ -16,23 +16,28 @@ class ActivityLoading : AppCompatActivity() {
 
         window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         SP = getSharedPreferences("User", Context.MODE_PRIVATE)
-        val backgrond = object : Thread(){
+        loading()
+    }
+
+    //Progress Loading
+    private fun loading() {
+        val backgrond = object : Thread() {
             override fun run() {
                 try {
                     sleep(2500)
                     when {
                         SP.getString("level", "") == "Pengguna" -> {
-                            var intent = Intent(applicationContext, com.example.projectskripsi.pengguna.ActivityUtama::class.java)
+                            val intent = Intent(applicationContext, com.example.projectskripsi.pengguna.ActivityUtama::class.java)
                             startActivity(intent)
                             finish()
                         }
                         SP.getString("level", "") == "Admin" -> {
-                            var intent = Intent(applicationContext, com.example.projectskripsi.admin.ActivityUtama::class.java)
+                            val intent = Intent(applicationContext, com.example.projectskripsi.admin.ActivityUtama::class.java)
                             startActivity(intent)
                             finish()
                         }
                         SP.getString("level", "") == "" -> {
-                            var intent = Intent(applicationContext, ActivityLogin::class.java)
+                            val intent = Intent(applicationContext, ActivityLogin::class.java)
                             startActivity(intent)
                             finish()
                         }
@@ -44,4 +49,5 @@ class ActivityLoading : AppCompatActivity() {
         }
         backgrond.start()
     }
+
 }

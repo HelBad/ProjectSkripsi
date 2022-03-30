@@ -15,6 +15,7 @@ class ActivityUtama : AppCompatActivity() {
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var bottomNav: BottomNavigationView
 
+    //Pilih Menu Navigasi
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId) {
             R.id.beranda -> {
@@ -43,6 +44,7 @@ class ActivityUtama : AppCompatActivity() {
         bottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
+    //Replace Fragment Menu Navigasi
     private fun replaceFragment(fragment: Fragment) {
         val fragmentTransition = supportFragmentManager.beginTransaction()
         fragmentTransition.replace(R.id.fragmentContainer, fragment)

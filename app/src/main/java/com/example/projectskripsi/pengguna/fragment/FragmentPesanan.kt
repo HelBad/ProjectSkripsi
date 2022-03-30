@@ -51,6 +51,7 @@ class FragmentPesanan : Fragment() {
         loadData()
     }
 
+    //Kategori Data Pesanan
     private fun loadData() {
         val query = databasePesanan.child("diproses").orderByChild("id_user")
             .equalTo(SP.getString("id_user", "").toString())
@@ -85,6 +86,7 @@ class FragmentPesanan : Fragment() {
         }
     }
 
+    //List Pesanan
     private fun listData(query: Query){
         val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Pesanan, ViewholderPesanan>(
             Pesanan::class.java,

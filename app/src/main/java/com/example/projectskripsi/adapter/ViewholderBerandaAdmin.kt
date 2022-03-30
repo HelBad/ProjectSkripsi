@@ -11,7 +11,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class ViewholderBerandaAdmin(itemView: View): RecyclerView.ViewHolder(itemView) {
-    internal var mView: View = itemView
+    private var mView: View = itemView
     private var mClickListener: ClickListener? = null
     var menu = Menu()
     var formatNumber: NumberFormat = DecimalFormat("#,###")

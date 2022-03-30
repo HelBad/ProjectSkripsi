@@ -64,6 +64,7 @@ class ActivityDetail : AppCompatActivity() {
         loadData()
     }
 
+    //Load Data Pesanan
     private fun loadData() {
         databaseDetail = FirebaseDatabase.getInstance().getReference("menu")
         val query = databaseDetail.orderByKey().equalTo(intent.getStringExtra("id_menu").toString())
@@ -98,6 +99,7 @@ class ActivityDetail : AppCompatActivity() {
         })
     }
 
+    //Save Data Pesanan
     private fun buatPesanan() {
         val id_user = SP.getString("id_user", "").toString().trim()
         val total = (harga_menu * jumlahDetail.text.toString().toInt()).toString()
@@ -113,6 +115,7 @@ class ActivityDetail : AppCompatActivity() {
         }
     }
 
+    //Cek Data Pesanan
     private fun cekData() {
         databaseRef.orderByChild("id_menu").equalTo(id_menu).addValueEventListener( object : ValueEventListener {
             override fun onDataChange(datasnapshot: DataSnapshot) {
@@ -131,6 +134,7 @@ class ActivityDetail : AppCompatActivity() {
         })
     }
 
+    //Set Jumlah Pesanan
     private fun setJumlah() {
         btnPesan.visibility = View.INVISIBLE
         btnHapus.visibility = View.GONE

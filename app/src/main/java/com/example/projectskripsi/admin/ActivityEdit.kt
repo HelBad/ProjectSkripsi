@@ -87,6 +87,7 @@ class ActivityEdit : AppCompatActivity() {
         }
     }
 
+    //Set Gambar Menu
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK) {
@@ -111,6 +112,7 @@ class ActivityEdit : AppCompatActivity() {
         }
     }
 
+    //Load Data Menu
     private fun loadMenu() {
         databaseReference.orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
             .addValueEventListener(object: ValueEventListener {
@@ -132,6 +134,7 @@ class ActivityEdit : AppCompatActivity() {
             })
     }
 
+    //Validasi Data Menu
     private fun validate(): Boolean {
         if(namaMenu.text.toString() == "") {
             Toast.makeText(this, "Nama menu masih kosong", Toast.LENGTH_SHORT).show()
@@ -168,6 +171,7 @@ class ActivityEdit : AppCompatActivity() {
         return true
     }
 
+    //Simpan Data Menu
     private fun tambahData() {
         if(statusMenu == "ada") {
             id_menu = intent.getStringExtra("id_menu").toString()
@@ -189,6 +193,7 @@ class ActivityEdit : AppCompatActivity() {
         }
     }
 
+    //AI Rekomendasi Menu
     private fun rekomendasi() {
         val jumlahData = 4
         var lemak = 0

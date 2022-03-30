@@ -17,6 +17,11 @@ class ActivityRestoran : AppCompatActivity() {
         setContentView(R.layout.activity_restoran)
 
         viewPager2 = findViewById(R.id.gambarTentang)
+        sliderImage()
+    }
+
+    //Set Image Slider
+    private fun sliderImage() {
         val sliderItems: MutableList<SliderItem> = ArrayList()
         sliderItems.add(SliderItem(R.drawable.img_restoran_1))
         sliderItems.add(SliderItem(R.drawable.img_restoran_2))

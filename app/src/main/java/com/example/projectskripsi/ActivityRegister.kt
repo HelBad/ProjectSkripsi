@@ -56,26 +56,9 @@ class ActivityRegister : AppCompatActivity() {
         alertDialog = AlertDialog.Builder(this)
 
         tanggalRegister.setOnClickListener {
-            val date = DatePickerDialog(this, {
-                    view, year, month, dayOfMonth -> val selectedDate = Calendar.getInstance()
-                selectedDate.set(Calendar.YEAR, year)
-                selectedDate.set(Calendar.MONTH, month)
-                selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                tanggalRegister.text = formateDate.format(selectedDate.time)
-            }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
-            date.show()
+            setTanggal()
         }
-
-        val genderUser = arrayOf("Laki-laki", "Perempuan")
-        spinnerRegister.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, genderUser)
-        spinnerRegister.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                genderRegister.text = "Masukkan Jenis Kelamin"
-            }
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                genderRegister.text = genderUser[position]
-            }
-        }
+        jenisKelamin()
 
         btnRegister.setOnClickListener {
             alertDialog.setMessage("Apakah data yang dimasukkan sudah benar ?")
@@ -110,6 +93,33 @@ class ActivityRegister : AppCompatActivity() {
         }
     }
 
+    //Set Tanggal
+    private fun setTanggal() {
+        val date = DatePickerDialog(this, {
+                view, year, month, dayOfMonth -> val selectedDate = Calendar.getInstance()
+            selectedDate.set(Calendar.YEAR, year)
+            selectedDate.set(Calendar.MONTH, month)
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            tanggalRegister.text = formateDate.format(selectedDate.time)
+        }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
+        date.show()
+    }
+
+    //Pilih Jenis Kelamin
+    private fun jenisKelamin() {
+        val genderUser = arrayOf("Laki-laki", "Perempuan")
+        spinnerRegister.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, genderUser)
+        spinnerRegister.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                genderRegister.text = "Masukkan Jenis Kelamin"
+            }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                genderRegister.text = genderUser[position]
+            }
+        }
+    }
+
+    //Validasi Data User
     private fun validate(): Boolean {
         if(namaRegister.text.toString() == "") {
             Toast.makeText(this, "Nama masih kosong", Toast.LENGTH_SHORT).show()
@@ -142,6 +152,7 @@ class ActivityRegister : AppCompatActivity() {
         return true
     }
 
+    //Add Data User
     private fun register() {
         btnRegister.isClickable = false
         Toast.makeText(this, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()

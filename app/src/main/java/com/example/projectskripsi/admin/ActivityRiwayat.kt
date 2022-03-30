@@ -84,6 +84,7 @@ class ActivityRiwayat : AppCompatActivity() {
         }
     }
 
+    //Salin Teks Lokasi
     private fun copyTextToClipboard() {
         val textToCopy = lokasiRiwayat.text
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -92,6 +93,7 @@ class ActivityRiwayat : AppCompatActivity() {
         Toast.makeText(this, "Teks berhasil disalin", Toast.LENGTH_SHORT).show()
     }
 
+    //Load Data Pesanan
     private fun loadData() {
         FirebaseDatabase.getInstance().getReference("pesanan").child(intent.getStringExtra("status").toString())
             .orderByKey().equalTo(intent.getStringExtra("id_pesanan").toString())
@@ -184,6 +186,7 @@ class ActivityRiwayat : AppCompatActivity() {
             })
     }
 
+    //List Keranjang
     private fun listKeranjang() {
         val query = FirebaseDatabase.getInstance().getReference("keranjang")
             .child("kosong").child("$id_user | $id_keranjang")
@@ -208,6 +211,7 @@ class ActivityRiwayat : AppCompatActivity() {
         mRecyclerView.adapter = firebaseRecyclerAdapter
     }
 
+    //Validasi Pesanan
     private fun validate(): Boolean {
         if(editLaporanRiwayat.text.toString() == "") {
             Toast.makeText(this, "Tambahkan alasan dibatalkan ", Toast.LENGTH_SHORT).show()
@@ -216,6 +220,7 @@ class ActivityRiwayat : AppCompatActivity() {
         return true
     }
 
+    //Set Status Pesanan
     private fun pesananBatal() {
         val addData = Pesanan(intent.getStringExtra("id_pesanan").toString(), id_user, id_keranjang,
             keteranganRiwayat.text.toString(), waktuRiwayat.text.toString(), lokasiRiwayat.text.toString(),

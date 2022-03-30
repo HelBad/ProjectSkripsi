@@ -37,6 +37,7 @@ class FragmentBeranda : Fragment() {
         mRecyclerView.layoutManager = mLayoutManager
     }
 
+    //Action Bar
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -54,6 +55,7 @@ class FragmentBeranda : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    //List Menu
     override fun onStart() {
         super.onStart()
         val query = FirebaseDatabase.getInstance().getReference("menu")

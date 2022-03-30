@@ -14,7 +14,7 @@ class ViewholderPesanan(itemView: View): RecyclerView.ViewHolder(itemView) {
     var pesanan = Pesanan()
     var formatNumber: NumberFormat = DecimalFormat("#,###")
 
-    init{
+    init {
         itemView.setOnClickListener { view -> mClickListener!!.onItemClick(view, adapterPosition) }
         itemView.setOnLongClickListener { view ->
             mClickListener!!.onItemLongClick(view, adapterPosition)

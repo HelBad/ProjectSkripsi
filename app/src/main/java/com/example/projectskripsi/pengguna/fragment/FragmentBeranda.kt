@@ -2,7 +2,6 @@ package com.example.projectskripsi.pengguna.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -52,22 +51,27 @@ class FragmentBeranda : Fragment() {
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
 
-        val rekomendasiPenyakit = arrayOf("Sehat", "Obesitas", "Diabetes", "Anemia")
-        spinnerBeranda.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, rekomendasiPenyakit)
-        spinnerBeranda.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                penyakitBeranda.text = rekomendasiPenyakit[position]
-                loadMenu(rekomendasiPenyakit[position])
-            }
-        }
-
+        pilihPenyakit()
         keranjangBeranda.setOnClickListener {
             val intent = Intent(view.context, ActivityCheckout::class.java)
             startActivity(intent)
         }
     }
 
+    //Pilih Penyakit
+    fun pilihPenyakit() {
+        val rekomendasiPenyakit = arrayOf("Sehat", "Obesitas", "Diabetes", "Anemia")
+        spinnerBeranda.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, rekomendasiPenyakit)
+        spinnerBeranda.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                penyakitBeranda.text = rekomendasiPenyakit[position]
+                listMenu(rekomendasiPenyakit[position])
+            }
+        }
+    }
+
+    //Action Bar
     override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -103,10 +107,11 @@ class FragmentBeranda : Fragment() {
             }
             override fun onCancelled(error: DatabaseError) {}
         })
-        loadMenu("Sehat")
+        listMenu("Sehat")
     }
 
-    fun loadMenu(kategori: String){
+    //List Menu
+    fun listMenu(kategori: String){
         val query = FirebaseDatabase.getInstance().getReference("menu")
         val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Menu, ViewholderBeranda>(
             Menu::class.java,

@@ -14,7 +14,6 @@ import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.ViewholderCheckout
 import com.example.projectskripsi.model.Keranjang
 import com.example.projectskripsi.model.Pesanan
-import com.example.projectskripsi.model.User
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.*
 import java.text.DecimalFormat
@@ -61,6 +60,7 @@ class ActivityRiwayat : AppCompatActivity() {
         loadData()
     }
 
+    //Load Data Pesanan
     private fun loadData() {
         FirebaseDatabase.getInstance().getReference("pesanan").child(intent.getStringExtra("status").toString())
             .orderByKey().equalTo(intent.getStringExtra("id_pesanan").toString())
@@ -107,6 +107,7 @@ class ActivityRiwayat : AppCompatActivity() {
         })
     }
 
+    //List Keranjang
     private fun listKeranjang() {
         val query = FirebaseDatabase.getInstance().getReference("keranjang")
             .child("kosong").child("$id_user | $id_keranjang")

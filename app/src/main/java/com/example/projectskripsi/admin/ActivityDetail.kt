@@ -52,6 +52,7 @@ class ActivityDetail : AppCompatActivity() {
         loadData()
     }
 
+    //Load Data Menu
     private fun loadData() {
         val query = FirebaseDatabase.getInstance().getReference("menu").orderByKey()
             .equalTo(intent.getStringExtra("id_menu").toString())
@@ -74,6 +75,7 @@ class ActivityDetail : AppCompatActivity() {
                         intent.putExtra("id_menu", id_menu)
                         startActivity(intent)
                     }
+
                     btnHapus.setOnClickListener {
                         alertDialog.setMessage("Apakah anda ingin menghapus menu ini ?")
                             .setCancelable(false)

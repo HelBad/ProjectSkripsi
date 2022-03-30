@@ -1,6 +1,5 @@
 package com.example.projectskripsi.adapter
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
@@ -14,7 +13,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
-    internal var mView: View = itemView
+    private var mView: View = itemView
     private var mClickListener: ClickListener? = null
     var menu = Menu()
     var formatNumber: NumberFormat = DecimalFormat("#,###")

@@ -103,23 +103,7 @@ class ActivityCheckout : AppCompatActivity() {
             override fun onCancelled(databaseError: DatabaseError) {}
         })
 
-        val mLocationRequest: LocationRequest = LocationRequest.create()
-        mLocationRequest.interval = 60000
-        mLocationRequest.fastestInterval = 5000
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        val mLocationCallback: LocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                for (location in locationResult.locations) {
-                    if (location != null) {
-                        //TODO: UI updates.
-                    }
-                }
-            }
-        }
-        LocationServices.getFusedLocationProviderClient(this)
-            .requestLocationUpdates(mLocationRequest, mLocationCallback, null)
-
-        checkPermissions()
+        lokasiSekarang()
         listKeranjang()
 
         btnPesanCo.setOnClickListener {
@@ -141,6 +125,27 @@ class ActivityCheckout : AppCompatActivity() {
                     }
                 }).create().show()
         }
+    }
+
+    //Set Lokasi Sekarang
+    @SuppressLint("MissingPermission")
+    private fun lokasiSekarang() {
+        val mLocationRequest: LocationRequest = LocationRequest.create()
+        mLocationRequest.interval = 60000
+        mLocationRequest.fastestInterval = 5000
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val mLocationCallback: LocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                for (location in locationResult.locations) {
+                    if (location != null) {
+                        //TODO: UI updates.
+                    }
+                }
+            }
+        }
+        LocationServices.getFusedLocationProviderClient(this)
+            .requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+        checkPermissions()
     }
 
     private fun checkPermissions() {
@@ -202,6 +207,7 @@ class ActivityCheckout : AppCompatActivity() {
         }
     }
 
+    //List Keranjang
     private fun listKeranjang() {
         val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Keranjang, ViewholderCheckout>(
             Keranjang::class.java,
@@ -229,6 +235,7 @@ class ActivityCheckout : AppCompatActivity() {
         mRecyclerView.adapter = firebaseRecyclerAdapter
     }
 
+    //Validasi Alamat User
     private fun validate(): Boolean {
         if(lokasiCo.text.toString() == "") {
             Toast.makeText(this, "Alamat masih kosong", Toast.LENGTH_SHORT).show()
@@ -237,6 +244,7 @@ class ActivityCheckout : AppCompatActivity() {
         return true
     }
 
+    //Checkout Pesanan
     @SuppressLint("NewApi")
     private fun buatPesanan() {
         val ref = FirebaseDatabase.getInstance().getReference("pesanan")
@@ -259,6 +267,7 @@ class ActivityCheckout : AppCompatActivity() {
         })
     }
 
+    //Validasi Pesanan
     override fun onStart() {
         super.onStart()
         databaseCo.addValueEventListener(object: ValueEventListener {

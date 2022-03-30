@@ -44,10 +44,11 @@ class FragmentPesanan : Fragment() {
         mRecyclerView.layoutManager = mLayoutManager
 
         databasePesanan = FirebaseDatabase.getInstance().getReference("pesanan")
-        loadData()
+        dataPesanan()
     }
 
-    private fun loadData() {
+    //Kategori Data Pesanan
+    private fun dataPesanan() {
         val query = databasePesanan.child("diproses").orderByChild("status").equalTo("diproses")
         listData(query)
         btnDiproses.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
@@ -77,6 +78,7 @@ class FragmentPesanan : Fragment() {
         }
     }
 
+    //List Pesanan
     private fun listData(query: Query){
         val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Pesanan, ViewholderPesanan>(
             Pesanan::class.java,

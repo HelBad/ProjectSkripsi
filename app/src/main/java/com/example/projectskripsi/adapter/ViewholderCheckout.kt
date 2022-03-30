@@ -14,7 +14,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class ViewholderCheckout(itemView: View): RecyclerView.ViewHolder(itemView) {
-    internal var mView: View = itemView
+    private var mView: View = itemView
     private var mClickListener: ClickListener? = null
     var keranjang = Keranjang()
     var formatNumber: NumberFormat = DecimalFormat("#,###")

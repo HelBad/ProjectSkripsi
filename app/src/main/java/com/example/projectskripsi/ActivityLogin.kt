@@ -47,6 +47,7 @@ class ActivityLogin : AppCompatActivity() {
         }
     }
 
+    //Validasi User
     private fun validate(): Boolean {
         if(emailLogin.text.toString() == "") {
             Toast.makeText(this, "Email kosong", Toast.LENGTH_SHORT).show()
@@ -59,6 +60,7 @@ class ActivityLogin : AppCompatActivity() {
         return true
     }
 
+    //Login User
     private fun login() {
         btnLogin.isClickable = false
         Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
