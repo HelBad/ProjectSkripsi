@@ -42,7 +42,7 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
         for (list in listPenyakit) {
             if(list.id_menu == menu.id_menu) {
                 if(pilihKategori == "Sehat") {
-                    if(list.sehat.toInt() in 0..5) {
+                    if(list.sehat.toInt() in -2..3) {
                         kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     } else {
@@ -50,7 +50,7 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                     }
                 } else if(pilihKategori == "Obesitas") {
-                    if(list.obesitas.toInt() in 0..5) {
+                    if(list.obesitas.toInt() in -2..3) {
                         kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     } else {
@@ -58,7 +58,7 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                     }
                 } else if(pilihKategori == "Diabetes") {
-                    if(list.diabetes.toInt() in 0..5) {
+                    if(list.diabetes.toInt() in -2..3) {
                         kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     } else {
@@ -66,7 +66,7 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                     }
                 } else if(pilihKategori == "Anemia") {
-                    if(list.anemia.toInt() in 0..5) {
+                    if(list.anemia.toInt() in -2..3) {
                         kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     } else {
