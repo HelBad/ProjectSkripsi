@@ -1,4 +1,4 @@
-package com.example.projectskripsi.pengguna
+package com.example.projectskripsi.core.ui.pengguna
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

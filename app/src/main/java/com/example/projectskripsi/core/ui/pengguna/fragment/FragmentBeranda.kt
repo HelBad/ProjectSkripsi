@@ -1,4 +1,4 @@
-package com.example.projectskripsi.pengguna.fragment
+package com.example.projectskripsi.core.ui.pengguna.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,10 +13,10 @@ import com.example.projectskripsi.*
 import com.example.projectskripsi.model.Menu
 import com.example.projectskripsi.adapter.ViewholderBeranda
 import com.example.projectskripsi.model.Penyakit
-import com.example.projectskripsi.pengguna.ActivityCheckout
-import com.example.projectskripsi.pengguna.ActivityDetail
-import com.example.projectskripsi.pengguna.ActivityNutrisi
-import com.example.projectskripsi.pengguna.ActivityRestoran
+import com.example.projectskripsi.core.ui.pengguna.ActivityCheckout
+import com.example.projectskripsi.core.ui.pengguna.ActivityDetail
+import com.example.projectskripsi.core.ui.pengguna.ActivityNutrisi
+import com.example.projectskripsi.core.ui.pengguna.ActivityRestoran
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

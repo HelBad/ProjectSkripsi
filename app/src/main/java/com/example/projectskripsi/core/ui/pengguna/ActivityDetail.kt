@@ -1,4 +1,4 @@
-package com.example.projectskripsi.pengguna
+package com.example.projectskripsi.core.ui.pengguna
 
 import android.content.Context
 import android.content.SharedPreferences

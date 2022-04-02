@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.core.ui.auth
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import com.example.projectskripsi.R
 import com.example.projectskripsi.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

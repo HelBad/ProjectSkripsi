@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.core.ui.auth
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import com.example.projectskripsi.R
+import com.example.projectskripsi.core.ui.admin.ActivityUtama
 
 class ActivityLoading : AppCompatActivity() {
     lateinit var SP: SharedPreferences
@@ -27,12 +29,12 @@ class ActivityLoading : AppCompatActivity() {
                     sleep(2500)
                     when {
                         SP.getString("level", "") == "Pengguna" -> {
-                            val intent = Intent(applicationContext, com.example.projectskripsi.pengguna.ActivityUtama::class.java)
+                            val intent = Intent(applicationContext, com.example.projectskripsi.core.ui.pengguna.ActivityUtama::class.java)
                             startActivity(intent)
                             finish()
                         }
                         SP.getString("level", "") == "Admin" -> {
-                            val intent = Intent(applicationContext, com.example.projectskripsi.admin.ActivityUtama::class.java)
+                            val intent = Intent(applicationContext, ActivityUtama::class.java)
                             startActivity(intent)
                             finish()
                         }

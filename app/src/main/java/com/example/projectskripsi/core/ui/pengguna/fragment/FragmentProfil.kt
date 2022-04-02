@@ -1,4 +1,4 @@
-package com.example.projectskripsi.pengguna.fragment
+package com.example.projectskripsi.core.ui.pengguna.fragment
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -13,7 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import com.example.projectskripsi.ActivityLogin
+import com.example.projectskripsi.core.ui.auth.ActivityLogin
 import com.example.projectskripsi.R
 import com.example.projectskripsi.model.User
 import com.google.firebase.database.FirebaseDatabase

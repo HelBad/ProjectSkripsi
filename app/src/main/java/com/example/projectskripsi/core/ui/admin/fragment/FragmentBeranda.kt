@@ -1,4 +1,4 @@
-package com.example.projectskripsi.admin.fragment
+package com.example.projectskripsi.core.ui.admin.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.ViewholderBerandaAdmin
-import com.example.projectskripsi.admin.ActivityEdit
+import com.example.projectskripsi.core.ui.admin.ActivityEdit
 import com.example.projectskripsi.model.Menu
-import com.example.projectskripsi.admin.ActivityDetail
+import com.example.projectskripsi.core.ui.admin.ActivityDetail
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.FirebaseDatabase
 

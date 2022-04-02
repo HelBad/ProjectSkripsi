@@ -1,4 +1,4 @@
-package com.example.projectskripsi.admin
+package com.example.projectskripsi.core.ui.admin
 
 import android.content.ClipData
 import android.content.ClipboardManager

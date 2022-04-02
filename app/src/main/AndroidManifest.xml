@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/img_logo"
         android:label="Nutrifood"
@@ -14,43 +15,43 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".admin.ActivityRiwayat"
+            android:name=".core.ui.admin.ActivityRiwayat"
             android:exported="false" />
         <activity
-            android:name=".admin.ActivityDetail"
+            android:name=".core.ui.admin.ActivityDetail"
             android:exported="false" />
         <activity
-            android:name=".admin.ActivityEdit"
+            android:name=".core.ui.admin.ActivityEdit"
             android:exported="false" />
         <activity
-            android:name=".admin.ActivityUtama"
+            android:name=".core.ui.admin.ActivityUtama"
             android:exported="false" />
         <activity
-            android:name=".pengguna.ActivityRiwayat"
+            android:name=".core.ui.pengguna.ActivityRiwayat"
             android:exported="false" />
         <activity
-            android:name=".pengguna.ActivityNutrisi"
+            android:name=".core.ui.pengguna.ActivityNutrisi"
             android:exported="false" />
         <activity
-            android:name=".pengguna.ActivityRestoran"
+            android:name=".core.ui.pengguna.ActivityRestoran"
             android:exported="false" />
         <activity
-            android:name=".pengguna.ActivityDetail"
+            android:name=".core.ui.pengguna.ActivityDetail"
             android:exported="false" />
         <activity
-            android:name=".pengguna.ActivityCheckout"
+            android:name=".core.ui.pengguna.ActivityCheckout"
             android:exported="false" />
         <activity
-            android:name=".pengguna.ActivityUtama"
+            android:name=".core.ui.pengguna.ActivityUtama"
             android:exported="false" />
         <activity
-            android:name=".ActivityRegister"
+            android:name=".core.ui.auth.ActivityRegister"
             android:exported="false" />
         <activity
-            android:name=".ActivityLogin"
+            android:name=".core.ui.auth.ActivityLogin"
             android:exported="false" />
         <activity
-            android:name=".ActivityLoading"
+            android:name=".core.ui.auth.ActivityLoading"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

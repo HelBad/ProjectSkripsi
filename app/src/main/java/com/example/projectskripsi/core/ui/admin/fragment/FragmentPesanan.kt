@@ -1,4 +1,4 @@
-package com.example.projectskripsi.admin.fragment
+package com.example.projectskripsi.core.ui.admin.fragment
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.ViewholderPesanan
 import com.example.projectskripsi.model.Pesanan
-import com.example.projectskripsi.admin.ActivityRiwayat
+import com.example.projectskripsi.core.ui.admin.ActivityRiwayat
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase

@@ -1,4 +1,4 @@
-package com.example.projectskripsi
+package com.example.projectskripsi.core.ui.auth
 
 import android.content.Context
 import android.content.DialogInterface
@@ -6,23 +6,30 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.projectskripsi.R
+import com.example.projectskripsi.core.ui.admin.ActivityUtama
+import com.example.projectskripsi.core.ui.auth.viewmodel.AuthViewModel
 import com.example.projectskripsi.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityLogin : AppCompatActivity() {
+    private val authViewModel: AuthViewModel by viewModel()
+
     lateinit var emailLogin: EditText
     lateinit var passwordLogin: EditText
     lateinit var btnLogin: Button
     lateinit var textRegister: TextView
-    lateinit var SP: SharedPreferences
+    lateinit var sp: SharedPreferences
     lateinit var alertDialog: AlertDialog.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +40,17 @@ class ActivityLogin : AppCompatActivity() {
         passwordLogin = findViewById(R.id.passwordLogin)
         btnLogin = findViewById(R.id.btnLogin)
         textRegister = findViewById(R.id.textRegister)
-        SP = getSharedPreferences("User", Context.MODE_PRIVATE)
+        sp = getSharedPreferences("User", Context.MODE_PRIVATE)
         alertDialog = AlertDialog.Builder(this)
 
         btnLogin.setOnClickListener {
             if(validate()) {
-                login()
+                btnLogin.isClickable = false
+//                Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
+                val user = authViewModel.login(
+                    emailLogin.text.toString(),
+                    passwordLogin.text.toString()
+                )
             }
         }
         textRegister.setOnClickListener {
@@ -72,7 +84,7 @@ class ActivityLogin : AppCompatActivity() {
                         for (h in p0.children) {
                             val us = h.getValue(User::class.java)
                             if(us!!.password == passwordLogin.text.toString()) {
-                                val editor = SP.edit()
+                                val editor = sp.edit()
                                 editor.putString("id_user", us.id_user)
                                 editor.putString("nama", us.nama)
                                 editor.putString("email", us.email)
@@ -87,13 +99,13 @@ class ActivityLogin : AppCompatActivity() {
                                 if(us.level == "Pengguna") {
                                     btnLogin.isClickable = false
                                     val intent = Intent(this@ActivityLogin,
-                                        com.example.projectskripsi.pengguna.ActivityUtama::class.java)
+                                        com.example.projectskripsi.core.ui.pengguna.ActivityUtama::class.java)
                                     startActivity(intent)
                                     finish()
                                 } else if(us.level == "Admin") {
                                     btnLogin.isClickable = false
                                     val intent = Intent(this@ActivityLogin,
-                                        com.example.projectskripsi.admin.ActivityUtama::class.java)
+                                        ActivityUtama::class.java)
                                     startActivity(intent)
                                     finish()
                                 }

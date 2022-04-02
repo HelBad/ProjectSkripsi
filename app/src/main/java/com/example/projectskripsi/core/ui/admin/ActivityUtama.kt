@@ -1,4 +1,4 @@
-package com.example.projectskripsi.admin
+package com.example.projectskripsi.core.ui.admin
 
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.projectskripsi.R
-import com.example.projectskripsi.admin.fragment.FragmentBeranda
-import com.example.projectskripsi.admin.fragment.FragmentPesanan
-import com.example.projectskripsi.admin.fragment.FragmentProfil
+import com.example.projectskripsi.core.ui.admin.fragment.FragmentBeranda
+import com.example.projectskripsi.core.ui.admin.fragment.FragmentPesanan
+import com.example.projectskripsi.core.ui.admin.fragment.FragmentProfil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ActivityUtama : AppCompatActivity() {

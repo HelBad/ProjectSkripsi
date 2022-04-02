@@ -1,4 +1,4 @@
-package com.example.projectskripsi.pengguna.fragment
+package com.example.projectskripsi.core.ui.pengguna.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectskripsi.pengguna.ActivityRiwayat
+import com.example.projectskripsi.core.ui.pengguna.ActivityRiwayat
 import com.example.projectskripsi.R
 import com.example.projectskripsi.adapter.ViewholderPesanan
 import com.example.projectskripsi.model.Pesanan
