@@ -22,7 +22,6 @@ class AuthRemoteDataSource {
                         for (h in p0.children) {
                             user = h.getValue(User::class.java)
                             Log.d("login", h.value.toString())
-                            Log.d("login", user.toString())
                         }
                     }
                 }
@@ -31,6 +30,7 @@ class AuthRemoteDataSource {
                 }
             })
 
+        Log.d("login", user.toString())
         return user
     }
 
