@@ -1,37 +1,41 @@
 package com.example.projectskripsi.core.data.source.remote
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
+import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
 
 class AuthRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
 
-    fun login(email: String, password: String): User? {
-        var user: User? = null
+    fun login(email: String, password: String): Flowable<Response<User?>> {
+        val response = PublishSubject.create<Response<User?>>()
 
         firebase.getReference("user").orderByChild("email")
             .equalTo(email).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.exists()) {
                         for (h in p0.children) {
-                            user = h.getValue(User::class.java)
-                            Log.d("login", h.value.toString())
+                            h.getValue(User::class.java)?.let { response.onNext(Response.Success(it)) }
                         }
+                    }
+                    else {
+                        response.onNext(Response.Empty)
                     }
                 }
                 override fun onCancelled(p0: DatabaseError) {
+                    response.onNext(Response.Error(p0.message))
                     Log.e("AuthRemoteDataSource", p0.message)
                 }
             })
 
-        Log.d("login", user.toString())
-        return user
+        return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     fun register(nama: String, email: String, password: String, tanggal: String, gender: String, alamat: String, telp: String): User? {

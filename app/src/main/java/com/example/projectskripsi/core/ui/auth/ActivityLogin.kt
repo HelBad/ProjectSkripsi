@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
+import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.ui.admin.ActivityUtama
 import com.example.projectskripsi.core.ui.auth.viewmodel.AuthViewModel
 import com.example.projectskripsi.model.User
@@ -46,15 +46,56 @@ class ActivityLogin : AppCompatActivity() {
         btnLogin.setOnClickListener {
             if(validate()) {
                 btnLogin.isClickable = false
-//                Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
-                val user = authViewModel.login(
+                Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
+
+                authViewModel.login(
                     emailLogin.text.toString(),
                     passwordLogin.text.toString()
-                )
+                ).observe(this@ActivityLogin) { res ->
+                    when (res) {
+                        is Resource.Loading -> {
+                            btnLogin.isClickable = false
+                            Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
+                        }
+                        is Resource.Success -> {
+                            val user = res.data
+                            if (user != null && user.password == passwordLogin.text.toString()) {
+                                val editor = sp.edit()
+                                editor.putString("id_user", user.id_user)
+                                editor.putString("nama", user.nama)
+                                editor.putString("email", user.email)
+                                editor.putString("password", user.password)
+                                editor.putString("tgl_lahir", user.tgl_lahir)
+                                editor.putString("gender", user.gender)
+                                editor.putString("alamat", user.alamat)
+                                editor.putString("telp", user.telp)
+                                editor.putString("level", user.level)
+                                editor.apply()
+
+                                if (user.level == "Pengguna") {
+                                    btnLogin.isClickable = false
+                                    val intent = Intent(this@ActivityLogin, com.example.projectskripsi.core.ui.pengguna.ActivityUtama::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                } else if (user.level == "Admin") {
+                                    btnLogin.isClickable = false
+                                    val intent = Intent(this@ActivityLogin, ActivityUtama::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }
+                            }
+                        }
+                        is Resource.Error -> {
+                            btnLogin.isClickable = true
+                            Toast.makeText(this@ActivityLogin, "Terjadi kesalahan saat login", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
         }
+
         textRegister.setOnClickListener {
-            val intent = Intent(this, ActivityRegister::class.java)
+            val intent = Intent(this@ActivityLogin, ActivityRegister::class.java)
             startActivity(intent)
         }
     }
@@ -65,7 +106,7 @@ class ActivityLogin : AppCompatActivity() {
             Toast.makeText(this, "Email kosong", Toast.LENGTH_SHORT).show()
             return false
         }
-        if(emailLogin.text.toString() == "") {
+        if(passwordLogin.text.toString() == "") {
             Toast.makeText(this, "Password kosong", Toast.LENGTH_SHORT).show()
             return false
         }
