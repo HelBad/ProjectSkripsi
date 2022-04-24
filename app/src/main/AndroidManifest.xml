@@ -15,43 +15,43 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".core.ui.admin.ActivityRiwayat"
+            android:name=".modules.pesanan.ui.ActivityRiwayatAdmin"
             android:exported="false" />
         <activity
-            android:name=".core.ui.admin.ActivityDetail"
+            android:name=".modules.detail.ui.ActivityDetailAdmin"
             android:exported="false" />
         <activity
-            android:name=".core.ui.admin.ActivityEdit"
+            android:name=".modules.edit.ui.ActivityEdit"
             android:exported="false" />
         <activity
-            android:name=".core.ui.admin.ActivityUtama"
+            android:name=".modules.beranda.ui.ActivityUtamaAdmin"
             android:exported="false" />
         <activity
-            android:name=".core.ui.pengguna.ActivityRiwayat"
+            android:name=".modules.pesanan.ui.ActivityRiwayatUser"
             android:exported="false" />
         <activity
-            android:name=".core.ui.pengguna.ActivityNutrisi"
+            android:name=".modules.beranda.ui.ActivityNutrisi"
             android:exported="false" />
         <activity
-            android:name=".core.ui.pengguna.ActivityRestoran"
+            android:name=".modules.beranda.ui.ActivityRestoran"
             android:exported="false" />
         <activity
-            android:name=".core.ui.pengguna.ActivityDetail"
+            android:name=".modules.detail.ui.ActivityDetailUser"
             android:exported="false" />
         <activity
-            android:name=".core.ui.pengguna.ActivityCheckout"
+            android:name=".modules.checkout.ui.ActivityCheckout"
             android:exported="false" />
         <activity
-            android:name=".core.ui.pengguna.ActivityUtama"
+            android:name=".modules.beranda.ui.ActivityUtamaUser"
             android:exported="false" />
         <activity
-            android:name=".core.ui.auth.ActivityRegister"
+            android:name=".modules.auth.ui.ActivityRegister"
             android:exported="false" />
         <activity
-            android:name=".core.ui.auth.ActivityLogin"
+            android:name=".modules.auth.ui.ActivityLogin"
             android:exported="false" />
         <activity
-            android:name=".core.ui.auth.ActivityLoading"
+            android:name=".modules.auth.ui.ActivityLoading"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".core.ui.pengguna.fragment.FragmentBeranda">
+    tools:context=".modules.beranda.ui.fragment.FragmentBerandaUser">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarBeranda"
         android:layout_width="match_parent"

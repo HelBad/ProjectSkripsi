@@ -1,7 +1,7 @@
 package com.example.projectskripsi
 
 import android.app.Application
-import com.example.projectskripsi.di.authModule
+import com.example.projectskripsi.core.authModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
