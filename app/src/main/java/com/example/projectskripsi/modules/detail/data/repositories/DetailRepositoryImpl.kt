@@ -3,7 +3,7 @@ package com.example.projectskripsi.modules.detail.data.repositories
 import android.annotation.SuppressLint
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.beranda.data.models.Menu
+import com.example.projectskripsi.modules.detail.data.models.Menu
 import com.example.projectskripsi.modules.detail.data.source.remote.DetailRemoteDataSource
 import com.example.projectskripsi.modules.detail.domain.repositories.DetailRepository
 import io.reactivex.BackpressureStrategy

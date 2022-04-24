@@ -2,13 +2,11 @@ package com.example.projectskripsi.modules.detail.data.source.remote
 
 import android.util.Log
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.detail.data.models.Menu
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
