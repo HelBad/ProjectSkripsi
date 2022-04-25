@@ -8,8 +8,8 @@ import android.text.Editable
 import android.view.View
 import android.widget.*
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.checkout.data.models.Keranjang
-import com.example.projectskripsi.modules.beranda.data.models.Menu
+import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
@@ -72,16 +72,16 @@ class ActivityDetailUser : AppCompatActivity() {
             override fun onDataChange(datasnapshot: DataSnapshot) {
                 for (snapshot1 in datasnapshot.children) {
                     val allocation = snapshot1.getValue(Menu::class.java)
-                    id_menu = allocation!!.id_menu
-                    namaDetail.text = allocation.nama_menu
-                    lemakDetail.text = allocation.lemak
-                    proteinDetail.text = allocation.protein
-                    kaloriDetail.text = allocation.kalori
-                    karbohidratDetail.text = allocation.karbohidrat
-                    deskripsiDetail.text = allocation.deskripsi
-                    harga_menu = allocation.harga.toInt()
-                    hargaDetail.text = "Rp. " + formatNumber.format(allocation.harga.toInt()) + ",00"
-                    Picasso.get().load(allocation.gambar).into(imgDetail)
+                    id_menu = allocation?.idMenu.toString()
+                    namaDetail.text = allocation?.namaMenu
+                    lemakDetail.text = allocation?.lemak
+                    proteinDetail.text = allocation?.protein
+                    kaloriDetail.text = allocation?.kalori
+                    karbohidratDetail.text = allocation?.karbohidrat
+                    deskripsiDetail.text = allocation?.deskripsi
+                    harga_menu = allocation?.harga?.toInt()!!
+                    hargaDetail.text = "Rp. " + formatNumber.format(allocation?.harga?.toInt()) + ",00"
+                    Picasso.get().load(allocation?.gambar).into(imgDetail)
 
                     cekData()
                     setJumlah()

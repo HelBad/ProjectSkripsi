@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.*
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.modules.beranda.ui.viewmodel.BerandaViewModel
 import com.example.projectskripsi.modules.checkout.ui.ActivityCheckout
 import com.example.projectskripsi.modules.detail.ui.ActivityDetailUser
@@ -72,7 +72,7 @@ class FragmentBerandaUser : Fragment() {
 
             adapter?.onItemClick = { menu ->
                 val intent = Intent(context, ActivityDetailUser::class.java)
-                intent.putExtra("id_menu", menu.id_menu)
+                intent.putExtra("id_menu", menu.idMenu)
                 startActivity(intent)
             }
 
@@ -95,7 +95,7 @@ class FragmentBerandaUser : Fragment() {
 
                     adapter?.onItemClick = { menu ->
                         val intent = Intent(context, ActivityDetailUser::class.java)
-                        intent.putExtra("id_menu", menu.id_menu)
+                        intent.putExtra("id_menu", menu.idMenu)
                         startActivity(intent)
                     }
 

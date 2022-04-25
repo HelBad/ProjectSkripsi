@@ -2,8 +2,9 @@ package com.example.projectskripsi.modules.beranda.data.source.remote
 
 import android.util.Log
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.data.responses.MenuResponse
+import com.example.projectskripsi.modules.beranda.data.responses.PenyakitResponse
+import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -12,22 +13,21 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
+
 class BerandaRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
 
-    fun getMenu(): Flowable<Response<ArrayList<Menu>>> {
-        val response = PublishSubject.create<Response<ArrayList<Menu>>>()
+    fun getMenu(): Flowable<Response<ArrayList<MenuResponse>>> {
+        val response = PublishSubject.create<Response<ArrayList<MenuResponse>>>()
 
         firebase.getReference("menu")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.exists()) {
-                        val list = arrayListOf<Menu>()
+                        val list = arrayListOf<MenuResponse>()
                         for (snap in p0.children) {
-                            val menu = snap.getValue(Menu::class.java)
-                            if (menu != null) {
-                                list.add(menu)
-                            }
+                            val menu = Converter.toObject(snap, MenuResponse::class.java)
+                            if (menu != null) list.add(menu)
                         }
 
                         response.onNext(Response.Success(list))
@@ -45,19 +45,16 @@ class BerandaRemoteDataSource {
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    fun getPenyakit(): Flowable<Response<ArrayList<Penyakit>>> {
-        val response = PublishSubject.create<Response<ArrayList<Penyakit>>>()
+    fun getPenyakit(): Flowable<Response<ArrayList<PenyakitResponse>>> {
+        val response = PublishSubject.create<Response<ArrayList<PenyakitResponse>>>()
 
-        firebase.getReference("penyakit")
-            .addValueEventListener(object : ValueEventListener {
+        firebase.getReference("penyakit").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.exists()) {
-                        val list = arrayListOf<Penyakit>()
+                        val list = arrayListOf<PenyakitResponse>()
                         for (snap in p0.children) {
-                            val menu = snap.getValue(Penyakit::class.java)
-                            if (menu != null) {
-                                list.add(menu)
-                            }
+                            val penyakit = Converter.toObject(snap, PenyakitResponse::class.java)
+                            if (penyakit != null) list.add(penyakit)
                         }
 
                         response.onNext(Response.Success(list))

@@ -15,7 +15,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.modules.auth.ui.ActivityLogin
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.auth.data.models.User
+import com.example.projectskripsi.modules.auth.domain.entities.User
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*

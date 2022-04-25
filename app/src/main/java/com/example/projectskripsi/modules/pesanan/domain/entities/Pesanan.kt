@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.pesanan.data.models
+package com.example.projectskripsi.modules.pesanan.domain.entities
 
 class Pesanan {
     lateinit var id_pesanan: String

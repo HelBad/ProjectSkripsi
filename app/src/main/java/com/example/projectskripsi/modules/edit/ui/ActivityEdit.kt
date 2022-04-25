@@ -12,8 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaAdmin
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -120,14 +120,14 @@ class ActivityEdit : AppCompatActivity() {
                 override fun onDataChange(datasnapshot: DataSnapshot) {
                     for (snapshot1 in datasnapshot.children) {
                         val allocation = snapshot1.getValue(Menu::class.java)
-                        namaMenu.text = Editable.Factory.getInstance().newEditable(allocation!!.nama_menu)
-                        deskripsiMenu.text = Editable.Factory.getInstance().newEditable(allocation.deskripsi)
-                        lemakMenu.text = Editable.Factory.getInstance().newEditable(allocation.lemak)
-                        proteinMenu.text = Editable.Factory.getInstance().newEditable(allocation.protein)
-                        kaloriMenu.text = Editable.Factory.getInstance().newEditable(allocation.kalori)
-                        karbohidratMenu.text = Editable.Factory.getInstance().newEditable(allocation.karbohidrat)
-                        hargaMenu.text = Editable.Factory.getInstance().newEditable(allocation.harga)
-                        gambarMenu.text = allocation.gambar
+                        namaMenu.text = Editable.Factory.getInstance().newEditable(allocation?.namaMenu)
+                        deskripsiMenu.text = Editable.Factory.getInstance().newEditable(allocation?.deskripsi)
+                        lemakMenu.text = Editable.Factory.getInstance().newEditable(allocation?.lemak)
+                        proteinMenu.text = Editable.Factory.getInstance().newEditable(allocation?.protein)
+                        kaloriMenu.text = Editable.Factory.getInstance().newEditable(allocation?.kalori)
+                        karbohidratMenu.text = Editable.Factory.getInstance().newEditable(allocation?.karbohidrat)
+                        hargaMenu.text = Editable.Factory.getInstance().newEditable(allocation?.harga)
+                        gambarMenu.text = allocation?.gambar
                         statusMenu = "ada"
                     }
                 }
@@ -251,7 +251,7 @@ class ActivityEdit : AppCompatActivity() {
                     override fun onDataChange(datasnapshot: DataSnapshot) {
                         for (snapshot1 in datasnapshot.children) {
                             val allocation = snapshot1.getValue(Penyakit::class.java)
-                            id_penyakit = allocation!!.id_penyakit
+                            id_penyakit = allocation?.idPenyakit.toString()
                             databaseAi.child(id_penyakit).child("id_penyakit").setValue(id_penyakit)
                             databaseAi.child(id_penyakit).child("id_menu").setValue(id_menu)
                             databaseAi.child(id_penyakit).child("sehat").setValue(sehat.toString())

@@ -8,8 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -51,15 +51,15 @@ class BerandaAdapter(
             val imgListmenu = mView.findViewById(R.id.imgListmenu) as ImageView
             val kategoriListmenu = mView.findViewById(R.id.kategoriListmenu) as TextView
 
-            namaListmenu.text = menu.nama_menu
-            hargaListmenu.text = "Rp. " + formatNumber.format(menu.harga.toInt()) + ",00"
+            namaListmenu.text = menu.namaMenu
+            hargaListmenu.text = "Rp. " + formatNumber.format(menu.harga?.toInt()) + ",00"
             deskripsiListmenu.text = menu.deskripsi
             Picasso.get().load(menu.gambar).into(imgListmenu)
 
             for (list in listPenyakit) {
-                if(list.id_menu == menu.id_menu) {
+                if(list.idMenu == menu.idMenu) {
                     if(pilihKategori == "Sehat") {
-                        if(list.sehat.toInt() in -2..3) {
+                        if(list.sehat?.toInt() in -2..3) {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                         } else {
@@ -67,7 +67,7 @@ class BerandaAdapter(
                             kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                         }
                     } else if(pilihKategori == "Obesitas") {
-                        if(list.obesitas.toInt() in -2..3) {
+                        if(list.obesitas?.toInt() in -2..3) {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                         } else {
@@ -75,7 +75,7 @@ class BerandaAdapter(
                             kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                         }
                     } else if(pilihKategori == "Diabetes") {
-                        if(list.diabetes.toInt() in -2..3) {
+                        if(list.diabetes?.toInt() in -2..3) {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                         } else {
@@ -83,7 +83,7 @@ class BerandaAdapter(
                             kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                         }
                     } else if(pilihKategori == "Anemia") {
-                        if(list.anemia.toInt() in -2..3) {
+                        if(list.anemia?.toInt() in -2..3) {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                         } else {

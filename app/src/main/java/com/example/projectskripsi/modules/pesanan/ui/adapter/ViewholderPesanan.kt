@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.pesanan.data.models.Pesanan
+import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
 import java.text.DecimalFormat
 import java.text.NumberFormat
 

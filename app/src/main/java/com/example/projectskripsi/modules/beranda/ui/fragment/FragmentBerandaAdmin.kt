@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.beranda.ui.adapter.BerandaAdminViewholder
-import com.example.projectskripsi.modules.beranda.data.models.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.example.projectskripsi.modules.edit.ui.ActivityEdit
 import com.example.projectskripsi.modules.detail.ui.ActivityDetailAdmin
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -73,7 +73,7 @@ class FragmentBerandaAdmin : Fragment() {
                 viewHolder.setOnClickListener(object: BerandaAdminViewholder.ClickListener {
                     override fun onItemClick(view:View, position:Int) {
                         val intent = Intent(view.context, ActivityDetailAdmin::class.java)
-                        intent.putExtra("id_menu", viewHolder.menu.id_menu)
+                        intent.putExtra("id_menu", viewHolder.menu.idMenu)
                         startActivity(intent)
                     }
                     override fun onItemLongClick(view:View, position:Int) {}

@@ -3,8 +3,8 @@ package com.example.projectskripsi.modules.beranda.data.repositories
 import android.annotation.SuppressLint
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.modules.beranda.data.source.remote.BerandaRemoteDataSource
 import com.example.projectskripsi.modules.beranda.domain.repositories.BerandaRepository
 import io.reactivex.BackpressureStrategy
@@ -29,7 +29,22 @@ class BerandaRepositoryImpl constructor(
             .subscribe {
                 when(it){
                     is Response.Success -> {
-                        result.onNext(Resource.Success(it.data))
+                        val list = arrayListOf<Menu>()
+                        it.data.map { res ->
+                            val menu = Menu(
+                                idMenu = res.idMenu,
+                                namaMenu = res.namaMenu,
+                                deskripsi = res.deskripsi,
+                                lemak = res.lemak,
+                                protein = res.protein,
+                                kalori = res.kalori,
+                                karbohidrat = res.karbohidrat,
+                                harga = res.harga,
+                                gambar = res.gambar
+                            )
+                            list.add(menu)
+                        }
+                        result.onNext(Resource.Success(list))
                     }
                     is Response.Empty -> {
                         result.onNext(Resource.Success(arrayListOf()))
@@ -55,7 +70,20 @@ class BerandaRepositoryImpl constructor(
             .subscribe {
                 when(it){
                     is Response.Success -> {
-                        result.onNext(Resource.Success(it.data))
+                        val list = arrayListOf<Penyakit>()
+                        it.data.map { res ->
+                            val penyakit = Penyakit(
+                                idPenyakit = res.idPenyakit,
+                                idMenu = res.idMenu,
+                                sehat = res.sehat,
+                                diabetes = res.diabetes,
+                                obesitas = res.obesitas,
+                                anemia = res.anemia,
+                            )
+                            list.add(penyakit)
+                        }
+
+                        result.onNext(Resource.Success(list))
                     }
                     is Response.Empty -> {
                         result.onNext(Resource.Success(arrayListOf()))

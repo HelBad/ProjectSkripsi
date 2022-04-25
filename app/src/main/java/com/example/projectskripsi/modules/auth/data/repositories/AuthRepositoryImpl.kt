@@ -3,7 +3,7 @@ package com.example.projectskripsi.modules.auth.data.repositories
 import android.annotation.SuppressLint
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.auth.data.models.User
+import com.example.projectskripsi.modules.auth.domain.entities.User
 import com.example.projectskripsi.modules.auth.data.source.remote.AuthRemoteDataSource
 import com.example.projectskripsi.modules.auth.domain.repositories.AuthRepository
 import io.reactivex.BackpressureStrategy

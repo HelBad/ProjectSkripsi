@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.auth.data.models.User
+import com.example.projectskripsi.modules.auth.domain.entities.User
 import com.example.projectskripsi.modules.auth.domain.usecases.AuthUsecase
 
 class AuthViewModel constructor(private val usecase: AuthUsecase) : ViewModel() {

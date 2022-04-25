@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.edit.ui.ActivityEdit
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -61,15 +61,15 @@ class ActivityDetailAdmin : AppCompatActivity() {
             override fun onDataChange(datasnapshot: DataSnapshot) {
                 for (snapshot1 in datasnapshot.children) {
                     val allocation = snapshot1.getValue(Menu::class.java)
-                    id_menu = allocation!!.id_menu
-                    namaDetail.text = allocation.nama_menu
-                    lemakDetail.text = allocation.lemak
-                    proteinDetail.text = allocation.protein
-                    kaloriDetail.text = allocation.kalori
-                    karbohidratDetail.text = allocation.karbohidrat
-                    deskripsiDetail.text = allocation.deskripsi
-                    hargaDetail.text = "Rp. " + formatNumber.format(allocation.harga.toInt()) + ",00"
-                    Picasso.get().load(allocation.gambar).into(imgDetail)
+                    id_menu = allocation?.idMenu.toString()
+                    namaDetail.text = allocation?.namaMenu
+                    lemakDetail.text = allocation?.lemak
+                    proteinDetail.text = allocation?.protein
+                    kaloriDetail.text = allocation?.kalori
+                    karbohidratDetail.text = allocation?.karbohidrat
+                    deskripsiDetail.text = allocation?.deskripsi
+                    hargaDetail.text = "Rp. " + formatNumber.format(allocation?.harga?.toInt()) + ",00"
+                    Picasso.get().load(allocation?.gambar).into(imgDetail)
 
                     btnEdit.setOnClickListener {
                         val intent = Intent(this@ActivityDetailAdmin, ActivityEdit::class.java)
@@ -92,9 +92,11 @@ class ActivityDetailAdmin : AppCompatActivity() {
                                             override fun onDataChange(datasnapshot: DataSnapshot) {
                                                 for (snapshot1 in datasnapshot.children) {
                                                     val allocation = snapshot1.getValue(Penyakit::class.java)
-                                                    val id_penyakit = allocation!!.id_penyakit
-                                                    FirebaseDatabase.getInstance().getReference("penyakit")
-                                                        .child(id_penyakit).removeValue()
+                                                    val id_penyakit = allocation?.idPenyakit
+                                                    if (id_penyakit != null) {
+                                                        FirebaseDatabase.getInstance().getReference("penyakit")
+                                                            .child(id_penyakit).removeValue()
+                                                    }
 
                                                 }
                                             }

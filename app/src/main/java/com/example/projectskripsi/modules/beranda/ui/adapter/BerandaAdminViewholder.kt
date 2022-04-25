@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.data.models.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -31,8 +31,8 @@ class BerandaAdminViewholder(itemView: View): RecyclerView.ViewHolder(itemView) 
         val deskripsiListmenu = mView.findViewById(R.id.deskripsiListmenuAdmin) as TextView
         val imgListmenu = mView.findViewById(R.id.imgListmenuAdmin) as ImageView
 
-        namaListmenu.text = menu.nama_menu
-        hargaListmenu.text = "Rp. " + formatNumber.format(menu.harga.toInt()) + ",00"
+        namaListmenu.text = menu.namaMenu
+        hargaListmenu.text = "Rp. " + formatNumber.format(menu.harga?.toInt()) + ",00"
         deskripsiListmenu.text = menu.deskripsi
         Picasso.get().load(menu.gambar).into(imgListmenu)
     }

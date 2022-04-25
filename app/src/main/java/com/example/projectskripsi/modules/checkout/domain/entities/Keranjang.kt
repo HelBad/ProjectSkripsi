@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.checkout.data.models
+package com.example.projectskripsi.modules.checkout.domain.entities
 
 class Keranjang {
     lateinit var id_keranjang: String

@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.auth.data.models
+package com.example.projectskripsi.modules.auth.domain.entities
 
 class User {
     lateinit var id_user: String

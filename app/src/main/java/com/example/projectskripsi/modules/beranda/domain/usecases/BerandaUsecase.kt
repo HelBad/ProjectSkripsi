@@ -1,8 +1,8 @@
 package com.example.projectskripsi.modules.beranda.domain.usecases
 
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.beranda.data.models.Menu
-import com.example.projectskripsi.modules.beranda.data.models.Penyakit
+import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.modules.beranda.domain.repositories.BerandaRepository
 import io.reactivex.Flowable
 

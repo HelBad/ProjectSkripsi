@@ -1,7 +1,7 @@
 package com.example.projectskripsi.modules.auth.domain.repositories
 
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.auth.data.models.User
+import com.example.projectskripsi.modules.auth.domain.entities.User
 import io.reactivex.Flowable
 
 interface AuthRepository {

@@ -23,8 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.checkout.ui.adapter.ViewholderCheckout
-import com.example.projectskripsi.modules.checkout.data.models.Keranjang
-import com.example.projectskripsi.modules.pesanan.data.models.Pesanan
+import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
 import com.example.projectskripsi.modules.detail.ui.ActivityDetailUser
 import com.firebase.ui.database.FirebaseRecyclerAdapter

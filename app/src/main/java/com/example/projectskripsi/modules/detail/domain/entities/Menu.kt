@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.data.models
+package com.example.projectskripsi.modules.detail.domain.entities
 
 class Menu {
     lateinit var id_menu: String

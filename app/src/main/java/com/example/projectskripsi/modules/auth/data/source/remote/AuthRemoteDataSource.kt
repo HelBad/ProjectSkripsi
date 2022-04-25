@@ -2,17 +2,19 @@ package com.example.projectskripsi.modules.auth.data.source.remote
 
 import android.util.Log
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.auth.data.models.User
+import com.example.projectskripsi.modules.auth.domain.entities.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
 class AuthRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
+    val gson = Gson()
 
     fun login(email: String, password: String): Flowable<Response<User?>> {
         val response = PublishSubject.create<Response<User?>>()

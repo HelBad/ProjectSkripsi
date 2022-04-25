@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.modules.pesanan.ui.ActivityRiwayatUser
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.pesanan.ui.adapter.ViewholderPesanan
-import com.example.projectskripsi.modules.pesanan.data.models.Pesanan
+import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
