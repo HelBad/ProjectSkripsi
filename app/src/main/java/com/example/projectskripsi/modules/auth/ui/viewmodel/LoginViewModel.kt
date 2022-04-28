@@ -7,22 +7,24 @@ import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.modules.auth.domain.entities.User
 import com.example.projectskripsi.modules.auth.domain.usecases.AuthUsecase
 
-class AuthViewModel constructor(private val usecase: AuthUsecase) : ViewModel() {
+class LoginViewModel constructor(private val usecase: AuthUsecase) : ViewModel() {
     fun login(email: String, password: String) : LiveData<Resource<User?>> {
         return LiveDataReactiveStreams.fromPublisher(usecase.login(email, password))
     }
 
-    fun register(
-        nama: String,
-        email: String,
-        password: String,
-        tanggal: String,
-        gender: String,
-        alamat: String,
-        telp: String
-    ) : LiveData<Resource<User?>> {
+    fun saveUser(
+        id: String?,
+        nama: String?,
+        email: String?,
+        password: String?,
+        tanggal: String?,
+        gender: String?,
+        alamat: String?,
+        telp: String?,
+        level: String?
+    ) : LiveData<Resource<String?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            usecase.register(nama, email, password, tanggal, gender, alamat, telp)
+            usecase.saveUser(id, nama, email, password, tanggal, gender, alamat, telp, level)
         )
     }
 }

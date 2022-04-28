@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.detail.ui
+package com.example.projectskripsi.modules.detail.presentation
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,9 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.edit.ui.ActivityEdit
+import com.example.projectskripsi.modules.edit.presentation.ActivityEdit
 import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
+import com.example.projectskripsi.utils.Rupiah
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -68,7 +69,7 @@ class ActivityDetailAdmin : AppCompatActivity() {
                     kaloriDetail.text = allocation?.kalori
                     karbohidratDetail.text = allocation?.karbohidrat
                     deskripsiDetail.text = allocation?.deskripsi
-                    hargaDetail.text = "Rp. " + formatNumber.format(allocation?.harga?.toInt()) + ",00"
+                    hargaDetail.text = allocation?.harga?.toInt()?.let { Rupiah.format(it) }
                     Picasso.get().load(allocation?.gambar).into(imgDetail)
 
                     btnEdit.setOnClickListener {

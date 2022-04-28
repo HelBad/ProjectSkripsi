@@ -1,6 +1,5 @@
 package com.example.projectskripsi.modules.auth.ui
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,19 +11,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
+import com.example.projectskripsi.modules.auth.ui.viewmodel.LoginViewModel
 import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaAdmin
-import com.example.projectskripsi.modules.auth.ui.viewmodel.AuthViewModel
 import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityLogin : AppCompatActivity() {
-    private val authViewModel: AuthViewModel by viewModel()
+    private val viewModel: LoginViewModel by viewModel()
 
     private lateinit var emailLogin: EditText
     private lateinit var passwordLogin: EditText
     private lateinit var btnLogin: Button
     private lateinit var textRegister: TextView
-    private lateinit var sp: SharedPreferences
     private lateinit var alertDialog: AlertDialog.Builder
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +33,6 @@ class ActivityLogin : AppCompatActivity() {
         passwordLogin = findViewById(R.id.passwordLogin)
         btnLogin = findViewById(R.id.btnLogin)
         textRegister = findViewById(R.id.textRegister)
-        sp = getSharedPreferences("User", Context.MODE_PRIVATE)
         alertDialog = AlertDialog.Builder(this)
 
         btnLogin.setOnClickListener {
@@ -43,7 +40,7 @@ class ActivityLogin : AppCompatActivity() {
                 btnLogin.isClickable = false
                 Toast.makeText(this@ActivityLogin, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
 
-                authViewModel.login(
+                viewModel.login(
                     emailLogin.text.toString(),
                     passwordLogin.text.toString()
                 ).observe(this@ActivityLogin) { res ->
@@ -55,17 +52,17 @@ class ActivityLogin : AppCompatActivity() {
                         is Resource.Success -> {
                             val user = res.data
                             if (user != null) {
-                                val editor = sp.edit()
-                                editor.putString("id_user", user.id_user)
-                                editor.putString("nama", user.nama)
-                                editor.putString("email", user.email)
-                                editor.putString("password", user.password)
-                                editor.putString("tgl_lahir", user.tgl_lahir)
-                                editor.putString("gender", user.gender)
-                                editor.putString("alamat", user.alamat)
-                                editor.putString("telp", user.telp)
-                                editor.putString("level", user.level)
-                                editor.apply()
+                                viewModel.saveUser(
+                                    user.idUser,
+                                    user.nama,
+                                    user.email,
+                                    user.password,
+                                    user.tglLahir,
+                                    user.gender,
+                                    user.alamat,
+                                    user.telp,
+                                    user.level
+                                )
 
                                 if (user.level == "Pengguna") {
                                     btnLogin.isClickable = false
@@ -79,10 +76,10 @@ class ActivityLogin : AppCompatActivity() {
                                     finish()
                                 }
                             }
-//                            else {
-//                                btnLogin.isClickable = true
-//                                Toast.makeText(this@ActivityLogin, "Email atau password salah", Toast.LENGTH_SHORT).show()
-//                            }
+                            else {
+                                btnLogin.isClickable = true
+                                Toast.makeText(this@ActivityLogin, "Email atau password salah", Toast.LENGTH_SHORT).show()
+                            }
                         }
                         is Resource.Error -> {
                             btnLogin.isClickable = true

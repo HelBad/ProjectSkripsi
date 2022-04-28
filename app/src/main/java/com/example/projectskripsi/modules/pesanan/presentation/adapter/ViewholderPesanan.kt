@@ -1,10 +1,11 @@
-package com.example.projectskripsi.modules.pesanan.ui.adapter
+package com.example.projectskripsi.modules.pesanan.presentation.adapter
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
+import com.example.projectskripsi.utils.Rupiah
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
@@ -30,7 +31,7 @@ class ViewholderPesanan(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         alamatPesanan.text = pesanan.lokasi
         waktuPesanan.text = pesanan.waktu
-        bayarPesanan.text = "Rp. " + formatNumber.format(pesanan.total_bayar.toInt()) + ",00"
+        bayarPesanan.text = Rupiah.format(pesanan.total_bayar.toInt())
     }
 
     interface ClickListener {

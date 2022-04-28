@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.pesanan.ui.fragment
+package com.example.projectskripsi.modules.pesanan.presentation.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -12,9 +12,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectskripsi.modules.pesanan.ui.ActivityRiwayatUser
+import com.example.projectskripsi.modules.pesanan.presentation.ActivityRiwayatUser
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.pesanan.ui.adapter.ViewholderPesanan
+import com.example.projectskripsi.modules.pesanan.presentation.adapter.ViewholderPesanan
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.DatabaseReference

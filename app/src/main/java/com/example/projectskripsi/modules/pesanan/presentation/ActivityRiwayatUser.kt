@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.pesanan.ui
+package com.example.projectskripsi.modules.pesanan.presentation
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,9 +11,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.checkout.ui.adapter.ViewholderCheckout
+import com.example.projectskripsi.modules.checkout.presentation.adapter.ViewholderCheckout
 import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
+import com.example.projectskripsi.utils.Rupiah
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.*
 import java.text.DecimalFormat
@@ -75,9 +76,9 @@ class ActivityRiwayatUser : AppCompatActivity() {
                         } else {
                             keteranganRiwayat.text = pesanan.catatan
                         }
-                        subtotalRiwayat.text = "Rp. " + formatter.format(pesanan.subtotal.toInt()) + ",00"
-                        ongkirRiwayat.text = "Rp. " + formatter.format(pesanan.ongkir.toInt()) + ",00"
-                        totalRiwayat.text = "Rp. " + formatter.format(pesanan.total_bayar.toInt()) + ",00"
+                        subtotalRiwayat.text = Rupiah.format(pesanan.subtotal.toInt())
+                        ongkirRiwayat.text = Rupiah.format(pesanan.ongkir.toInt())
+                        totalRiwayat.text = Rupiah.format(pesanan.total_bayar.toInt())
                         if(pesanan.keterangan == "") {
                             laporanRiwayat.text = "-"
                         } else {

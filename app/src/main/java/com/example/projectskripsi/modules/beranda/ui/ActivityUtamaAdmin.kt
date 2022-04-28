@@ -7,8 +7,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.beranda.ui.fragment.FragmentBerandaAdmin
-import com.example.projectskripsi.modules.pesanan.ui.fragment.FragmentPesananAdmin
-import com.example.projectskripsi.modules.profil.ui.fragment.FragmentProfilAdmin
+import com.example.projectskripsi.modules.pesanan.presentation.fragment.FragmentPesananAdmin
+import com.example.projectskripsi.modules.profil.presentation.fragment.FragmentProfilAdmin
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ActivityUtamaAdmin : AppCompatActivity() {

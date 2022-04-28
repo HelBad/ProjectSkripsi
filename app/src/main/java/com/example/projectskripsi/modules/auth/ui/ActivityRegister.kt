@@ -3,6 +3,7 @@ package com.example.projectskripsi.modules.auth.ui
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -11,13 +12,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.auth.ui.viewmodel.AuthViewModel
+import com.example.projectskripsi.modules.auth.ui.viewmodel.RegisterViewModel
+import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ActivityRegister : AppCompatActivity() {
-    private val authViewModel: AuthViewModel by viewModel()
+    private val viewModel: RegisterViewModel by viewModel()
 
     private lateinit var namaRegister: EditText
     private lateinit var emailRegister: EditText
@@ -30,7 +32,6 @@ class ActivityRegister : AppCompatActivity() {
     private lateinit var telpRegister: EditText
     private lateinit var btnRegister: Button
     private lateinit var textLogin: TextView
-    private lateinit var sp: SharedPreferences
     private lateinit var alertDialog: AlertDialog.Builder
 
     @SuppressLint("NewApi")
@@ -52,7 +53,6 @@ class ActivityRegister : AppCompatActivity() {
         telpRegister = findViewById(R.id.telpRegister)
         btnRegister = findViewById(R.id.btnRegister)
         textLogin = findViewById(R.id.textLogin)
-        sp = getSharedPreferences("User", Context.MODE_PRIVATE)
         alertDialog = AlertDialog.Builder(this)
 
         tanggalRegister.setOnClickListener {
@@ -137,7 +137,7 @@ class ActivityRegister : AppCompatActivity() {
         btnRegister.isClickable = false
         Toast.makeText(this@ActivityRegister, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
 
-        authViewModel.register(
+        viewModel.register(
             namaRegister.text.toString(),
             emailRegister.text.toString(),
             passwordRegister.text.toString(),
@@ -154,23 +154,26 @@ class ActivityRegister : AppCompatActivity() {
                 is Resource.Success -> {
                     val user = res.data
                     if (user != null) {
-                        val editor = sp.edit()
-                        editor.putString("id_user", user.id_user)
-                        editor.putString("nama", namaRegister.text.toString())
-                        editor.putString("email", emailRegister.text.toString())
-                        editor.putString("password", passwordRegister.text.toString())
-                        editor.putString("tgl_lahir", tanggalRegister.text.toString())
-                        editor.putString("gender", genderRegister.text.toString())
-                        editor.putString("alamat", alamatRegister.text.toString())
-                        editor.putString("telp", telpRegister.text.toString())
-                        editor.putString("level", user.level)
-                        editor.apply()
-                        finish()
+                        viewModel.saveUser(
+                            user.idUser,
+                            user.nama,
+                            user.email,
+                            user.password,
+                            user.tglLahir,
+                            user.gender,
+                            user.alamat,
+                            user.telp,
+                            user.level
+                        )
+                        val intent = Intent(this@ActivityRegister, ActivityUtamaUser::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+
                     }
-//                            else {
-//                                btnLogin.isClickable = true
-//                                Toast.makeText(this@ActivityLogin, "Email atau password salah", Toast.LENGTH_SHORT).show()
-//                            }
+                    else {
+                        btnRegister.isClickable = true
+                        Toast.makeText(this@ActivityRegister, "Email atau password salah", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 is Resource.Error -> {
                     btnRegister.isClickable = true

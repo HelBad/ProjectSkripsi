@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.checkout.ui
+package com.example.projectskripsi.modules.checkout.presentation
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
@@ -22,11 +22,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.checkout.ui.adapter.ViewholderCheckout
+import com.example.projectskripsi.modules.checkout.presentation.adapter.ViewholderCheckout
 import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
-import com.example.projectskripsi.modules.detail.ui.ActivityDetailUser
+import com.example.projectskripsi.modules.detail.presentation.ActivityDetailUser
+import com.example.projectskripsi.utils.Rupiah
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.android.gms.location.*
 import com.google.firebase.database.*
@@ -99,7 +100,7 @@ class ActivityCheckout : AppCompatActivity() {
                     id_keranjang = keranjang!!.id_keranjang
                     val mTotalPrice = Integer.valueOf(keranjang.total)
                     total += mTotalPrice
-                    subtotalCo.text = "Rp. " + formatter.format(total) + ",00"
+                    subtotalCo.text = Rupiah.format(total)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -189,8 +190,8 @@ class ActivityCheckout : AppCompatActivity() {
                 } else {
                     ongkir = 20000
                 }
-                ongkirCo.text = "Rp. " + formatter.format(ongkir) + ",00"
-                totalCo.text = "Rp. " + formatter.format(total + ongkir) + ",00"
+                ongkirCo.text = Rupiah.format(ongkir)
+                totalCo.text = Rupiah.format(total + ongkir)
             }
         }
     }

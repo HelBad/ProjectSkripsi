@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.checkout.ui.adapter
+package com.example.projectskripsi.modules.checkout.presentation.adapter
 
 import android.view.View
 import android.widget.TextView
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.utils.Rupiah
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,7 +18,6 @@ class ViewholderCheckout(itemView: View): RecyclerView.ViewHolder(itemView) {
     private var mView: View = itemView
     private var mClickListener: ClickListener? = null
     var keranjang = Keranjang()
-    var formatNumber: NumberFormat = DecimalFormat("#,###")
 
     init {
         itemView.setOnClickListener { view -> mClickListener!!.onItemClick(view, adapterPosition) }
@@ -40,7 +40,7 @@ class ViewholderCheckout(itemView: View): RecyclerView.ViewHolder(itemView) {
                 for (snapshot1 in datasnapshot.children) {
                     val allocation = snapshot1.getValue(Menu::class.java)
                     namaCheckout.text = allocation?.namaMenu
-                    hargaCheckout.text = "Rp. " + formatNumber.format(keranjang.total.toInt()) + ",00"
+                    hargaCheckout.text = Rupiah.format(keranjang.total.toInt())
                     jumlahCheckout.text = keranjang.jumlah
                 }
             }

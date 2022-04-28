@@ -16,4 +16,18 @@ interface AuthRepository {
         alamat: String,
         telp: String
     ): Flowable<Resource<User?>>
+
+    fun getUser(): Flowable<Resource<User?>>
+
+    fun saveUser(
+        id: String?,
+        nama: String?,
+        email: String?,
+        password: String?,
+        tglLahir: String?,
+        gender: String?,
+        alamat: String?,
+        telp: String?,
+        level: String?,
+    ): Flowable<Resource<String?>>
 }

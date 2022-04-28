@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.utils.Rupiah
 import com.squareup.picasso.Picasso
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -14,7 +15,6 @@ class BerandaAdminViewholder(itemView: View): RecyclerView.ViewHolder(itemView) 
     private var mView: View = itemView
     private var mClickListener: ClickListener? = null
     var menu = Menu()
-    var formatNumber: NumberFormat = DecimalFormat("#,###")
 
     init {
         itemView.setOnClickListener { view -> mClickListener!!.onItemClick(view, adapterPosition) }
@@ -32,7 +32,7 @@ class BerandaAdminViewholder(itemView: View): RecyclerView.ViewHolder(itemView) 
         val imgListmenu = mView.findViewById(R.id.imgListmenuAdmin) as ImageView
 
         namaListmenu.text = menu.namaMenu
-        hargaListmenu.text = "Rp. " + formatNumber.format(menu.harga?.toInt()) + ",00"
+        hargaListmenu.text = menu.harga?.toInt()?.let { Rupiah.format(it) }
         deskripsiListmenu.text = menu.deskripsi
         Picasso.get().load(menu.gambar).into(imgListmenu)
     }

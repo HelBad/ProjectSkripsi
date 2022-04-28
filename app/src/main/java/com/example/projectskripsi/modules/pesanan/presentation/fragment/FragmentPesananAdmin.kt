@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.pesanan.ui.fragment
+package com.example.projectskripsi.modules.pesanan.presentation.fragment
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -11,9 +11,9 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.pesanan.ui.adapter.ViewholderPesanan
+import com.example.projectskripsi.modules.pesanan.presentation.adapter.ViewholderPesanan
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
-import com.example.projectskripsi.modules.pesanan.ui.ActivityRiwayatAdmin
+import com.example.projectskripsi.modules.pesanan.presentation.ActivityRiwayatAdmin
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase

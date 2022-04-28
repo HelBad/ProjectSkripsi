@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.*
 import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.modules.beranda.ui.viewmodel.BerandaViewModel
-import com.example.projectskripsi.modules.checkout.ui.ActivityCheckout
-import com.example.projectskripsi.modules.detail.ui.ActivityDetailUser
+import com.example.projectskripsi.modules.checkout.presentation.ActivityCheckout
+import com.example.projectskripsi.modules.detail.presentation.ActivityDetailUser
 import com.example.projectskripsi.modules.beranda.ui.ActivityNutrisi
 import com.example.projectskripsi.modules.beranda.ui.ActivityRestoran
 import com.example.projectskripsi.modules.beranda.ui.adapter.BerandaAdapter

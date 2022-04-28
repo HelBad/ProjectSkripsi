@@ -15,19 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".modules.pesanan.ui.ActivityRiwayatAdmin"
+            android:name=".modules.pesanan.presentation.ActivityRiwayatAdmin"
             android:exported="false" />
         <activity
-            android:name=".modules.detail.ui.ActivityDetailAdmin"
+            android:name=".modules.detail.presentation.ActivityDetailAdmin"
             android:exported="false" />
         <activity
-            android:name=".modules.edit.ui.ActivityEdit"
+            android:name=".modules.edit.presentation.ActivityEdit"
             android:exported="false" />
         <activity
             android:name=".modules.beranda.ui.ActivityUtamaAdmin"
             android:exported="false" />
         <activity
-            android:name=".modules.pesanan.ui.ActivityRiwayatUser"
+            android:name=".modules.pesanan.presentation.ActivityRiwayatUser"
             android:exported="false" />
         <activity
             android:name=".modules.beranda.ui.ActivityNutrisi"
@@ -36,10 +36,10 @@
             android:name=".modules.beranda.ui.ActivityRestoran"
             android:exported="false" />
         <activity
-            android:name=".modules.detail.ui.ActivityDetailUser"
+            android:name=".modules.detail.presentation.ActivityDetailUser"
             android:exported="false" />
         <activity
-            android:name=".modules.checkout.ui.ActivityCheckout"
+            android:name=".modules.checkout.presentation.ActivityCheckout"
             android:exported="false" />
         <activity
             android:name=".modules.beranda.ui.ActivityUtamaUser"

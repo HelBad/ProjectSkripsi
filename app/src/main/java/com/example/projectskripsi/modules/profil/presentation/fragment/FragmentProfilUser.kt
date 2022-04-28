@@ -1,5 +1,7 @@
-package com.example.projectskripsi.modules.profil.ui.fragment
+package com.example.projectskripsi.modules.profil.presentation.fragment
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -15,31 +17,52 @@ import com.example.projectskripsi.modules.auth.ui.ActivityLogin
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.auth.domain.entities.User
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
 
-class FragmentProfilAdmin : Fragment() {
+class FragmentProfilUser : Fragment() {
     lateinit var SP: SharedPreferences
     lateinit var alertDialog: AlertDialog.Builder
+    lateinit var profilNama: EditText
     lateinit var profilEmail: EditText
     lateinit var profilPassword: EditText
+    lateinit var profilTanggal: TextView
+    lateinit var profilSpinner: Spinner
+    lateinit var profilGender: TextView
+    lateinit var profilAlamat: EditText
+    lateinit var profilTelp: EditText
     lateinit var btnSimpan: Button
     lateinit var btnKeluar: Button
 
+    @SuppressLint("NewApi")
+    var formateDate = SimpleDateFormat("dd MMM YYYY")
+    val date = Calendar.getInstance()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.admin_fragment_profil, container, false)
+        return inflater.inflate(R.layout.fragment_profil, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        profilNama = requireActivity().findViewById(R.id.profilNama)
         profilEmail = requireActivity().findViewById(R.id.profilEmail)
         profilPassword = requireActivity().findViewById(R.id.profilPassword)
+        profilTanggal = requireActivity().findViewById(R.id.profilTanggal)
+        profilSpinner = requireActivity().findViewById(R.id.profilSpinner)
+        profilGender = requireActivity().findViewById(R.id.profilGender)
+        profilAlamat = requireActivity().findViewById(R.id.profilAlamat)
+        profilTelp = requireActivity().findViewById(R.id.profilTelp)
         btnSimpan = requireActivity().findViewById(R.id.btnSimpan)
         btnKeluar = requireActivity().findViewById(R.id.btnKeluar)
-
         alertDialog = AlertDialog.Builder(requireActivity())
         SP = requireActivity().applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
-        profilEmail.setText(SP.getString("email", ""))
-        profilPassword.setText(SP.getString("password", ""))
+
+        loadData()
+        profilTanggal.setOnClickListener {
+            setTanggal()
+        }
+        jenisKelamin()
 
         btnKeluar.setOnClickListener {
             alertDialog.setTitle("Keluar Akun")
@@ -87,8 +110,49 @@ class FragmentProfilAdmin : Fragment() {
         }
     }
 
-    //Validasi Data User
+    //Load Data User
+    private fun loadData() {
+        profilNama.setText(SP.getString("nama", ""))
+        profilEmail.setText(SP.getString("email", ""))
+        profilPassword.setText(SP.getString("password", ""))
+        profilTanggal.text = SP.getString("tgl_lahir", "")
+        profilGender.text = SP.getString("gender", "")
+        profilAlamat.setText(SP.getString("alamat", ""))
+        profilTelp.setText(SP.getString("telp", ""))
+    }
+
+    //Set Tanggal
+    private fun setTanggal() {
+        val date = DatePickerDialog(requireActivity(), {
+                view, year, month, dayOfMonth -> val selectedDate = Calendar.getInstance()
+            selectedDate.set(Calendar.YEAR, year)
+            selectedDate.set(Calendar.MONTH, month)
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            profilTanggal.text = formateDate.format(selectedDate.time)
+        }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
+        date.show()
+    }
+
+    //Pilih Jenis Kelamin
+    private fun jenisKelamin() {
+        val genderUser = arrayOf("Laki-laki", "Perempuan")
+        profilSpinner.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, genderUser)
+        profilSpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                profilGender.text = "Masukkan Jenis Kelamin"
+            }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                profilGender.text = genderUser[position]
+            }
+        }
+    }
+
+    //Validasi Data Akun
     private fun validate(): Boolean {
+        if(profilNama.text.toString() == "") {
+            Toast.makeText(activity, "Nama masih kosong", Toast.LENGTH_SHORT).show()
+            return false
+        }
         if(profilEmail.text.toString() == "") {
             Toast.makeText(activity, "Email masih kosong", Toast.LENGTH_SHORT).show()
             return false
@@ -97,23 +161,35 @@ class FragmentProfilAdmin : Fragment() {
             Toast.makeText(activity, "Password masih kosong", Toast.LENGTH_SHORT).show()
             return false
         }
+        if(profilTanggal.text.toString() == "") {
+            Toast.makeText(activity, "Tanggal lahir kosong", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if(profilAlamat.text.toString() == "") {
+            Toast.makeText(activity, "Alamat masih kosong", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if(profilTelp.text.toString() == "") {
+            Toast.makeText(activity, "Nomor telepon kosong", Toast.LENGTH_SHORT).show()
+            return false
+        }
         return true
     }
 
-    //Simpan Perubahan Data User
+    //Simpan Data Akun
     private fun saveData() {
         val id_user = SP.getString("id_user", "").toString()
-        val updateData = User(id_user, SP.getString("nama", "").toString(), profilEmail.text.toString(),
-            profilPassword.text.toString(), SP.getString("tgl_lahir", "").toString(),
-            SP.getString("gender", "").toString(), SP.getString("alamat", "").toString(),
-            SP.getString("telp", "").toString(), SP.getString("level", "").toString())
+        val updateData = User(id_user, profilNama.text.toString(), profilEmail.text.toString(),
+            profilPassword.text.toString(), profilTanggal.text.toString(), profilGender.text.toString(),
+            profilAlamat.text.toString(), profilTelp.text.toString(),
+            SP.getString("level", "").toString())
         val ref = FirebaseDatabase.getInstance().getReference("user")
         ref.child(id_user).setValue(updateData).addOnSuccessListener {
             val editor = SP.edit()
             editor.putString("nama", updateData.nama)
             editor.putString("email", updateData.email)
             editor.putString("password", updateData.password)
-            editor.putString("tgl_lahir", updateData.tgl_lahir)
+            editor.putString("tgl_lahir", updateData.tglLahir)
             editor.putString("gender", updateData.gender)
             editor.putString("alamat", updateData.alamat)
             editor.putString("telp", updateData.telp)

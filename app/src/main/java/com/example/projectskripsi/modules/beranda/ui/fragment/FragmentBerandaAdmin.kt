@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.beranda.ui.adapter.BerandaAdminViewholder
 import com.example.projectskripsi.modules.beranda.domain.entities.Menu
-import com.example.projectskripsi.modules.edit.ui.ActivityEdit
-import com.example.projectskripsi.modules.detail.ui.ActivityDetailAdmin
+import com.example.projectskripsi.modules.edit.presentation.ActivityEdit
+import com.example.projectskripsi.modules.detail.presentation.ActivityDetailAdmin
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.FirebaseDatabase
 

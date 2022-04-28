@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.detail.ui
+package com.example.projectskripsi.modules.detail.presentation
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,13 +9,17 @@ import android.view.View
 import android.widget.*
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
-import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.detail.presentation.viewmodel.DetailViewModel
+import com.example.projectskripsi.utils.Rupiah
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class ActivityDetailUser : AppCompatActivity() {
+    private val detailViewModel: DetailViewModel by viewModel()
+
     lateinit var namaDetail: TextView
     lateinit var imgDetail: ImageView
     lateinit var lemakDetail: TextView
@@ -30,13 +34,11 @@ class ActivityDetailUser : AppCompatActivity() {
     lateinit var btnPesan: Button
     lateinit var btnHapus: Button
 
-    lateinit var databaseDetail: DatabaseReference
     lateinit var databaseRef: DatabaseReference
-    lateinit var SP: SharedPreferences
-    var formatNumber: NumberFormat = DecimalFormat("#,###")
+    lateinit var sp: SharedPreferences
     var countJumlah = 0
     var id_keranjang = ""
-    var id_menu = ""
+    var idMenu = ""
     var harga_menu = 0
     var statusKeranjang = ""
 
@@ -58,30 +60,31 @@ class ActivityDetailUser : AppCompatActivity() {
         btnPesan = findViewById(R.id.btnPesan)
         btnHapus = findViewById(R.id.btnHapus)
 
-        SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
+        sp = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
         databaseRef = FirebaseDatabase.getInstance().getReference("keranjang")
-            .child("ready").child(SP.getString("id_user", "").toString())
+            .child("ready").child(sp.getString("id_user", "").toString())
         loadData()
     }
 
     //Load Data Pesanan
     private fun loadData() {
-        databaseDetail = FirebaseDatabase.getInstance().getReference("menu")
-        val query = databaseDetail.orderByKey().equalTo(intent.getStringExtra("id_menu").toString())
-        query.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(datasnapshot: DataSnapshot) {
-                for (snapshot1 in datasnapshot.children) {
-                    val allocation = snapshot1.getValue(Menu::class.java)
-                    id_menu = allocation?.idMenu.toString()
-                    namaDetail.text = allocation?.namaMenu
-                    lemakDetail.text = allocation?.lemak
-                    proteinDetail.text = allocation?.protein
-                    kaloriDetail.text = allocation?.kalori
-                    karbohidratDetail.text = allocation?.karbohidrat
-                    deskripsiDetail.text = allocation?.deskripsi
-                    harga_menu = allocation?.harga?.toInt()!!
-                    hargaDetail.text = "Rp. " + formatNumber.format(allocation?.harga?.toInt()) + ",00"
-                    Picasso.get().load(allocation?.gambar).into(imgDetail)
+        detailViewModel.getDetailMenu(intent.getStringExtra("id_menu").toString())
+            .observe(this@ActivityDetailUser) { res ->
+                if (res.data != null) {
+                    val detail = res.data
+
+                    idMenu = detail.idMenu.toString()
+                    namaDetail.text = detail.namaMenu
+                    lemakDetail.text = detail.lemak
+                    proteinDetail.text = detail.protein
+                    kaloriDetail.text = detail.kalori
+                    karbohidratDetail.text = detail.karbohidrat
+                    deskripsiDetail.text = detail.deskripsi
+                    harga_menu = detail.harga?.toInt()!!
+                    if (detail.harga != null) {
+                        hargaDetail.text = Rupiah.format(detail.harga!!.toInt())
+                    }
+                    Picasso.get().load(detail.gambar).into(imgDetail)
 
                     cekData()
                     setJumlah()
@@ -95,13 +98,11 @@ class ActivityDetailUser : AppCompatActivity() {
                     }
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
     }
 
     //Save Data Pesanan
     private fun buatPesanan() {
-        val id_user = SP.getString("id_user", "").toString().trim()
+        val id_user = sp.getString("id_user", "").toString().trim()
         val total = (harga_menu * jumlahDetail.text.toString().toInt()).toString()
 
         if(statusKeranjang == "ready") {
@@ -110,14 +111,14 @@ class ActivityDetailUser : AppCompatActivity() {
             databaseRef.child(id_keranjang).child("total").setValue(total)
         } else {
             id_keranjang  = databaseRef.push().key.toString()
-            val addData = Keranjang(id_keranjang, id_user, id_menu, jumlahDetail.text.toString(), total)
+            val addData = Keranjang(id_keranjang, id_user, idMenu, jumlahDetail.text.toString(), total)
             databaseRef.child(id_keranjang).setValue(addData)
         }
     }
 
     //Cek Data Pesanan
     private fun cekData() {
-        databaseRef.orderByChild("id_menu").equalTo(id_menu).addValueEventListener( object : ValueEventListener {
+        databaseRef.orderByChild("id_menu").equalTo(idMenu).addValueEventListener( object : ValueEventListener {
             override fun onDataChange(datasnapshot: DataSnapshot) {
                 if(datasnapshot.exists()) {
                     for (snapshot1 in datasnapshot.children) {

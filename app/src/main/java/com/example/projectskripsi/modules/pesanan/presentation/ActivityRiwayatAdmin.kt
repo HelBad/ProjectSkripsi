@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.pesanan.ui
+package com.example.projectskripsi.modules.pesanan.presentation
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -14,10 +14,11 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.checkout.ui.adapter.ViewholderCheckout
+import com.example.projectskripsi.modules.checkout.presentation.adapter.ViewholderCheckout
 import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.modules.auth.domain.entities.User
+import com.example.projectskripsi.utils.Rupiah
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -45,7 +46,6 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
     lateinit var btnSelesai: Button
     lateinit var imgCopyLokasi: ImageView
 
-    var formatter: NumberFormat = DecimalFormat("#,###")
     var id_user = ""
     var id_keranjang = ""
     var subtotal = 0
@@ -111,9 +111,9 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
                         subtotal = pesanan.subtotal.toInt()
                         ongkir = pesanan.ongkir.toInt()
                         total_bayar = pesanan.total_bayar.toInt()
-                        subtotalRiwayat.text = "Rp. " + formatter.format(subtotal) + ",00"
-                        ongkirRiwayat.text = "Rp. " + formatter.format(ongkir) + ",00"
-                        totalRiwayat.text = "Rp. " + formatter.format(total_bayar) + ",00"
+                        subtotalRiwayat.text = Rupiah.format(subtotal)
+                        ongkirRiwayat.text = Rupiah.format(ongkir)
+                        totalRiwayat.text = Rupiah.format(total_bayar)
                         if(pesanan.keterangan == "") {
                             laporanRiwayat.text = "-"
                         } else {
