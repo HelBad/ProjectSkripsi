@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.auth.data.responses
+package com.example.projectskripsi.modules.profil.data.responses
 
 
 import com.google.gson.annotations.SerializedName

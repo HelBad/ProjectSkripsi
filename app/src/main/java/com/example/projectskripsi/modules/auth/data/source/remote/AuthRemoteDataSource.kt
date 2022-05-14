@@ -24,6 +24,7 @@ class AuthRemoteDataSource {
                     if (p0.exists()) {
                         var user: UserResponse? = null
                         for (h in p0.children) {
+                            Log.d("profil", h.toString())
                             user = Converter.toObject(h, UserResponse::class.java)
                             if (user != null && user.password == password){
                                 response.onNext(Response.Success(user))
@@ -56,7 +57,7 @@ class AuthRemoteDataSource {
                 override fun onDataChange(p0: DataSnapshot) {
                     if(!p0.exists()) {
                         val ref = firebase.getReference("user")
-                        val idUser  = firebase.getReference("user").push().key.toString()
+                        val idUser  = ref.push().key.toString()
                         val addData = UserResponse(idUser, nama, email, password, tanggal, gender, alamat, telp, "Pengguna")
 
                         ref.child(idUser).setValue(addData).addOnCompleteListener {

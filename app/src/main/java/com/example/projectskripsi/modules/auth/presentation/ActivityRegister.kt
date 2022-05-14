@@ -1,10 +1,8 @@
-package com.example.projectskripsi.modules.auth.ui
+package com.example.projectskripsi.modules.auth.presentation
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -12,10 +10,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.auth.ui.viewmodel.RegisterViewModel
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
+import com.example.projectskripsi.modules.auth.presentation.viewmodel.RegisterViewModel
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaUser
+import com.example.projectskripsi.utils.Tanggal
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ActivityRegister : AppCompatActivity() {
@@ -35,7 +33,6 @@ class ActivityRegister : AppCompatActivity() {
     private lateinit var alertDialog: AlertDialog.Builder
 
     @SuppressLint("NewApi")
-    var formateDate = SimpleDateFormat("dd MMM YYYY")
     private val date: Calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +77,7 @@ class ActivityRegister : AppCompatActivity() {
             selectedDate.set(Calendar.YEAR, year)
             selectedDate.set(Calendar.MONTH, month)
             selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            tanggalRegister.text = formateDate.format(selectedDate.time)
+            tanggalRegister.text = Tanggal.format(selectedDate.time)
         }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH))
         date.show()
     }

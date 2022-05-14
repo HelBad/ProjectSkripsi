@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui
+package com.example.projectskripsi.modules.beranda.presentation
 
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
@@ -6,12 +6,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.ui.fragment.FragmentBerandaUser
-import com.example.projectskripsi.modules.pesanan.presentation.fragment.FragmentPesananUser
-import com.example.projectskripsi.modules.profil.presentation.fragment.FragmentProfilUser
+import com.example.projectskripsi.modules.beranda.presentation.fragment.FragmentBerandaAdmin
+import com.example.projectskripsi.modules.pesanan.presentation.fragment.FragmentPesananAdmin
+import com.example.projectskripsi.modules.profil.presentation.fragment.FragmentProfilAdmin
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ActivityUtamaUser : AppCompatActivity() {
+class ActivityUtamaAdmin : AppCompatActivity() {
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var bottomNav: BottomNavigationView
 
@@ -19,15 +19,15 @@ class ActivityUtamaUser : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId) {
             R.id.beranda -> {
-                replaceFragment(FragmentBerandaUser())
+                replaceFragment(FragmentBerandaAdmin())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.pesanan -> {
-                replaceFragment(FragmentPesananUser())
+                replaceFragment(FragmentPesananAdmin())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.profil -> {
-                replaceFragment(FragmentProfilUser())
+                replaceFragment(FragmentProfilAdmin())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -36,16 +36,11 @@ class ActivityUtamaUser : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_utama)
+        setContentView(R.layout.admin_activity_utama)
 
         bottomNav = findViewById(R.id.bottomNav)
         alertDialog = AlertDialog.Builder(this)
-        if (intent.getStringExtra("pesanan").toString() == "true") {
-            replaceFragment(FragmentPesananUser())
-            bottomNav.selectedItemId = R.id.pesanan
-        } else {
-            replaceFragment(FragmentBerandaUser())
-        }
+        replaceFragment(FragmentBerandaAdmin())
         bottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 

@@ -1,8 +1,8 @@
-package com.example.projectskripsi.modules.auth.ui
+package com.example.projectskripsi.modules.auth.presentation
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -11,9 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.modules.auth.ui.viewmodel.LoginViewModel
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaAdmin
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
+import com.example.projectskripsi.modules.auth.presentation.viewmodel.LoginViewModel
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaAdmin
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaUser
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityLogin : AppCompatActivity() {

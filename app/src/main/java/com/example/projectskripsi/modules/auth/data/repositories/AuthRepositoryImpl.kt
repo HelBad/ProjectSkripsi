@@ -32,11 +32,11 @@ class AuthRepositoryImpl constructor(
                 is Response.Success -> {
                     if (it.data != null) {
                         val user = User(
-                            idUser = it.data.idUser,
+                            idUser = it.data.id_user,
                             nama = it.data.nama,
                             email = it.data.email,
                             password = it.data.password,
-                            tglLahir = it.data.tglLahir,
+                            tglLahir = it.data.tgl_lahir,
                             gender = it.data.gender,
                             alamat = it.data.alamat,
                             telp = it.data.telp,
@@ -74,11 +74,11 @@ class AuthRepositoryImpl constructor(
                     is Response.Success -> {
                         if (it.data != null) {
                             val user = User(
-                                idUser = it.data.idUser,
+                                idUser = it.data.id_user,
                                 nama = it.data.nama,
                                 email = it.data.email,
                                 password = it.data.password,
-                                tglLahir = it.data.tglLahir,
+                                tglLahir = it.data.tgl_lahir,
                                 gender = it.data.gender,
                                 alamat = it.data.alamat,
                                 telp = it.data.telp,
@@ -116,11 +116,11 @@ class AuthRepositoryImpl constructor(
                     is Response.Success -> {
                         if (it.data != null) {
                             val user = User(
-                                idUser = it.data.idUser,
+                                idUser = it.data.id_user,
                                 nama = it.data.nama,
                                 email = it.data.email,
                                 password = it.data.password,
-                                tglLahir = it.data.tglLahir,
+                                tglLahir = it.data.tgl_lahir,
                                 gender = it.data.gender,
                                 alamat = it.data.alamat,
                                 telp = it.data.telp,

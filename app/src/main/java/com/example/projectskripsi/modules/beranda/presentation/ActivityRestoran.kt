@@ -1,12 +1,12 @@
-package com.example.projectskripsi.modules.beranda.ui
+package com.example.projectskripsi.modules.beranda.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.ui.adapter.SliderAdapter
-import com.example.projectskripsi.modules.beranda.ui.adapter.SliderItem
+import com.example.projectskripsi.modules.beranda.presentation.adapter.SliderAdapter
+import com.example.projectskripsi.modules.beranda.presentation.adapter.SliderItem
 
 class ActivityRestoran : AppCompatActivity() {
     lateinit var viewPager2: ViewPager2

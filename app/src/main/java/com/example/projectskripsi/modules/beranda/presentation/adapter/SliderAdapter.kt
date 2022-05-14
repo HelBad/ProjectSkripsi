@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui.adapter
+package com.example.projectskripsi.modules.beranda.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +17,12 @@ class SliderAdapter internal constructor(sliderItems: MutableList<SliderItem>, v
         this.viewPager2 = viewPager2
     }
 
-    class SliderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-            private val imageView: ImageView = itemView.findViewById(R.id.imageSlider)
-            fun image(sliderItem: SliderItem) {
-                imageView.setImageResource(sliderItem.image)
-            }
+    inner class SliderViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private val imageView: ImageView = itemView.findViewById(R.id.imageSlider)
+        fun image(sliderItem: SliderItem) {
+            imageView.setImageResource(sliderItem.image)
         }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
         return SliderViewHolder(
@@ -48,3 +48,5 @@ class SliderAdapter internal constructor(sliderItems: MutableList<SliderItem>, v
         notifyDataSetChanged()
     }
 }
+
+class SliderItem internal constructor(val image: Int)

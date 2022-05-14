@@ -12,14 +12,18 @@ import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.edit.presentation.ActivityEdit
 import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
+import com.example.projectskripsi.modules.detail.presentation.viewmodel.DetailViewModel
 import com.example.projectskripsi.utils.Rupiah
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class ActivityDetailAdmin : AppCompatActivity() {
+    private val detailViewModel: DetailViewModel by viewModel()
+
     lateinit var namaDetail: TextView
     lateinit var imgDetail: ImageView
     lateinit var lemakDetail: TextView
@@ -56,21 +60,19 @@ class ActivityDetailAdmin : AppCompatActivity() {
 
     //Load Data Menu
     private fun loadData() {
-        val query = FirebaseDatabase.getInstance().getReference("menu").orderByKey()
-            .equalTo(intent.getStringExtra("id_menu").toString())
-        query.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(datasnapshot: DataSnapshot) {
-                for (snapshot1 in datasnapshot.children) {
-                    val allocation = snapshot1.getValue(Menu::class.java)
-                    id_menu = allocation?.idMenu.toString()
-                    namaDetail.text = allocation?.namaMenu
-                    lemakDetail.text = allocation?.lemak
-                    proteinDetail.text = allocation?.protein
-                    kaloriDetail.text = allocation?.kalori
-                    karbohidratDetail.text = allocation?.karbohidrat
-                    deskripsiDetail.text = allocation?.deskripsi
-                    hargaDetail.text = allocation?.harga?.toInt()?.let { Rupiah.format(it) }
-                    Picasso.get().load(allocation?.gambar).into(imgDetail)
+        detailViewModel.getDetailMenu(intent.getStringExtra("id_menu").toString())
+            .observe(this@ActivityDetailAdmin) { res ->
+                if (res.data != null) {
+                    val allocation = res.data
+                    id_menu = allocation.idMenu.toString()
+                    namaDetail.text = allocation.namaMenu
+                    lemakDetail.text = allocation.lemak
+                    proteinDetail.text = allocation.protein
+                    kaloriDetail.text = allocation.kalori
+                    karbohidratDetail.text = allocation.karbohidrat
+                    deskripsiDetail.text = allocation.deskripsi
+                    hargaDetail.text = allocation.harga?.toInt()?.let { Rupiah.format(it) }
+                    Picasso.get().load(allocation.gambar).into(imgDetail)
 
                     btnEdit.setOnClickListener {
                         val intent = Intent(this@ActivityDetailAdmin, ActivityEdit::class.java)
@@ -114,7 +116,5 @@ class ActivityDetailAdmin : AppCompatActivity() {
                     }
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
     }
 }

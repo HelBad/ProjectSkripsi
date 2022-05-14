@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui.viewmodel
+package com.example.projectskripsi.modules.beranda.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams

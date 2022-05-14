@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.auth.ui
+package com.example.projectskripsi.modules.auth.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaAdmin
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaAdmin
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaUser
 
 class ActivityLoading : AppCompatActivity() {
     lateinit var SP: SharedPreferences

@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui.adapter
+package com.example.projectskripsi.modules.beranda.presentation.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -12,14 +12,12 @@ import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.utils.Rupiah
 import com.squareup.picasso.Picasso
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
-class BerandaAdapter(
+class BerandaUserAdapter(
     private val listMenu: ArrayList<Menu>,
     private val listPenyakit: ArrayList<Penyakit>,
     private val kategori: String,
-) : RecyclerView.Adapter<BerandaAdapter.BerandaViewHolder>() {
+) : RecyclerView.Adapter<BerandaUserAdapter.BerandaViewHolder>() {
     var onItemClick: ((Menu) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BerandaViewHolder {
@@ -102,6 +100,5 @@ class BerandaAdapter(
 
     interface ClickListener {
         fun onItemClick(view: View, position:Int)
-        fun onItemLongClick(view: View, position:Int)
     }
 }

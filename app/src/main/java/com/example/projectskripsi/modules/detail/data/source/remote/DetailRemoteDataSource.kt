@@ -2,6 +2,8 @@ package com.example.projectskripsi.modules.detail.data.source.remote
 
 import android.util.Log
 import com.example.projectskripsi.core.Response
+import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.modules.detail.data.responses.KeranjangResponse
 import com.example.projectskripsi.modules.detail.data.responses.MenuResponse
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
@@ -41,11 +43,122 @@ class DetailRemoteDataSource {
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-//    fun hapusPesanan(idKeranjang: String): Flowable<Response<MenuResponse?>> {
-//        val response = PublishSubject.create<Response<MenuResponse?>>()
-//
-//        firebase.getReference("keranjang")
-//            .child("ready")
-//            .child(sp.getString("id_user", "").toString())
-//    }
+    fun hapusMenu(idKeranjang: String, idUser: String): Flowable<Response<String?>> {
+        val response = PublishSubject.create<Response<String?>>()
+
+        firebase.getReference("keranjang")
+            .child("ready")
+            .child(idUser)
+            .child(idKeranjang)
+            .removeValue()
+            .addOnCompleteListener {
+                response.onNext(Response.Success("success"))
+            }
+            .addOnCanceledListener {
+                response.onNext(Response.Error("error"))
+            }
+            .addOnFailureListener {
+                response.onNext(Response.Error(it.message.toString()))
+            }
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun getDetailKeranjang(idKeranjang: String, idUser: String): Flowable<Response<KeranjangResponse?>> {
+        val response = PublishSubject.create<Response<KeranjangResponse?>>()
+
+        firebase.getReference("keranjang")
+            .child("ready")
+            .child(idUser)
+            .child(idKeranjang)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (snap in snapshot.children) {
+                            val menu = Converter.toObject(snap, KeranjangResponse::class.java)
+                            response.onNext(Response.Success(menu))
+                        }
+                    }
+                    else {
+                        response.onNext(Response.Empty)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    response.onNext(Response.Error(error.message))
+                    Log.e("DetailRemoteDataSource", error.message)
+                }
+            }
+        )
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun hapusPesanan(idKeranjang: String, idUser: String): Flowable<Response<String?>> {
+        val response = PublishSubject.create<Response<String?>>()
+
+        firebase.getReference("keranjang")
+            .child("ready")
+            .child(idUser)
+            .child(idKeranjang)
+            .removeValue()
+            .addOnCompleteListener {
+                response.onNext(Response.Success("success"))
+            }
+            .addOnCanceledListener {
+                response.onNext(Response.Error("error"))
+            }
+            .addOnFailureListener {
+                response.onNext(Response.Error(it.message.toString()))
+            }
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun buatPesanan(idUser: String, idMenu: String, jumlah: String, total: String): Flowable<Response<String?>> {
+        val response = PublishSubject.create<Response<String?>>()
+
+        val ref = firebase.getReference("keranjang")
+            .child("ready")
+            .child(idUser)
+
+        val id = ref.push().key.toString()
+        val data = Keranjang(id, idUser, idMenu, jumlah, total)
+        ref.child(id).setValue(data).addOnCompleteListener {
+            response.onNext(Response.Success(id))
+        }
+        .addOnCanceledListener {
+            response.onNext(Response.Error("error"))
+        }
+        .addOnFailureListener {
+            response.onNext(Response.Error(it.message.toString()))
+        }
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun updatePesanan(idKeranjang: String, jumlah: String, total: String, idUser: String): Flowable<Response<String?>> {
+        val response = PublishSubject.create<Response<String?>>()
+
+        val map = HashMap<String, Any>()
+        map["total"] = total
+        map["jumlah"] = jumlah
+
+        firebase.getReference("keranjang")
+            .child("ready")
+            .child(idUser)
+            .child(idKeranjang)
+            .updateChildren(map)
+            .addOnCompleteListener {
+                response.onNext(Response.Success("success"))
+            }
+            .addOnCanceledListener {
+                response.onNext(Response.Error("error"))
+            }
+            .addOnFailureListener {
+                response.onNext(Response.Error(it.message.toString()))
+            }
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
 }

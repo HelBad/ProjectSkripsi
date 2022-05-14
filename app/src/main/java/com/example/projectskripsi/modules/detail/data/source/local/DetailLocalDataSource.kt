@@ -3,8 +3,7 @@ package com.example.projectskripsi.modules.detail.data.source.local
 import android.content.Context
 import com.example.projectskripsi.MyApplication
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.auth.data.responses.UserResponse
-import com.google.gson.Gson
+import com.example.projectskripsi.modules.detail.data.responses.UserResponse
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject

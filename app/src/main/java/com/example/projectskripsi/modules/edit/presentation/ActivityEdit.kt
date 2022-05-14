@@ -14,7 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.beranda.domain.entities.Menu
 import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaAdmin
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaAdmin
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference

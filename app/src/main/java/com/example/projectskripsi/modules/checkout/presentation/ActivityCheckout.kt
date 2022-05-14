@@ -25,15 +25,15 @@ import com.example.projectskripsi.R
 import com.example.projectskripsi.modules.checkout.presentation.adapter.ViewholderCheckout
 import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.modules.pesanan.domain.entities.Pesanan
-import com.example.projectskripsi.modules.beranda.ui.ActivityUtamaUser
+import com.example.projectskripsi.modules.beranda.presentation.ActivityUtamaUser
 import com.example.projectskripsi.modules.detail.presentation.ActivityDetailUser
 import com.example.projectskripsi.utils.Rupiah
+import com.example.projectskripsi.utils.Tanggal
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.android.gms.location.*
 import com.google.firebase.database.*
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -252,8 +252,7 @@ class ActivityCheckout : AppCompatActivity() {
     private fun buatPesanan() {
         val ref = FirebaseDatabase.getInstance().getReference("pesanan")
         val id_pesanan  = ref.push().key.toString()
-        val time = SimpleDateFormat("dd MMM YYYY, hh:mm aa")
-        val currentTime = time.format(Date())
+        val currentTime = Tanggal.format(Date(), "dd MMM YYYY, hh:mm aa")
 
         val addData = Pesanan(id_pesanan, SP.getString("id_user", "").toString(),
             id_keranjang, keteranganCo.text.toString(), currentTime.toString(), lokasiCo.text.toString(),

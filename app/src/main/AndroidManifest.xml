@@ -24,16 +24,16 @@
             android:name=".modules.edit.presentation.ActivityEdit"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.ui.ActivityUtamaAdmin"
+            android:name=".modules.beranda.presentation.ActivityUtamaAdmin"
             android:exported="false" />
         <activity
             android:name=".modules.pesanan.presentation.ActivityRiwayatUser"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.ui.ActivityNutrisi"
+            android:name=".modules.beranda.presentation.ActivityNutrisi"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.ui.ActivityRestoran"
+            android:name=".modules.beranda.presentation.ActivityRestoran"
             android:exported="false" />
         <activity
             android:name=".modules.detail.presentation.ActivityDetailUser"
@@ -42,16 +42,16 @@
             android:name=".modules.checkout.presentation.ActivityCheckout"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.ui.ActivityUtamaUser"
+            android:name=".modules.beranda.presentation.ActivityUtamaUser"
             android:exported="false" />
         <activity
-            android:name=".modules.auth.ui.ActivityRegister"
+            android:name=".modules.auth.presentation.ActivityRegister"
             android:exported="false" />
         <activity
-            android:name=".modules.auth.ui.ActivityLogin"
+            android:name=".modules.auth.presentation.ActivityLogin"
             android:exported="false" />
         <activity
-            android:name=".modules.auth.ui.ActivityLoading"
+            android:name=".modules.auth.presentation.ActivityLoading"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,11 +1,11 @@
-package com.example.projectskripsi.modules.auth.data.responses
+package com.example.projectskripsi.modules.detail.data.responses
 
 
 import com.google.gson.annotations.SerializedName
 
 data class UserResponse(
     @SerializedName("id_user")
-    var id_user: String?,
+    var idUser: String?,
     @SerializedName("nama")
     var nama: String?,
     @SerializedName("email")
@@ -13,7 +13,7 @@ data class UserResponse(
     @SerializedName("password")
     var password: String?,
     @SerializedName("tgl_lahir")
-    var tgl_lahir: String?,
+    var tglLahir: String?,
     @SerializedName("gender")
     var gender: String?,
     @SerializedName("alamat")

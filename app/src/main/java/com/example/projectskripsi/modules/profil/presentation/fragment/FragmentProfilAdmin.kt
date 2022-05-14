@@ -1,28 +1,32 @@
 package com.example.projectskripsi.modules.profil.presentation.fragment
 
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.projectskripsi.modules.auth.ui.ActivityLogin
+import androidx.fragment.app.Fragment
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.auth.domain.entities.User
-import com.google.firebase.database.FirebaseDatabase
+import com.example.projectskripsi.core.Resource
+import com.example.projectskripsi.modules.auth.presentation.ActivityLogin
+import com.example.projectskripsi.modules.profil.domain.entities.User
+import com.example.projectskripsi.modules.profil.presentation.viewmodel.ProfilViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentProfilAdmin : Fragment() {
-    lateinit var SP: SharedPreferences
-    lateinit var alertDialog: AlertDialog.Builder
-    lateinit var profilEmail: EditText
-    lateinit var profilPassword: EditText
-    lateinit var btnSimpan: Button
-    lateinit var btnKeluar: Button
+    private val profilViewModel: ProfilViewModel by viewModel()
+
+    private lateinit var alertDialog: AlertDialog.Builder
+    private lateinit var profilEmail: EditText
+    private lateinit var profilPassword: EditText
+    private lateinit var btnSimpan: Button
+    private lateinit var btnKeluar: Button
+
+    var user: User? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.admin_fragment_profil, container, false)
@@ -37,53 +41,48 @@ class FragmentProfilAdmin : Fragment() {
         btnKeluar = requireActivity().findViewById(R.id.btnKeluar)
 
         alertDialog = AlertDialog.Builder(requireActivity())
-        SP = requireActivity().applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
-        profilEmail.setText(SP.getString("email", ""))
-        profilPassword.setText(SP.getString("password", ""))
+        loadData()
 
         btnKeluar.setOnClickListener {
             alertDialog.setTitle("Keluar Akun")
             alertDialog.setMessage("Apakah anda ingin keluar dari akun ini ?").setCancelable(false)
-                .setPositiveButton("YA", object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id:Int) {
-                        val editor = SP.edit()
-                        editor.putString("id_user", "")
-                        editor.putString("nama", "")
-                        editor.putString("email", "")
-                        editor.putString("password", "")
-                        editor.putString("tgl_lahir", "")
-                        editor.putString("gender", "")
-                        editor.putString("alamat", "")
-                        editor.putString("telp", "")
-                        editor.putString("level", "")
-                        editor.apply()
-
-                        val intent = Intent(context, ActivityLogin::class.java)
-                        startActivity(intent)
-                        activity!!.finish()
-                    }
-                })
-                .setNegativeButton("TIDAK", object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id:Int) {
-                        dialog.cancel()
-                    }
-                }).create().show()
+                .setPositiveButton("YA"
+                ) { _, _ ->
+                    profilViewModel.saveUser("", "", "", "", "", "", "", "", "")
+                        .observe(viewLifecycleOwner) { res ->
+                            if (res is Resource.Success) {
+                                val intent = Intent(context, ActivityLogin::class.java)
+                                startActivity(intent)
+                                requireActivity().finish()
+                            } else if (res is Resource.Error) {
+                                Toast.makeText(requireActivity(), "Terjadi kesalahan. Silahkan coba lagi", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                }
+                .setNegativeButton("TIDAK"
+                ) { dialog, _ -> dialog.cancel() }.create().show()
         }
 
         btnSimpan.setOnClickListener {
             alertDialog.setMessage("Apakah ingin menyimpan perubahan data ?").setCancelable(false)
-                .setPositiveButton("YA", object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id:Int) {
-                        if(validate()) {
-                            saveData()
-                        }
+                .setPositiveButton("YA"
+                ) { _, _ ->
+                    if (validate()) {
+                        saveData()
                     }
-                })
-                .setNegativeButton("TIDAK", object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id:Int) {
-                        dialog.cancel()
-                    }
-                }).create().show()
+                }
+                .setNegativeButton("TIDAK"
+                ) { dialog, _ -> dialog.cancel() }.create().show()
+        }
+    }
+
+    private fun loadData() {
+        profilViewModel.getUser().observe(viewLifecycleOwner) {
+            if (it != null) {
+                user = it.data
+                profilEmail.setText(user?.email ?: "")
+                profilPassword.setText(user?.password ?: "")
+            }
         }
     }
 
@@ -102,24 +101,31 @@ class FragmentProfilAdmin : Fragment() {
 
     //Simpan Perubahan Data User
     private fun saveData() {
-        val id_user = SP.getString("id_user", "").toString()
-        val updateData = User(id_user, SP.getString("nama", "").toString(), profilEmail.text.toString(),
-            profilPassword.text.toString(), SP.getString("tgl_lahir", "").toString(),
-            SP.getString("gender", "").toString(), SP.getString("alamat", "").toString(),
-            SP.getString("telp", "").toString(), SP.getString("level", "").toString())
-        val ref = FirebaseDatabase.getInstance().getReference("user")
-        ref.child(id_user).setValue(updateData).addOnSuccessListener {
-            val editor = SP.edit()
-            editor.putString("nama", updateData.nama)
-            editor.putString("email", updateData.email)
-            editor.putString("password", updateData.password)
-            editor.putString("tgl_lahir", updateData.tglLahir)
-            editor.putString("gender", updateData.gender)
-            editor.putString("alamat", updateData.alamat)
-            editor.putString("telp", updateData.telp)
-            editor.apply()
-
-            Toast.makeText(activity, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+        if (user != null) {
+            profilViewModel.updateUser(
+                user?.idUser ?: "",
+                user?.nama ?: "",
+                user?.email ?: "",
+                user?.password ?: "",
+                user?.tglLahir ?: "",
+                user?.gender ?: "",
+                user?.alamat ?: "",
+                user?.telp ?: "",
+                user?.level ?: ""
+            ).observe(viewLifecycleOwner) { res ->
+                    if (res is Resource.Success) {
+                        profilViewModel.saveUser(user?.idUser, user?.nama, user?.email, user?.password, user?.tglLahir, user?.gender, user?.alamat, user?.telp, user?.level)
+                            .observe(viewLifecycleOwner) { res1 ->
+                                if (res1 is Resource.Success) {
+                                    Toast.makeText(activity, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+                                } else if (res1 is Resource.Error) {
+                                    Toast.makeText(requireActivity(), "Terjadi kesalahan. Silahkan coba lagi", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    } else if (res is Resource.Error) {
+                        Toast.makeText(requireActivity(), "Terjadi kesalahan. Silahkan coba lagi", Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
     }
 }

@@ -1,21 +1,20 @@
 package com.example.projectskripsi.modules.detail.presentation
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.core.Resource
+import com.example.projectskripsi.modules.detail.domain.entities.User
 import com.example.projectskripsi.modules.detail.presentation.viewmodel.DetailViewModel
 import com.example.projectskripsi.utils.Rupiah
-import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
 class ActivityDetailUser : AppCompatActivity() {
     private val detailViewModel: DetailViewModel by viewModel()
@@ -34,12 +33,12 @@ class ActivityDetailUser : AppCompatActivity() {
     lateinit var btnPesan: Button
     lateinit var btnHapus: Button
 
-    lateinit var databaseRef: DatabaseReference
-    lateinit var sp: SharedPreferences
+    var user: User? = null
+
     var countJumlah = 0
-    var id_keranjang = ""
+    var idKeranjang = ""
     var idMenu = ""
-    var harga_menu = 0
+    var hargaMenu = 0
     var statusKeranjang = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,14 +59,17 @@ class ActivityDetailUser : AppCompatActivity() {
         btnPesan = findViewById(R.id.btnPesan)
         btnHapus = findViewById(R.id.btnHapus)
 
-        sp = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
-        databaseRef = FirebaseDatabase.getInstance().getReference("keranjang")
-            .child("ready").child(sp.getString("id_user", "").toString())
         loadData()
     }
 
     //Load Data Pesanan
     private fun loadData() {
+        detailViewModel.getUser().observe(this@ActivityDetailUser) {
+            if (it != null) {
+                user = it.data
+            }
+        }
+
         detailViewModel.getDetailMenu(intent.getStringExtra("id_menu").toString())
             .observe(this@ActivityDetailUser) { res ->
                 if (res.data != null) {
@@ -80,7 +82,7 @@ class ActivityDetailUser : AppCompatActivity() {
                     kaloriDetail.text = detail.kalori
                     karbohidratDetail.text = detail.karbohidrat
                     deskripsiDetail.text = detail.deskripsi
-                    harga_menu = detail.harga?.toInt()!!
+                    hargaMenu = detail.harga?.toInt()!!
                     if (detail.harga != null) {
                         hargaDetail.text = Rupiah.format(detail.harga!!.toInt())
                     }
@@ -93,7 +95,9 @@ class ActivityDetailUser : AppCompatActivity() {
                         finish()
                     }
                     btnHapus.setOnClickListener {
-                        databaseRef.child(id_keranjang).removeValue()
+                        user?.idUser?.let {
+                            it1 -> detailViewModel.hapusPesanan(idKeranjang, it1)
+                        }
                         finish()
                     }
                 }
@@ -102,37 +106,48 @@ class ActivityDetailUser : AppCompatActivity() {
 
     //Save Data Pesanan
     private fun buatPesanan() {
-        val id_user = sp.getString("id_user", "").toString().trim()
-        val total = (harga_menu * jumlahDetail.text.toString().toInt()).toString()
+        val total = (hargaMenu * jumlahDetail.text.toString().toInt()).toString()
+        val jumlah = jumlahDetail.text.toString()
 
         if(statusKeranjang == "ready") {
-            val jumlah = jumlahDetail.text.toString()
-            databaseRef.child(id_keranjang).child("jumlah").setValue(jumlah)
-            databaseRef.child(id_keranjang).child("total").setValue(total)
+            user?.idUser?.let {
+                detailViewModel.updatePesanan(
+                    idKeranjang,
+                    jumlah,
+                    total,
+                    it
+                )
+            }
         } else {
-            id_keranjang  = databaseRef.push().key.toString()
-            val addData = Keranjang(id_keranjang, id_user, idMenu, jumlahDetail.text.toString(), total)
-            databaseRef.child(id_keranjang).setValue(addData)
+            user?.idUser?.let {
+                detailViewModel.buatPesanan(
+                    it,
+                    idMenu,
+                    jumlah,
+                    total,
+                ).observe(this@ActivityDetailUser) { res ->
+                    if (res is Resource.Success && res.data != null) {
+                        idKeranjang = res.data
+                    }
+                }
+            }
         }
     }
 
     //Cek Data Pesanan
     private fun cekData() {
-        databaseRef.orderByChild("id_menu").equalTo(idMenu).addValueEventListener( object : ValueEventListener {
-            override fun onDataChange(datasnapshot: DataSnapshot) {
-                if(datasnapshot.exists()) {
-                    for (snapshot1 in datasnapshot.children) {
-                        val allocation = snapshot1.getValue(Keranjang::class.java)
-                        if(allocation!!.id_keranjang.isNotEmpty()) {
-                            jumlahDetail.text = Editable.Factory.getInstance().newEditable(allocation.jumlah)
-                            id_keranjang = allocation.id_keranjang
-                            statusKeranjang = "ready"
-                        }
+        user?.idUser?.let {
+            detailViewModel.getDetailKeranjang(idMenu, it).observe(this@ActivityDetailUser) { res ->
+                if (res is Resource.Success) {
+                    val keranjang = res.data
+                    if(keranjang?.idKeranjang != null) {
+                        jumlahDetail.text = Editable.Factory.getInstance().newEditable(keranjang.jumlah)
+                        idKeranjang = keranjang.idKeranjang.toString()
+                        statusKeranjang = "ready"
                     }
                 }
             }
-            override fun onCancelled(databaseError: DatabaseError) { }
-        })
+        }
     }
 
     //Set Jumlah Pesanan

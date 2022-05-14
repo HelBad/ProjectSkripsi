@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui
+package com.example.projectskripsi.modules.beranda.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

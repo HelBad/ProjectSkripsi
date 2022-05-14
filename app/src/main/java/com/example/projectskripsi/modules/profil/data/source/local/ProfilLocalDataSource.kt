@@ -1,14 +1,15 @@
-package com.example.projectskripsi.modules.auth.data.source.local
+package com.example.projectskripsi.modules.profil.data.source.local
 
 import android.content.Context
+import android.util.Log
 import com.example.projectskripsi.MyApplication
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.modules.auth.data.responses.UserResponse
+import com.example.projectskripsi.modules.profil.data.responses.UserResponse
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
-class AuthLocalDataSource {
+class ProfilLocalDataSource {
     fun getUser(): Flowable<Response<UserResponse?>> {
         val response = PublishSubject.create<Response<UserResponse?>>()
 
@@ -28,6 +29,7 @@ class AuthLocalDataSource {
         )
 
         if (user.id_user != null) {
+            Log.d("profil", user.toString())
             response.onNext(Response.Success(user))
         } else {
             response.onNext(Response.Empty)

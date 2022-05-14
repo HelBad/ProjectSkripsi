@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui.fragment
+package com.example.projectskripsi.modules.beranda.presentation.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,14 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.modules.beranda.ui.adapter.BerandaAdminViewholder
-import com.example.projectskripsi.modules.beranda.domain.entities.Menu
+import com.example.projectskripsi.modules.beranda.presentation.adapter.BerandaAdminAdapter
+import com.example.projectskripsi.modules.beranda.presentation.viewmodel.BerandaViewModel
 import com.example.projectskripsi.modules.edit.presentation.ActivityEdit
 import com.example.projectskripsi.modules.detail.presentation.ActivityDetailAdmin
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.google.firebase.database.FirebaseDatabase
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentBerandaAdmin : Fragment() {
+    private val berandaViewModel: BerandaViewModel by viewModel()
+
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
 
@@ -38,11 +39,9 @@ class FragmentBerandaAdmin : Fragment() {
     }
 
     //Action Bar
-    override fun onCreateOptionsMenu(menu: android.view.Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
-        val inflater = requireActivity().menuInflater
-        inflater.inflate(R.menu.bar_beranda_admin, menu)
+        requireActivity().menuInflater.inflate(R.menu.bar_beranda_admin, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -58,29 +57,18 @@ class FragmentBerandaAdmin : Fragment() {
     //List Menu
     override fun onStart() {
         super.onStart()
-        val query = FirebaseDatabase.getInstance().getReference("menu")
-        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Menu, BerandaAdminViewholder>(
-            Menu::class.java,
-            R.layout.menu_admin_listmenu,
-            BerandaAdminViewholder::class.java,
-            query
-        ) {
-            override fun populateViewHolder(viewHolder: BerandaAdminViewholder, model: Menu, position:Int) {
-                viewHolder.setDetails(model)
+        berandaViewModel.getMenu().observe(viewLifecycleOwner) { res ->
+            val adapter = res.data?.let {
+                BerandaAdminAdapter(it)
             }
-            override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): BerandaAdminViewholder {
-                val viewHolder = super.onCreateViewHolder(parent, viewType)
-                viewHolder.setOnClickListener(object: BerandaAdminViewholder.ClickListener {
-                    override fun onItemClick(view:View, position:Int) {
-                        val intent = Intent(view.context, ActivityDetailAdmin::class.java)
-                        intent.putExtra("id_menu", viewHolder.menu.idMenu)
-                        startActivity(intent)
-                    }
-                    override fun onItemLongClick(view:View, position:Int) {}
-                })
-                return viewHolder
+
+            adapter?.onItemClick = { menu ->
+                val intent = Intent(context, ActivityDetailAdmin::class.java)
+                intent.putExtra("id_menu", menu.idMenu)
+                startActivity(intent)
             }
+
+            mRecyclerView.adapter = adapter
         }
-        mRecyclerView.adapter = firebaseRecyclerAdapter
     }
 }

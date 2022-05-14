@@ -1,4 +1,4 @@
-package com.example.projectskripsi.modules.beranda.ui.fragment
+package com.example.projectskripsi.modules.beranda.presentation.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.*
 import com.example.projectskripsi.modules.beranda.domain.entities.Penyakit
-import com.example.projectskripsi.modules.beranda.ui.viewmodel.BerandaViewModel
+import com.example.projectskripsi.modules.beranda.presentation.viewmodel.BerandaViewModel
 import com.example.projectskripsi.modules.checkout.presentation.ActivityCheckout
 import com.example.projectskripsi.modules.detail.presentation.ActivityDetailUser
-import com.example.projectskripsi.modules.beranda.ui.ActivityNutrisi
-import com.example.projectskripsi.modules.beranda.ui.ActivityRestoran
-import com.example.projectskripsi.modules.beranda.ui.adapter.BerandaAdapter
+import com.example.projectskripsi.modules.beranda.presentation.ActivityNutrisi
+import com.example.projectskripsi.modules.beranda.presentation.ActivityRestoran
+import com.example.projectskripsi.modules.beranda.presentation.adapter.BerandaUserAdapter
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentBerandaUser : Fragment() {
@@ -67,7 +67,7 @@ class FragmentBerandaUser : Fragment() {
 
         berandaViewModel.getMenu().observe(viewLifecycleOwner) { res ->
             val adapter = res.data?.let {
-                BerandaAdapter(it, listPenyakit, rekomendasiPenyakit[0])
+                BerandaUserAdapter(it, listPenyakit, rekomendasiPenyakit[0])
             }
 
             adapter?.onItemClick = { menu ->
@@ -90,7 +90,7 @@ class FragmentBerandaUser : Fragment() {
                 penyakitBeranda.text = rekomendasiPenyakit[position]
                 berandaViewModel.getMenu().observe(viewLifecycleOwner) { res ->
                     val adapter = res.data?.let {
-                        BerandaAdapter(it, listPenyakit, rekomendasiPenyakit[position])
+                        BerandaUserAdapter(it, listPenyakit, rekomendasiPenyakit[position])
                     }
 
                     adapter?.onItemClick = { menu ->
