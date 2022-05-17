@@ -1,6 +1,7 @@
 package com.example.projectskripsi.modules.auth.data.repositories
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.modules.auth.data.source.local.AuthLocalDataSource
@@ -114,6 +115,7 @@ class AuthRepositoryImpl constructor(
             .subscribe {
                 when(it){
                     is Response.Success -> {
+                        Log.d("auth", it.data.toString())
                         if (it.data != null) {
                             val user = User(
                                 idUser = it.data.id_user,
@@ -156,6 +158,7 @@ class AuthRepositoryImpl constructor(
             .subscribe {
                 when(it){
                     is Response.Success -> {
+                        Log.d("auth", it.data.toString())
                         result.onNext(Resource.Success(it.data))
                     }
                     is Response.Empty -> {

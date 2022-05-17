@@ -10,7 +10,7 @@ class AuthUsecase constructor(private val repository: AuthRepository) {
         return repository.login(email, password)
     }
 
-    fun register(nama: String, email: String, password: String, tanggal: String, gender: String, alamat: String, telp: String) :  Flowable<Resource<User?>> {
+    fun register(nama: String, email: String, password: String, tanggal: String, gender: String, alamat: String, telp: String) : Flowable<Resource<User?>> {
         return repository.register(nama, email, password, tanggal, gender, alamat, telp)
     }
 

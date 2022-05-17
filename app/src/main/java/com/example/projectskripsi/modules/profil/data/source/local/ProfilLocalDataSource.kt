@@ -1,20 +1,20 @@
 package com.example.projectskripsi.modules.profil.data.source.local
 
 import android.content.Context
-import android.util.Log
 import com.example.projectskripsi.MyApplication
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.modules.profil.data.responses.UserResponse
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class ProfilLocalDataSource {
-    fun getUser(): Flowable<Response<UserResponse?>> {
-        val response = PublishSubject.create<Response<UserResponse?>>()
-
-        val sp = MyApplication.instance.applicationContext
-            .getSharedPreferences("User", Context.MODE_PRIVATE)
+    fun getUser(): Flowable<UserResponse?> {
+        val sp = MyApplication.instance.applicationContext.getSharedPreferences(
+            "User",
+            Context.MODE_PRIVATE
+        )
 
         val user = UserResponse(
             id_user = sp.getString("id_user", null),
@@ -28,21 +28,29 @@ class ProfilLocalDataSource {
             level = sp.getString("level", null),
         )
 
-        if (user.id_user != null) {
-            Log.d("profil", user.toString())
-            response.onNext(Response.Success(user))
-        } else {
-            response.onNext(Response.Empty)
-        }
-
-        return response.toFlowable(BackpressureStrategy.BUFFER)
+        return Observable.create<UserResponse?> {
+            it.onNext(user)
+            it.onComplete()
+        }.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    fun saveUser(id: String?, nama: String?, email: String?, password: String?, tglLahir: String?, gender: String?, alamat: String?, telp: String?, level: String?): Flowable<Response<String?>> {
+    fun saveUser(
+        id: String?,
+        nama: String?,
+        email: String?,
+        password: String?,
+        tglLahir: String?,
+        gender: String?,
+        alamat: String?,
+        telp: String?,
+        level: String?
+    ): Flowable<Response<String?>> {
         val response = PublishSubject.create<Response<String?>>()
 
-        val sp = MyApplication.instance.applicationContext
-            .getSharedPreferences("User", Context.MODE_PRIVATE)
+        val sp = MyApplication.instance.applicationContext.getSharedPreferences(
+            "User",
+            Context.MODE_PRIVATE
+        )
 
         val editor = sp.edit()
         editor.putString("id_user", id)

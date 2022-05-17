@@ -2,6 +2,7 @@ package com.example.projectskripsi.modules.detail.presentation
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -140,6 +141,7 @@ class ActivityDetailUser : AppCompatActivity() {
             detailViewModel.getDetailKeranjang(idMenu, it).observe(this@ActivityDetailUser) { res ->
                 if (res is Resource.Success) {
                     val keranjang = res.data
+                    Log.d("detail", keranjang.toString())
                     if(keranjang?.idKeranjang != null) {
                         jumlahDetail.text = Editable.Factory.getInstance().newEditable(keranjang.jumlah)
                         idKeranjang = keranjang.idKeranjang.toString()

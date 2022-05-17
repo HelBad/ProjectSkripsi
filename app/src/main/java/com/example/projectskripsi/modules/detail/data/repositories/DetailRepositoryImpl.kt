@@ -212,38 +212,24 @@ class DetailRepositoryImpl constructor(
         val result = PublishSubject.create<Resource<User?>>()
         result.onNext(Resource.Loading())
 
-        localDataSource.getUser()
-            .subscribeOn(Schedulers.io())
+        val source = localDataSource.getUser()
+
+        source.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
             .subscribe {
-                when(it){
-                    is Response.Success -> {
-                        if (it.data != null) {
-                            val user = User(
-                                idUser = it.data.idUser,
-                                nama = it.data.nama,
-                                email = it.data.email,
-                                password = it.data.password,
-                                tglLahir = it.data.tglLahir,
-                                gender = it.data.gender,
-                                alamat = it.data.alamat,
-                                telp = it.data.telp,
-                                level = it.data.level
-                            )
-                            result.onNext(Resource.Success(user))
-                        }
-                        else {
-                            result.onNext(Resource.Success(null))
-                        }
-                    }
-                    is Response.Empty -> {
-                        result.onNext(Resource.Success(null))
-                    }
-                    is Response.Error -> {
-                        result.onNext(Resource.Error(it.errorMessage, null))
-                    }
-                }
+                val user = User(
+                    idUser = it?.idUser,
+                    nama = it?.nama,
+                    email = it?.email,
+                    password = it?.password,
+                    tglLahir = it?.tglLahir,
+                    gender = it?.gender,
+                    alamat = it?.alamat,
+                    telp = it?.telp,
+                    level = it?.level
+                )
+                result.onNext(Resource.Success(user))
             }
 
         return result.toFlowable(BackpressureStrategy.BUFFER)

@@ -141,7 +141,7 @@ class ActivityCheckout : AppCompatActivity() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     if (location != null) {
-                        //TODO: UI updates.
+
                     }
                 }
             }

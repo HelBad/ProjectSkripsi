@@ -125,6 +125,7 @@ class DetailRemoteDataSource {
         val id = ref.push().key.toString()
         val data = Keranjang(id, idUser, idMenu, jumlah, total)
         ref.child(id).setValue(data).addOnCompleteListener {
+            Log.d("detail", id)
             response.onNext(Response.Success(id))
         }
         .addOnCanceledListener {
@@ -150,6 +151,7 @@ class DetailRemoteDataSource {
             .child(idKeranjang)
             .updateChildren(map)
             .addOnCompleteListener {
+                Log.d("detail", idUser)
                 response.onNext(Response.Success("success"))
             }
             .addOnCanceledListener {

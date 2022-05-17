@@ -1,6 +1,7 @@
 package com.example.projectskripsi.modules.auth.data.source.local
 
 import android.content.Context
+import android.util.Log
 import com.example.projectskripsi.MyApplication
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.modules.auth.data.responses.UserResponse
@@ -28,6 +29,7 @@ class AuthLocalDataSource {
         )
 
         if (user.id_user != null) {
+            Log.d("auth", user.toString())
             response.onNext(Response.Success(user))
         } else {
             response.onNext(Response.Empty)

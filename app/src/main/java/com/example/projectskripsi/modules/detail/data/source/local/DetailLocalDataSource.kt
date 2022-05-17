@@ -2,18 +2,17 @@ package com.example.projectskripsi.modules.detail.data.source.local
 
 import android.content.Context
 import com.example.projectskripsi.MyApplication
-import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.modules.detail.data.responses.UserResponse
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Observable
 
 class DetailLocalDataSource {
-    fun getUser(): Flowable<Response<UserResponse?>> {
-        val response = PublishSubject.create<Response<UserResponse?>>()
-
-        val sp = MyApplication.instance.applicationContext
-            .getSharedPreferences("User", Context.MODE_PRIVATE)
+    fun getUser(): Flowable<UserResponse> {
+        val sp = MyApplication.instance.applicationContext.getSharedPreferences(
+            "User",
+            Context.MODE_PRIVATE
+        )
 
         val user = UserResponse(
             idUser = sp.getString("id_user", null),
@@ -27,12 +26,9 @@ class DetailLocalDataSource {
             level = sp.getString("level", null),
         )
 
-        if (user.idUser != null) {
-            response.onNext(Response.Success(user))
-        } else {
-            response.onNext(Response.Empty)
-        }
-
-        return response.toFlowable(BackpressureStrategy.BUFFER)
+        return Observable.create<UserResponse?> {
+            it.onNext(user)
+            it.onComplete()
+        }.toFlowable(BackpressureStrategy.BUFFER)
     }
 }
