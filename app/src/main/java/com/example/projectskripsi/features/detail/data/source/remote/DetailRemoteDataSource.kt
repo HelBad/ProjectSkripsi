@@ -67,6 +67,7 @@ class DetailRemoteDataSource {
     fun getDetailKeranjang(idKeranjang: String, idUser: String): Flowable<Response<KeranjangResponse?>> {
         val response = PublishSubject.create<Response<KeranjangResponse?>>()
 
+//        Log.d("detail", idKeranjang)
         firebase.getReference("keranjang")
             .child("ready")
             .child(idUser)

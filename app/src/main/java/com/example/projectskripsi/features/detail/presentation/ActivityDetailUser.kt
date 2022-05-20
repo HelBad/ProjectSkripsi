@@ -75,6 +75,7 @@ class ActivityDetailUser : AppCompatActivity() {
             .observe(this@ActivityDetailUser) { res ->
                 if (res.data != null) {
                     val detail = res.data
+                    Log.d("detail", detail.toString())
 
                     idMenu = detail.idMenu.toString()
                     namaDetail.text = detail.namaMenu
@@ -141,7 +142,6 @@ class ActivityDetailUser : AppCompatActivity() {
             detailViewModel.getDetailKeranjang(idMenu, it).observe(this@ActivityDetailUser) { res ->
                 if (res is Resource.Success) {
                     val keranjang = res.data
-                    Log.d("detail", keranjang.toString())
                     if(keranjang?.idKeranjang != null) {
                         jumlahDetail.text = Editable.Factory.getInstance().newEditable(keranjang.jumlah)
                         idKeranjang = keranjang.idKeranjang.toString()
