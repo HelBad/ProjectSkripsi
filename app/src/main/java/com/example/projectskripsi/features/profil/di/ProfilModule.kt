@@ -13,7 +13,6 @@ import org.koin.dsl.module
 
 val profilModule = module {
     factory { ProfilRemoteDataSource() }
-
     factory { ProfilLocalDataSource() }
 
     single<ProfilRepository> { ProfilRepositoryImpl(get(), get()) }

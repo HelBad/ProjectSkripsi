@@ -11,7 +11,6 @@ import org.koin.dsl.module
 
 val detailModule = module {
     factory { DetailRemoteDataSource() }
-
     factory { DetailLocalDataSource() }
 
     single<DetailRepository> { DetailRepositoryImpl(get(), get()) }
