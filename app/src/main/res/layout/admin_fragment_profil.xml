@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".modules.profil.presentation.fragment.FragmentProfilAdmin">
+    tools:context=".features.profil.presentation.fragment.FragmentProfilAdmin">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarProfil"
         android:layout_width="match_parent"

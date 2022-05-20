@@ -1,8 +1,10 @@
 package com.example.projectskripsi
 
 import android.app.Application
-import android.content.Context
-import com.example.projectskripsi.core.authModule
+import com.example.projectskripsi.features.auth.di.authModule
+import com.example.projectskripsi.features.beranda.di.berandaModule
+import com.example.projectskripsi.features.detail.di.detailModule
+import com.example.projectskripsi.features.profil.di.profilModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -17,7 +19,10 @@ class MyApplication : Application() {
             androidContext(this@MyApplication)
             modules(
                 listOf(
-                    authModule
+                    authModule,
+                    berandaModule,
+                    detailModule,
+                    profilModule,
                 )
             )
         }

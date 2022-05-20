@@ -15,43 +15,43 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".modules.pesanan.presentation.ActivityRiwayatAdmin"
+            android:name=".features.pesanan.presentation.ActivityRiwayatAdmin"
             android:exported="false" />
         <activity
-            android:name=".modules.detail.presentation.ActivityDetailAdmin"
+            android:name=".features.detail.presentation.ActivityDetailAdmin"
             android:exported="false" />
         <activity
-            android:name=".modules.edit.presentation.ActivityEdit"
+            android:name=".features.edit.presentation.ActivityEdit"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.presentation.ActivityUtamaAdmin"
+            android:name=".features.beranda.presentation.ActivityUtamaAdmin"
             android:exported="false" />
         <activity
-            android:name=".modules.pesanan.presentation.ActivityRiwayatUser"
+            android:name=".features.pesanan.presentation.ActivityRiwayatUser"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.presentation.ActivityNutrisi"
+            android:name=".features.beranda.presentation.ActivityNutrisi"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.presentation.ActivityRestoran"
+            android:name=".features.beranda.presentation.ActivityRestoran"
             android:exported="false" />
         <activity
-            android:name=".modules.detail.presentation.ActivityDetailUser"
+            android:name=".features.detail.presentation.ActivityDetailUser"
             android:exported="false" />
         <activity
-            android:name=".modules.checkout.presentation.ActivityCheckout"
+            android:name=".features.checkout.presentation.ActivityCheckout"
             android:exported="false" />
         <activity
-            android:name=".modules.beranda.presentation.ActivityUtamaUser"
+            android:name=".features.beranda.presentation.ActivityUtamaUser"
             android:exported="false" />
         <activity
-            android:name=".modules.auth.presentation.ActivityRegister"
+            android:name=".features.auth.presentation.ActivityRegister"
             android:exported="false" />
         <activity
-            android:name=".modules.auth.presentation.ActivityLogin"
+            android:name=".features.auth.presentation.ActivityLogin"
             android:exported="false" />
         <activity
-            android:name=".modules.auth.presentation.ActivityLoading"
+            android:name=".features.auth.presentation.ActivityLoading"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
