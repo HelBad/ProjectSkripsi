@@ -5,13 +5,13 @@ import com.example.projectskripsi.core.UseCase
 import com.example.projectskripsi.features.menu.domain.repositories.MenuRepository
 import io.reactivex.Flowable
 
-class UpdatePesananUsecase(private val repository: MenuRepository) :
-    UseCase<Flowable<Resource<String?>>, UpdatePesananUsecase.UpdatePesananParams>() {
-    override fun run(params: UpdatePesananParams) = repository.updatePesanan(
+class UpdateKeranjangUsecase(private val repository: MenuRepository) :
+    UseCase<Flowable<Resource<String?>>, UpdateKeranjangUsecase.UpdateKeranjangParams>() {
+    override fun run(params: UpdateKeranjangParams) = repository.updateKeranjang(
         params.idKeranjang, params.jumlah, params.total, params.idUser
     )
 
-    data class UpdatePesananParams(
+    data class UpdateKeranjangParams(
         val idKeranjang: String,
         val jumlah: String,
         val total: String,

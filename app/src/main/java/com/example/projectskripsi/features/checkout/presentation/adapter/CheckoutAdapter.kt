@@ -1,32 +1,31 @@
-package com.example.projectskripsi.features.riwayat.presentation.adapter
+package com.example.projectskripsi.features.checkout.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.riwayat.domain.entities.Keranjang
+import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.utils.Rupiah
 
-class RiwayatAdapter(
+class CheckoutAdapter(
     private val listKeranjang: ArrayList<Keranjang>,
-) : RecyclerView.Adapter<RiwayatAdapter.RiwayatViewHolder>() {
+) : RecyclerView.Adapter<CheckoutAdapter.CheckoutViewHolder>() {
     var onItemClick: ((Keranjang) -> Unit)? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RiwayatViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckoutViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.menu_checkout, parent, false)
-        return RiwayatViewHolder(view)
+        return CheckoutViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RiwayatViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CheckoutViewHolder, position: Int) {
         holder.setDetails(listKeranjang[position])
     }
 
     override fun getItemCount(): Int = listKeranjang.size
 
-    inner class RiwayatViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class CheckoutViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var mView: View = itemView
         private var mClickListener: ClickListener? = null
         var keranjang = Keranjang()

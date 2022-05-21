@@ -2,9 +2,9 @@ package com.example.projectskripsi.features.menu.data.source.remote
 
 import android.util.Log
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.features.menu.data.responses.KeranjangResponse
 import com.example.projectskripsi.features.menu.data.responses.MenuResponse
+import com.example.projectskripsi.features.menu.domain.entities.Keranjang
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -95,7 +95,7 @@ class MenuRemoteDataSource {
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    fun hapusPesanan(idKeranjang: String, idUser: String): Flowable<Response<String?>> {
+    fun hapusKeranjang(idKeranjang: String, idUser: String): Flowable<Response<String?>> {
         val response = PublishSubject.create<Response<String?>>()
 
         firebase.getReference("keranjang")
@@ -116,7 +116,7 @@ class MenuRemoteDataSource {
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    fun buatPesanan(idUser: String, idMenu: String, jumlah: String, total: String): Flowable<Response<String?>> {
+    fun buatKeranjang(idUser: String, idMenu: String, jumlah: String, total: String): Flowable<Response<String?>> {
         val response = PublishSubject.create<Response<String?>>()
 
         val ref = firebase.getReference("keranjang")
@@ -124,7 +124,8 @@ class MenuRemoteDataSource {
             .child(idUser)
 
         val id = ref.push().key.toString()
-        val data = Keranjang(id, idUser, idMenu, jumlah, total)
+        val data = KeranjangResponse(id, idUser, idMenu, jumlah, total)
+        Log.d("menu", data.toString())
         ref.child(id).setValue(data).addOnCompleteListener {
             Log.d("detail", id)
             response.onNext(Response.Success(id))
@@ -139,7 +140,7 @@ class MenuRemoteDataSource {
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    fun updatePesanan(idKeranjang: String, jumlah: String, total: String, idUser: String): Flowable<Response<String?>> {
+    fun updateKeranjang(idKeranjang: String, jumlah: String, total: String, idUser: String): Flowable<Response<String?>> {
         val response = PublishSubject.create<Response<String?>>()
 
         val map = HashMap<String, Any>()

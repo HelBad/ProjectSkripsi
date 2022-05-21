@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 data class KeranjangResponse(
     @SerializedName("id_keranjang")
-    var idKeranjang: String?,
-    @SerializedName("total")
-    var total: String?,
+    var id_keranjang: String?,
+    @SerializedName("id_user")
+    var id_user: String?,
     @SerializedName("id_menu")
-    var idMenu: String?,
+    var id_menu: String?,
     @SerializedName("jumlah")
     var jumlah: String?,
-    @SerializedName("id_user")
-    var idUser: String?
+    @SerializedName("total")
+    var total: String?,
 )

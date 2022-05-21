@@ -8,8 +8,8 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -24,15 +24,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.beranda.presentation.ActivityUtamaUser
-import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.features.checkout.domain.entities.User
-import com.example.projectskripsi.features.checkout.presentation.adapter.ViewholderCheckout
+import com.example.projectskripsi.features.checkout.presentation.adapter.CheckoutAdapter
 import com.example.projectskripsi.features.checkout.presentation.viewmodel.CheckoutViewModel
-import com.example.projectskripsi.features.menu.presentation.ActivityMenuUser
 import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.utils.Rupiah
 import com.example.projectskripsi.utils.Tanggal
-import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -45,7 +42,6 @@ import java.util.*
 class ActivityCheckout : AppCompatActivity() {
     private val checkoutViewModel: CheckoutViewModel by viewModel()
 
-    var databaseCo: DatabaseReference? = null
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
@@ -109,29 +105,28 @@ class ActivityCheckout : AppCompatActivity() {
                 user = it.data
                 identitasCo.text = "${user?.nama} (${user?.telp})"
 
-                databaseCo = FirebaseDatabase.getInstance().getReference("keranjang")
-                    .child("ready").child(user?.idUser.toString())
-
                 mLayoutManager = LinearLayoutManager(this)
                 mRecyclerView = findViewById(R.id.recyclerCo)
                 mRecyclerView.setHasFixedSize(true)
                 mRecyclerView.layoutManager = mLayoutManager
 
-                databaseCo?.addValueEventListener(object: ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (ds in dataSnapshot.children) {
-                            val keranjang = ds.getValue(Keranjang::class.java)
-                            idKeranjang = keranjang!!.id_keranjang
-                            val mTotalPrice = Integer.valueOf(keranjang.total)
-                            total += mTotalPrice
-                            subtotalCo.text = Rupiah.format(total)
-                        }
-                    }
-                    override fun onCancelled(databaseError: DatabaseError) {}
-                })
-
+                loadKeranjangDetail()
                 lokasiSekarang()
                 listKeranjang()
+            }
+        }
+    }
+
+    private fun loadKeranjangDetail() {
+        user?.idUser?.let { idUser ->
+            checkoutViewModel.getDetailKeranjang(idUser).observe(this@ActivityCheckout) {
+                if (it is Resource.Success) {
+                    val keranjang = it.data
+                    Log.d("checkout", keranjang.toString())
+                    idKeranjang = keranjang?.idKeranjang.toString()
+                    total += keranjang?.total?.toInt()!!
+                    subtotalCo.text = Rupiah.format(total)
+                }
             }
         }
     }
@@ -223,30 +218,15 @@ class ActivityCheckout : AppCompatActivity() {
 
     //List Keranjang
     private fun listKeranjang() {
-        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Keranjang, ViewholderCheckout>(
-            Keranjang::class.java,
-            R.layout.menu_checkout,
-            ViewholderCheckout::class.java,
-            databaseCo
-        ) {
-            override fun populateViewHolder(viewHolder: ViewholderCheckout, model: Keranjang, position:Int) {
-                viewHolder.setDetails(model)
-            }
-            override fun onCreateViewHolder(parent: ViewGroup, viewType:Int): ViewholderCheckout {
-                val viewHolder = super.onCreateViewHolder(parent, viewType)
-                viewHolder.setOnClickListener(object: ViewholderCheckout.ClickListener {
-                    override fun onItemClick(view: View, position:Int) {
-                        val intent = Intent(view.context, ActivityMenuUser::class.java)
-                        intent.putExtra("id_menu", viewHolder.keranjang.id_menu)
-                        startActivity(intent)
-                        finish()
-                    }
-                    override fun onItemLongClick(view: View, position:Int) {}
-                })
-                return viewHolder
+        user?.idUser?.let { idUser ->
+            checkoutViewModel.getKeranjang(idUser).observe(this@ActivityCheckout) {
+                if (it is Resource.Success && it.data != null) {
+                    val list = it.data
+                    val adapter = CheckoutAdapter(list)
+                    mRecyclerView.adapter = adapter
+                }
             }
         }
-        mRecyclerView.adapter = firebaseRecyclerAdapter
     }
 
     //Validasi Alamat User
@@ -262,34 +242,42 @@ class ActivityCheckout : AppCompatActivity() {
     @SuppressLint("NewApi")
     private fun buatPesanan() {
         if (user != null) {
-            val ref = FirebaseDatabase.getInstance().getReference("pesanan")
-            val idPesanan  = ref.push().key.toString()
             val currentTime = Tanggal.format(Date(), "dd MMM YYYY, hh:mm aa")
 
-            val addData = Pesanan(idPesanan, user?.idUser.toString(),
+            checkoutViewModel.buatPesanan(
+                user?.idUser.toString(),
                 idKeranjang, keteranganCo.text.toString(), currentTime, lokasiCo.text.toString(),
-                total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", "")
-            ref.child("diproses").child(idPesanan).setValue(addData)
+                total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", ""
+            ).observe(this@ActivityCheckout) {
 
-            databaseCo?.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
-                        .child(user?.idUser.toString() + " | $idKeranjang").setValue(dataSnapshot.value)
-                    databaseCo?.removeValue()
-                }
-                override fun onCancelled(databaseError: DatabaseError) {}
-            })
+            }
+//            val ref = FirebaseDatabase.getInstance().getReference("pesanan")
+//            val idPesanan  = ref.push().key.toString()
+//
+//            val addData = Pesanan(idPesanan, user?.idUser.toString(),
+//                idKeranjang, keteranganCo.text.toString(), currentTime, lokasiCo.text.toString(),
+//                total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", "")
+//            ref.child("diproses").child(idPesanan).setValue(addData)
+//
+//            databaseCo?.addListenerForSingleValueEvent(object : ValueEventListener {
+//                override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                    FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
+//                        .child(user?.idUser.toString() + " | $idKeranjang").setValue(dataSnapshot.value)
+//                    databaseCo?.removeValue()
+//                }
+//                override fun onCancelled(databaseError: DatabaseError) {}
+//            })
         }
     }
 
     //Validasi Pesanan
     override fun onStart() {
         super.onStart()
-        if (databaseCo != null) {
-            databaseCo?.addValueEventListener(object: ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val project = dataSnapshot.childrenCount.toInt()
-                    if(project == 0) {
+        user?.idUser?.let { idUser ->
+            checkoutViewModel.getKeranjang(idUser).observe(this@ActivityCheckout) {
+                if (it is Resource.Success && it.data != null) {
+                    val list = it.data
+                    if (list.isEmpty()) {
                         idLayoutCo.visibility = View.GONE
                         mRecyclerView.visibility = View.GONE
                         btnLayoutCo.visibility = View.GONE
@@ -301,8 +289,7 @@ class ActivityCheckout : AppCompatActivity() {
                         kosongCo.visibility = View.GONE
                     }
                 }
-                override fun onCancelled(databaseError: DatabaseError) {}
-            })
+            }
         }
     }
 }

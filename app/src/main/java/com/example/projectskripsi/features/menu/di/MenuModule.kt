@@ -15,12 +15,12 @@ val menuModule = module {
 
     single<MenuRepository> { MenuRepositoryImpl(get(), get()) }
 
-    single { BuatPesananUsecase(get()) }
+    single { BuatKeranjangUsecase(get()) }
     single { GetDetailKeranjangUsecase(get()) }
     single { GetDetailMenuUsecase(get()) }
     single { GetUserUsecase(get()) }
-    single { HapusPesananUsecase(get()) }
-    single { UpdatePesananUsecase(get()) }
+    single { HapusKeranjangUsecase(get()) }
+    single { UpdateKeranjangUsecase(get()) }
 
     viewModel { MenuViewModel(get(), get(), get(), get(), get(), get()) }
 }

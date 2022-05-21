@@ -121,7 +121,7 @@ class ActivityRiwayatUser : AppCompatActivity() {
 
     //List Keranjang
     private fun listKeranjang() {
-        riwayatViewModel.getKeranjang(idKeranjang,idUser).observe(this@ActivityRiwayatUser) {
+        riwayatViewModel.getKeranjang(idKeranjang, idUser).observe(this@ActivityRiwayatUser) {
             if (it is Resource.Success && it.data != null) {
                 val list = it.data
                 list.forEach { keranjang ->

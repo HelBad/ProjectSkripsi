@@ -13,9 +13,9 @@ import com.example.projectskripsi.features.menu.domain.usecases.*
 class MenuViewModel (
     private val getDetailMenuUsecase: GetDetailMenuUsecase,
     private val getDetailKeranjangUsecase: GetDetailKeranjangUsecase,
-    private val hapusPesananUsecase: HapusPesananUsecase,
-    private val buatPesananUsecase: BuatPesananUsecase,
-    private val updatePesananUsecase: UpdatePesananUsecase,
+    private val hapusKeranjangUsecase: HapusKeranjangUsecase,
+    private val buatKeranjangUsecase: BuatKeranjangUsecase,
+    private val updateKeranjangUsecase: UpdateKeranjangUsecase,
     private val getUserUsecase: GetUserUsecase,
 ) : ViewModel() {
     fun getDetailMenu(id: String): LiveData<Resource<Menu?>> {
@@ -36,7 +36,7 @@ class MenuViewModel (
 
     fun hapusPesanan(idKeranjang: String, idUser: String): LiveData<Resource<String?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            hapusPesananUsecase.run(HapusPesananUsecase.HapusPesananParams(idKeranjang, idUser))
+            hapusKeranjangUsecase.run(HapusKeranjangUsecase.HapusKeranjangParams(idKeranjang, idUser))
         )
     }
 
@@ -47,8 +47,8 @@ class MenuViewModel (
         total: String
     ): LiveData<Resource<String?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            buatPesananUsecase.run(
-                BuatPesananUsecase.BuatPesananParams(
+            buatKeranjangUsecase.run(
+                BuatKeranjangUsecase.BuatKeranjangParams(
                     idUser,
                     idMenu,
                     jumlah,
@@ -65,8 +65,8 @@ class MenuViewModel (
         idUser: String
     ): LiveData<Resource<String?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            updatePesananUsecase.run(
-                UpdatePesananUsecase.UpdatePesananParams(
+            updateKeranjangUsecase.run(
+                UpdateKeranjangUsecase.UpdateKeranjangParams(
                     idKeranjang,
                     jumlah,
                     total,

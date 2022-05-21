@@ -1,24 +1,24 @@
 package com.example.projectskripsi.features.menu.presentation
 
-import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.edit.presentation.ActivityEdit
 import com.example.projectskripsi.features.beranda.domain.entities.Penyakit
+import com.example.projectskripsi.features.edit.presentation.ActivityEdit
 import com.example.projectskripsi.features.menu.presentation.viewmodel.MenuViewModel
 import com.example.projectskripsi.utils.Rupiah
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.text.DecimalFormat
-import java.text.NumberFormat
 
 class ActivityMenuAdmin : AppCompatActivity() {
     private val menuViewModel: MenuViewModel by viewModel()
@@ -35,7 +35,6 @@ class ActivityMenuAdmin : AppCompatActivity() {
     lateinit var btnHapus: Button
 
     lateinit var alertDialog: AlertDialog.Builder
-    var formatNumber: NumberFormat = DecimalFormat("#,###")
     var id_menu = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,36 +81,36 @@ class ActivityMenuAdmin : AppCompatActivity() {
                     btnHapus.setOnClickListener {
                         alertDialog.setMessage("Apakah anda ingin menghapus menu ini ?")
                             .setCancelable(false)
-                            .setPositiveButton("YA", object: DialogInterface.OnClickListener {
-                                override fun onClick(dialog: DialogInterface, id:Int) {
-                                    FirebaseDatabase.getInstance().getReference("menu")
-                                        .child(intent.getStringExtra("id_menu").toString()).removeValue()
-                                    FirebaseStorage.getInstance().getReference("menu")
-                                        .child(intent.getStringExtra("id_menu").toString()).delete()
-                                    FirebaseDatabase.getInstance().getReference("penyakit")
-                                        .orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
-                                        .addListenerForSingleValueEvent(object: ValueEventListener {
-                                            override fun onDataChange(datasnapshot: DataSnapshot) {
-                                                for (snapshot1 in datasnapshot.children) {
-                                                    val allocation = snapshot1.getValue(Penyakit::class.java)
-                                                    val id_penyakit = allocation?.idPenyakit
-                                                    if (id_penyakit != null) {
-                                                        FirebaseDatabase.getInstance().getReference("penyakit")
-                                                            .child(id_penyakit).removeValue()
-                                                    }
-
+                            .setPositiveButton("YA") { _, _ ->
+                                FirebaseDatabase.getInstance().getReference("menu")
+                                    .child(intent.getStringExtra("id_menu").toString())
+                                    .removeValue()
+                                FirebaseStorage.getInstance().getReference("menu")
+                                    .child(intent.getStringExtra("id_menu").toString()).delete()
+                                FirebaseDatabase.getInstance().getReference("penyakit")
+                                    .orderByChild("id_menu")
+                                    .equalTo(intent.getStringExtra("id_menu"))
+                                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                                        override fun onDataChange(datasnapshot: DataSnapshot) {
+                                            for (snapshot1 in datasnapshot.children) {
+                                                val allocation =
+                                                    snapshot1.getValue(Penyakit::class.java)
+                                                val id_penyakit = allocation?.idPenyakit
+                                                if (id_penyakit != null) {
+                                                    FirebaseDatabase.getInstance()
+                                                        .getReference("penyakit")
+                                                        .child(id_penyakit).removeValue()
                                                 }
+
                                             }
-                                            override fun onCancelled(databaseError: DatabaseError) {}
-                                        })
-                                    finish()
-                                }
-                            })
-                            .setNegativeButton("TIDAK", object: DialogInterface.OnClickListener {
-                                override fun onClick(dialog: DialogInterface, id:Int) {
-                                    dialog.cancel()
-                                }
-                            }).create().show()
+                                        }
+
+                                        override fun onCancelled(databaseError: DatabaseError) {}
+                                    })
+                                finish()
+                            }
+                            .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
+                            .show()
                     }
                 }
             }

@@ -11,11 +11,11 @@ interface MenuRepository {
 
     fun getDetailKeranjang(idMenu: String, idUser: String): Flowable<Resource<Keranjang?>>
 
-    fun hapusPesanan(idKeranjang: String, idUser: String): Flowable<Resource<String?>>
+    fun hapusKeranjang(idKeranjang: String, idUser: String): Flowable<Resource<String?>>
 
-    fun buatPesanan(idUser: String, idMenu: String, jumlah: String, total: String): Flowable<Resource<String?>>
+    fun buatKeranjang(idUser: String, idMenu: String, jumlah: String, total: String): Flowable<Resource<String?>>
 
-    fun updatePesanan(idKeranjang: String, jumlah: String, total: String, idUser: String): Flowable<Resource<String?>>
+    fun updateKeranjang(idKeranjang: String, jumlah: String, total: String, idUser: String): Flowable<Resource<String?>>
 
     fun getUser(): Flowable<Resource<User?>>
 }

@@ -5,13 +5,13 @@ import com.example.projectskripsi.core.UseCase
 import com.example.projectskripsi.features.menu.domain.repositories.MenuRepository
 import io.reactivex.Flowable
 
-class HapusPesananUsecase(private val repository: MenuRepository) :
-    UseCase<Flowable<Resource<String?>>, HapusPesananUsecase.HapusPesananParams>() {
-    override fun run(params: HapusPesananParams) = repository.hapusPesanan(
+class HapusKeranjangUsecase(private val repository: MenuRepository) :
+    UseCase<Flowable<Resource<String?>>, HapusKeranjangUsecase.HapusKeranjangParams>() {
+    override fun run(params: HapusKeranjangParams) = repository.hapusKeranjang(
         params.idKeranjang, params.idUser
     )
 
-    data class HapusPesananParams(
+    data class HapusKeranjangParams(
         val idKeranjang: String,
         val idUser: String
     )

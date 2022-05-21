@@ -23,7 +23,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class FragmentPesananUser : Fragment() {
     private val pesananViewModel: PesananViewModel by viewModel()
 
-    private lateinit var databasePesanan: DatabaseReference
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var btnDiproses: Button
@@ -51,8 +50,6 @@ class FragmentPesananUser : Fragment() {
         mRecyclerView = requireView().findViewById(R.id.recyclerPesanan)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
-
-        databasePesanan = FirebaseDatabase.getInstance().getReference("pesanan")
     }
 
     override fun onStart() {

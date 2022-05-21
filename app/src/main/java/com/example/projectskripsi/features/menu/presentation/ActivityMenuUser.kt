@@ -95,8 +95,8 @@ class ActivityMenuUser : AppCompatActivity() {
                         finish()
                     }
                     btnHapus.setOnClickListener {
-                        user?.idUser?.let {
-                            it1 -> menuViewModel.hapusPesanan(idKeranjang, it1)
+                        user?.idUser?.let { it1 ->
+                            menuViewModel.hapusPesanan(idKeranjang, it1)
                         }
                         finish()
                     }
@@ -109,7 +109,7 @@ class ActivityMenuUser : AppCompatActivity() {
         val total = (hargaMenu * jumlahDetail.text.toString().toInt()).toString()
         val jumlah = jumlahDetail.text.toString()
 
-        if(statusKeranjang == "ready") {
+        if (statusKeranjang == "ready") {
             user?.idUser?.let {
                 menuViewModel.updatePesanan(
                     idKeranjang,
@@ -120,16 +120,12 @@ class ActivityMenuUser : AppCompatActivity() {
             }
         } else {
             user?.idUser?.let {
-                menuViewModel.buatPesanan(
-                    it,
-                    idMenu,
-                    jumlah,
-                    total,
-                ).observe(this@ActivityMenuUser) { res ->
-                    if (res is Resource.Success && res.data != null) {
-                        idKeranjang = res.data
+                menuViewModel.buatPesanan(it, idMenu, jumlah, total)
+                    .observe(this@ActivityMenuUser) { res ->
+                        if (res is Resource.Success && res.data != null) {
+                            idKeranjang = res.data
+                        }
                     }
-                }
             }
         }
     }
@@ -140,8 +136,9 @@ class ActivityMenuUser : AppCompatActivity() {
             menuViewModel.getDetailKeranjang(idMenu, it).observe(this@ActivityMenuUser) { res ->
                 if (res is Resource.Success) {
                     val keranjang = res.data
-                    if(keranjang?.idKeranjang != null) {
-                        jumlahDetail.text = Editable.Factory.getInstance().newEditable(keranjang.jumlah)
+                    if (keranjang?.idKeranjang != null) {
+                        jumlahDetail.text =
+                            Editable.Factory.getInstance().newEditable(keranjang.jumlah)
                         idKeranjang = keranjang.idKeranjang.toString()
                         statusKeranjang = "ready"
                     }
@@ -163,7 +160,7 @@ class ActivityMenuUser : AppCompatActivity() {
         }
         kurangDetail.setOnClickListener {
             if (jumlahDetail.text.toString() == "0") {
-                if(statusKeranjang == "ready") {
+                if (statusKeranjang == "ready") {
                     btnHapus.visibility = View.VISIBLE
                     btnPesan.visibility = View.GONE
                 } else {
@@ -174,7 +171,7 @@ class ActivityMenuUser : AppCompatActivity() {
                 countJumlah = jumlahDetail.text.toString().toInt()
                 countJumlah--
                 jumlahDetail.setText(countJumlah.toString())
-                if(statusKeranjang == "ready") {
+                if (statusKeranjang == "ready") {
                     btnHapus.visibility = View.VISIBLE
                     btnPesan.visibility = View.GONE
                 } else {

@@ -80,9 +80,9 @@ class MenuRepositoryImpl constructor(
                         val res = it.data
                         if (res != null) {
                             val keranjang = Keranjang(
-                                idKeranjang = res.idKeranjang,
-                                idUser = res.idUser,
-                                idMenu = res.idMenu,
+                                idKeranjang = res.id_keranjang,
+                                idUser = res.id_user,
+                                idMenu = res.id_menu,
                                 jumlah = res.jumlah,
                                 total = res.total,
                             )
@@ -104,11 +104,11 @@ class MenuRepositoryImpl constructor(
     }
 
     @SuppressLint("CheckResult")
-    override fun hapusPesanan(idKeranjang: String, idUser: String): Flowable<Resource<String?>> {
+    override fun hapusKeranjang(idKeranjang: String, idUser: String): Flowable<Resource<String?>> {
         val result = PublishSubject.create<Resource<String?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.hapusPesanan(idKeranjang, idUser)
+        remoteDataSource.hapusKeranjang(idKeranjang, idUser)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -135,7 +135,7 @@ class MenuRepositoryImpl constructor(
     }
 
     @SuppressLint("CheckResult")
-    override fun buatPesanan(
+    override fun buatKeranjang(
         idUser: String,
         idMenu: String,
         jumlah: String,
@@ -144,7 +144,7 @@ class MenuRepositoryImpl constructor(
         val result = PublishSubject.create<Resource<String?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.buatPesanan(idUser, idMenu, jumlah, total)
+        remoteDataSource.buatKeranjang(idUser, idMenu, jumlah, total)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -171,7 +171,7 @@ class MenuRepositoryImpl constructor(
     }
 
     @SuppressLint("CheckResult")
-    override fun updatePesanan(
+    override fun updateKeranjang(
         idKeranjang: String,
         jumlah: String,
         total: String,
@@ -180,7 +180,7 @@ class MenuRepositoryImpl constructor(
         val result = PublishSubject.create<Resource<String?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.updatePesanan(idKeranjang, jumlah, total, idUser)
+        remoteDataSource.updateKeranjang(idKeranjang, jumlah, total, idUser)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
