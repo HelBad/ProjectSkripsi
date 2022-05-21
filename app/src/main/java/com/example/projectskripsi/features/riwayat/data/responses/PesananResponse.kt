@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 
 data class PesananResponse(
     @SerializedName("id_pesanan")
-    var idPesanan: String?,
+    var id_pesanan: String?,
     @SerializedName("id_user")
-    var idUser: String?,
+    var id_user: String?,
     @SerializedName("id_keranjang")
-    var idKeranjang: String?,
+    var id_keranjang: String?,
     @SerializedName("catatan")
     var catatan: String?,
     @SerializedName("waktu")
@@ -21,7 +21,7 @@ data class PesananResponse(
     @SerializedName("ongkir")
     var ongkir: String?,
     @SerializedName("total_bayar")
-    var totalBayar: String?,
+    var total_bayar: String?,
     @SerializedName("status")
     var status: String?,
     @SerializedName("keterangan")

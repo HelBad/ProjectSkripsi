@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.projectskripsi.features.auth.di.authModule
 import com.example.projectskripsi.features.beranda.di.berandaModule
 import com.example.projectskripsi.features.checkout.di.checkoutModule
+import com.example.projectskripsi.features.edit.di.editModule
 import com.example.projectskripsi.features.menu.di.menuModule
 import com.example.projectskripsi.features.pesanan.di.pesananModule
 import com.example.projectskripsi.features.profil.di.profilModule
@@ -25,6 +26,7 @@ class MyApplication : Application() {
                     authModule,
                     berandaModule,
                     checkoutModule,
+                    editModule,
                     menuModule,
                     pesananModule,
                     profilModule,

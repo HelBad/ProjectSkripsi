@@ -3,7 +3,6 @@ package com.example.projectskripsi.features.riwayat.presentation
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -15,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.riwayat.domain.entities.User
-import com.example.projectskripsi.features.riwayat.domain.entities.Pesanan
 import com.example.projectskripsi.features.riwayat.presentation.adapter.RiwayatAdapter
 import com.example.projectskripsi.features.riwayat.presentation.viewmodel.RiwayatViewModel
 import com.example.projectskripsi.utils.Rupiah
-import com.google.firebase.database.FirebaseDatabase
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityRiwayatAdmin : AppCompatActivity() {
@@ -99,80 +96,70 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
         ).observe(this@ActivityRiwayatAdmin) {
             if (it is Resource.Success) {
                 val pesanan = it.data
-                lokasiRiwayat.text = pesanan?.lokasi
-                waktuRiwayat.text = pesanan?.waktu
-                if (pesanan?.catatan == "") {
-                    keteranganRiwayat.text = "-"
-                } else {
-                    keteranganRiwayat.text = pesanan?.catatan
-                }
-                subtotal = pesanan?.subtotal?.toInt()!!
-                ongkir = pesanan.ongkir?.toInt()!!
-                totalBayar = pesanan.total_bayar?.toInt()!!
-                subtotalRiwayat.text = Rupiah.format(subtotal)
-                ongkirRiwayat.text = Rupiah.format(ongkir)
-                totalRiwayat.text = Rupiah.format(totalBayar)
-                if (pesanan.keterangan == "") {
-                    laporanRiwayat.text = "-"
-                } else {
-                    laporanRiwayat.text = pesanan.keterangan
-                }
+                if (pesanan != null) {
+                    lokasiRiwayat.text = pesanan.lokasi
+                    waktuRiwayat.text = pesanan.waktu
+                    if (pesanan.catatan == "") {
+                        keteranganRiwayat.text = "-"
+                    } else {
+                        keteranganRiwayat.text = pesanan.catatan
+                    }
+                    subtotal = pesanan.subtotal?.toInt()!!
+                    ongkir = pesanan.ongkir?.toInt()!!
+                    totalBayar = pesanan.total_bayar?.toInt()!!
+                    subtotalRiwayat.text = Rupiah.format(subtotal)
+                    ongkirRiwayat.text = Rupiah.format(ongkir)
+                    totalRiwayat.text = Rupiah.format(totalBayar)
+                    if (pesanan.keterangan == "") {
+                        laporanRiwayat.text = "-"
+                    } else {
+                        laporanRiwayat.text = pesanan.keterangan
+                    }
 
-                pesanan.id_user?.let { idUser ->
-                    riwayatViewModel.getUser(idUser).observe(this@ActivityRiwayatAdmin) { r1 ->
-                        if (r1 is Resource.Success) {
-                            user = r1.data
-                            val nama = user?.nama
-                            val telp = user?.telp
-                            identitasRiwayat.text = "$nama ($telp)"
+                    pesanan.id_user?.let { idUser ->
+                        riwayatViewModel.getUser(idUser).observe(this@ActivityRiwayatAdmin) { r1 ->
+                            if (r1 is Resource.Success) {
+                                user = r1.data
+                                val nama = user?.nama
+                                val telp = user?.telp
+                                identitasRiwayat.text = "$nama ($telp)"
+                            }
                         }
                     }
-                }
 
-                riwayatViewModel.getDetailKeranjang(
-                    pesanan.id_keranjang.toString(),
-                    pesanan.id_user.toString()
-                ).observe(this@ActivityRiwayatAdmin) { r2 ->
-                    if (r2 is Resource.Success) {
-                        val keranjang = r2.data
-                        idKeranjang = keranjang?.idKeranjang.toString()
-                        idUser = keranjang?.idUser.toString()
-                        listKeranjang()
+                    riwayatViewModel.getDetailKeranjang(
+                        pesanan.id_keranjang.toString(),
+                        pesanan.id_user.toString()
+                    ).observe(this@ActivityRiwayatAdmin) { r2 ->
+                        if (r2 is Resource.Success) {
+                            val keranjang = r2.data
+                            idKeranjang = keranjang?.idKeranjang.toString()
+                            idUser = keranjang?.idUser.toString()
+                            listKeranjang()
+                        }
                     }
-                }
 
-                btnBatal.setOnClickListener {
-                    alertDialog.setMessage("Apakah anda yakin membatalkan pesanan ini ?")
-                        .setCancelable(false)
-                        .setPositiveButton("YA", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
+                    btnBatal.setOnClickListener {
+                        alertDialog.setMessage("Apakah anda yakin membatalkan pesanan ini ?")
+                            .setCancelable(false)
+                            .setPositiveButton("YA") { _, _ ->
                                 if (validate()) {
                                     pesananBatal()
-                                    finish()
                                 }
                             }
-                        })
-                        .setNegativeButton("TIDAK", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                dialog.cancel()
-                            }
-                        }).create().show()
-                }
+                            .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
+                            .show()
+                    }
 
-                btnSelesai.setOnClickListener {
-                    alertDialog.setMessage("Apakah anda yakin mengakhiri pesanan ini ?")
-                        .setCancelable(false)
-                        .setPositiveButton("YA", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
+                    btnSelesai.setOnClickListener {
+                        alertDialog.setMessage("Apakah anda yakin mengakhiri pesanan ini ?")
+                            .setCancelable(false)
+                            .setPositiveButton("YA") { _, _ ->
                                 pesananSelesai()
-                                finish()
                             }
-                        })
-                        .setNegativeButton("TIDAK", object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                dialog.cancel()
-                            }
-                        }).create().show()
+                            .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
+                            .show()
+                    }
                 }
             }
         }
@@ -201,7 +188,7 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
 
     //Set Status Pesanan
     private fun pesananBatal() {
-        val addData = Pesanan(
+        riwayatViewModel.updatePesanan(
             intent.getStringExtra("id_pesanan").toString(),
             idUser,
             idKeranjang,
@@ -213,16 +200,16 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
             totalBayar.toString(),
             "dibatalkan",
             editLaporanRiwayat.text.toString()
-        )
-
-        FirebaseDatabase.getInstance().getReference("pesanan").child("dibatalkan")
-            .child(intent.getStringExtra("id_pesanan").toString()).setValue(addData)
-        FirebaseDatabase.getInstance().getReference("pesanan").child("diproses")
-            .child(intent.getStringExtra("id_pesanan").toString()).removeValue()
+        ).observe(this@ActivityRiwayatAdmin) {
+            if (it is Resource.Success) {
+                Toast.makeText(this, "Pesanan berhasil dibatalkan", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
     }
 
     private fun pesananSelesai() {
-        val addData = Pesanan(
+        riwayatViewModel.updatePesanan(
             intent.getStringExtra("id_pesanan").toString(),
             idUser,
             idKeranjang,
@@ -234,12 +221,12 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
             totalBayar.toString(),
             "selesai",
             editLaporanRiwayat.text.toString()
-        )
-
-        FirebaseDatabase.getInstance().getReference("pesanan").child("selesai")
-            .child(intent.getStringExtra("id_pesanan").toString()).setValue(addData)
-        FirebaseDatabase.getInstance().getReference("pesanan").child("diproses")
-            .child(intent.getStringExtra("id_pesanan").toString()).removeValue()
+        ).observe(this@ActivityRiwayatAdmin) {
+            if (it is Resource.Success) {
+                Toast.makeText(this, "Pesanan berhasil diselesaikan", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
     }
 
     override fun onStart() {

@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.menu.data.responses.KeranjangResponse
 import com.example.projectskripsi.features.menu.data.responses.MenuResponse
-import com.example.projectskripsi.features.menu.domain.entities.Keranjang
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,7 +19,7 @@ class MenuRemoteDataSource {
     fun getDetailMenu(id: String): Flowable<Response<MenuResponse?>> {
         val response = PublishSubject.create<Response<MenuResponse?>>()
 
-        firebase.getReference("menu").orderByKey().equalTo(id)
+        firebase.getReference("menu").orderByChild("id_menu").equalTo(id)
             .addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
@@ -39,27 +38,6 @@ class MenuRemoteDataSource {
                 Log.e("DetailRemoteDataSource", error.message)
             }
         })
-
-        return response.toFlowable(BackpressureStrategy.BUFFER)
-    }
-
-    fun hapusMenu(idKeranjang: String, idUser: String): Flowable<Response<String?>> {
-        val response = PublishSubject.create<Response<String?>>()
-
-        firebase.getReference("keranjang")
-            .child("ready")
-            .child(idUser)
-            .child(idKeranjang)
-            .removeValue()
-            .addOnCompleteListener {
-                response.onNext(Response.Success("success"))
-            }
-            .addOnCanceledListener {
-                response.onNext(Response.Error("error"))
-            }
-            .addOnFailureListener {
-                response.onNext(Response.Error(it.message.toString()))
-            }
 
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }

@@ -107,15 +107,15 @@ class RiwayatRepositoryImpl constructor(
                         val res = it.data
                         if (res != null) {
                             val pesanan = Pesanan(
-                                id_pesanan = res.idPesanan,
-                                id_user = res.idUser,
-                                id_keranjang = res.idKeranjang,
+                                id_pesanan = res.id_pesanan,
+                                id_user = res.id_user,
+                                id_keranjang = res.id_keranjang,
                                 catatan = res.catatan,
                                 waktu = res.waktu,
                                 lokasi = res.lokasi,
                                 subtotal = res.subtotal,
                                 ongkir = res.ongkir,
-                                total_bayar = res.totalBayar,
+                                total_bayar = res.total_bayar,
                                 status = res.status,
                                 keterangan = res.keterangan,
                             )
