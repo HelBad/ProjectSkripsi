@@ -50,6 +50,49 @@ class RiwayatRepositoryImpl constructor(
     }
 
     @SuppressLint("CheckResult")
+    override fun getUser(id: String): Flowable<Resource<User?>> {
+        val result = PublishSubject.create<Resource<User?>>()
+        result.onNext(Resource.Loading())
+
+        val source = remoteDataSource.getUser(id)
+
+        source.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe {
+                when(it){
+                    is Response.Success -> {
+                        val res = it.data
+                        if (res != null) {
+                            val user = User(
+                                idUser = res.idUser,
+                                nama = res.nama,
+                                email = res.email,
+                                password = res.password,
+                                tglLahir = res.tglLahir,
+                                gender = res.gender,
+                                alamat = res.alamat,
+                                telp = res.telp,
+                                level = res.level,
+                            )
+                            result.onNext(Resource.Success(user))
+                        } else {
+                            result.onNext(Resource.Success(null))
+                        }
+                    }
+                    is Response.Empty -> {
+                        result.onNext(Resource.Success(null))
+                    }
+                    is Response.Error -> {
+                        result.onNext(Resource.Error(it.errorMessage, null))
+                    }
+                }
+            }
+
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    @SuppressLint("CheckResult")
     override fun getDetailPesanan(status: String, idPesanan: String): Flowable<Resource<Pesanan?>> {
         val result = PublishSubject.create<Resource<Pesanan?>>()
         result.onNext(Resource.Loading())
@@ -203,6 +246,47 @@ class RiwayatRepositoryImpl constructor(
                         } else {
                             result.onNext(Resource.Success(null))
                         }
+                    }
+                    is Response.Empty -> {
+                        result.onNext(Resource.Success(null))
+                    }
+                    is Response.Error -> {
+                        result.onNext(Resource.Error(it.errorMessage, null))
+                    }
+                }
+            }
+
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    @SuppressLint("CheckResult")
+    override fun updatePesanan(
+        id: String,
+        idUser: String,
+        idKeranjang: String,
+        catatan: String,
+        waktu: String,
+        lokasi: String,
+        subtotal: String,
+        ongkir: String,
+        totalBayar: String,
+        status: String,
+        keterangan: String
+    ): Flowable<Resource<String?>> {
+        val result = PublishSubject.create<Resource<String?>>()
+        result.onNext(Resource.Loading())
+
+        val source = remoteDataSource.updatePesanan(
+            id, idUser, idKeranjang, catatan, waktu, lokasi, subtotal, ongkir, totalBayar, status, keterangan
+        )
+
+        source.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe {
+                when(it){
+                    is Response.Success -> {
+                        result.onNext(Resource.Success(it.data))
                     }
                     is Response.Empty -> {
                         result.onNext(Resource.Success(null))

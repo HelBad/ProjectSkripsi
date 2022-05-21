@@ -16,10 +16,12 @@ val riwayatModule = module {
     single<RiwayatRepository> { RiwayatRepositoryImpl(get(), get()) }
 
     single { GetUserUsecase(get()) }
+    single { GetUserRemoteUsecase(get()) }
     single { GetDetailPesananUsecase(get()) }
     single { GetKeranjangUsecase(get()) }
     single { GetDetailKeranjangUsecase(get()) }
     single { GetMenuUsecase(get()) }
+    single { UpdatePesananUsecase(get()) }
 
-    viewModel { RiwayatViewModel(get(), get(), get(), get(), get()) }
+    viewModel { RiwayatViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

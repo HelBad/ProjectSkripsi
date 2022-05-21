@@ -14,6 +14,7 @@ import com.example.projectskripsi.R
 import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatUser
 import com.example.projectskripsi.features.pesanan.presentation.adapter.PesananAdapter
 import com.example.projectskripsi.features.pesanan.presentation.viewmodel.PesananViewModel
+import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatAdmin
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentPesananAdmin : Fragment() {
@@ -94,7 +95,7 @@ class FragmentPesananAdmin : Fragment() {
                     val adapter = PesananAdapter(res.data)
 
                     adapter.onItemClick = { pesanan ->
-                        val intent = Intent(context, ActivityRiwayatUser::class.java)
+                        val intent = Intent(context, ActivityRiwayatAdmin::class.java)
                         intent.putExtra("id_pesanan", pesanan.id_pesanan)
                         intent.putExtra("status", pesanan.status)
                         startActivity(intent)

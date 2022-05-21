@@ -18,10 +18,10 @@ class PesananRemoteDataSource {
 
     fun getPesanan(status: String, idUser: String?): Flowable<Response<ArrayList<PesananResponse>>> {
         val response = PublishSubject.create<Response<ArrayList<PesananResponse>>>()
-        val ref = if (idUser == null) firebase.getReference("pesanan").child(status).orderByChild("id_user")
-            .equalTo(idUser)
-        else firebase.getReference("pesanan").child(status).orderByChild("status")
+        val ref = if (idUser == null) firebase.getReference("pesanan").child(status).orderByChild("status")
             .equalTo(status)
+        else firebase.getReference("pesanan").child(status).orderByChild("id_user")
+            .equalTo(idUser)
 
         ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot) {

@@ -5,6 +5,7 @@ import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.riwayat.data.responses.KeranjangResponse
 import com.example.projectskripsi.features.riwayat.data.responses.MenuResponse
 import com.example.projectskripsi.features.riwayat.data.responses.PesananResponse
+import com.example.projectskripsi.features.riwayat.data.responses.UserResponse
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -16,6 +17,32 @@ import io.reactivex.subjects.PublishSubject
 
 class RiwayatRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
+
+    fun getUser(id: String): Flowable<Response<UserResponse?>> {
+        val response = PublishSubject.create<Response<UserResponse?>>()
+
+        firebase.getReference("user").orderByKey().equalTo(id)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        for (snap in p0.children) {
+                            val user = Converter.toObject(snap, UserResponse::class.java)
+                            response.onNext(Response.Success(user))
+                        }
+
+                    } else {
+                        response.onNext(Response.Empty)
+                    }
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                    response.onNext(Response.Error(p0.message))
+                    Log.e("RiwayatRemoteDataSource", p0.message)
+                }
+            })
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
 
     fun getDetailPesanan(status: String, idPesanan: String?): Flowable<Response<PesananResponse?>> {
         val response = PublishSubject.create<Response<PesananResponse?>>()
@@ -123,6 +150,55 @@ class RiwayatRemoteDataSource {
                     Log.e("RiwayatRemoteDataSource", p0.message)
                 }
             })
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun updatePesanan(
+        id: String,
+        idUser: String,
+        idKeranjang: String,
+        catatan: String,
+        waktu: String,
+        lokasi: String,
+        subtotal: String,
+        ongkir: String,
+        totalBayar: String,
+        status: String,
+        keterangan: String,
+    ): Flowable<Response<String?>> {
+        val response = PublishSubject.create<Response<String?>>()
+
+        val data = PesananResponse(
+            id,
+            idUser,
+            idKeranjang,
+            catatan,
+            waktu,
+            lokasi,
+            subtotal,
+            ongkir,
+            totalBayar,
+            status,
+            keterangan
+        )
+        firebase.getReference("pesanan").child(status).child(id)
+            .setValue(data)
+            .addOnCompleteListener {
+                firebase.getReference("pesanan").child("diproses").child(id)
+                    .removeValue()
+                    .addOnCompleteListener {
+                        response.onNext(Response.Success(id))
+                    }.addOnCanceledListener {
+                        response.onNext(Response.Error("error"))
+                    }.addOnFailureListener {
+                        response.onNext(Response.Error(it.message.toString()))
+                    }
+            }.addOnCanceledListener {
+                response.onNext(Response.Error("error"))
+            }.addOnFailureListener {
+                response.onNext(Response.Error(it.message.toString()))
+            }
 
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
