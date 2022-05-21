@@ -12,7 +12,7 @@ import com.example.projectskripsi.R
 import com.example.projectskripsi.features.beranda.presentation.adapter.BerandaAdminAdapter
 import com.example.projectskripsi.features.beranda.presentation.viewmodel.BerandaViewModel
 import com.example.projectskripsi.features.edit.presentation.ActivityEdit
-import com.example.projectskripsi.features.detail.presentation.ActivityDetailAdmin
+import com.example.projectskripsi.features.menu.presentation.ActivityMenuAdmin
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentBerandaAdmin : Fragment() {
@@ -63,7 +63,7 @@ class FragmentBerandaAdmin : Fragment() {
             }
 
             adapter?.onItemClick = { menu ->
-                val intent = Intent(context, ActivityDetailAdmin::class.java)
+                val intent = Intent(context, ActivityMenuAdmin::class.java)
                 intent.putExtra("id_menu", menu.idMenu)
                 startActivity(intent)
             }

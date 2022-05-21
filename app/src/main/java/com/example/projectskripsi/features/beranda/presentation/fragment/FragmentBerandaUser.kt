@@ -13,7 +13,7 @@ import com.example.projectskripsi.*
 import com.example.projectskripsi.features.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.features.beranda.presentation.viewmodel.BerandaViewModel
 import com.example.projectskripsi.features.checkout.presentation.ActivityCheckout
-import com.example.projectskripsi.features.detail.presentation.ActivityDetailUser
+import com.example.projectskripsi.features.menu.presentation.ActivityMenuUser
 import com.example.projectskripsi.features.beranda.presentation.ActivityNutrisi
 import com.example.projectskripsi.features.beranda.presentation.ActivityRestoran
 import com.example.projectskripsi.features.beranda.presentation.adapter.BerandaUserAdapter
@@ -71,7 +71,7 @@ class FragmentBerandaUser : Fragment() {
             }
 
             adapter?.onItemClick = { menu ->
-                val intent = Intent(context, ActivityDetailUser::class.java)
+                val intent = Intent(context, ActivityMenuUser::class.java)
                 intent.putExtra("id_menu", menu.idMenu)
                 startActivity(intent)
             }
@@ -94,7 +94,7 @@ class FragmentBerandaUser : Fragment() {
                     }
 
                     adapter?.onItemClick = { menu ->
-                        val intent = Intent(context, ActivityDetailUser::class.java)
+                        val intent = Intent(context, ActivityMenuUser::class.java)
                         intent.putExtra("id_menu", menu.idMenu)
                         startActivity(intent)
                     }

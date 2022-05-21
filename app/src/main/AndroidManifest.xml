@@ -15,10 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".features.pesanan.presentation.ActivityRiwayatAdmin"
+            android:name=".features.riwayat.presentation.ActivityRiwayatAdmin"
             android:exported="false" />
         <activity
-            android:name=".features.detail.presentation.ActivityDetailAdmin"
+            android:name=".features.menu.presentation.ActivityMenuAdmin"
             android:exported="false" />
         <activity
             android:name=".features.edit.presentation.ActivityEdit"
@@ -27,7 +27,7 @@
             android:name=".features.beranda.presentation.ActivityUtamaAdmin"
             android:exported="false" />
         <activity
-            android:name=".features.pesanan.presentation.ActivityRiwayatUser"
+            android:name=".features.riwayat.presentation.ActivityRiwayatUser"
             android:exported="false" />
         <activity
             android:name=".features.beranda.presentation.ActivityNutrisi"
@@ -36,7 +36,7 @@
             android:name=".features.beranda.presentation.ActivityRestoran"
             android:exported="false" />
         <activity
-            android:name=".features.detail.presentation.ActivityDetailUser"
+            android:name=".features.menu.presentation.ActivityMenuUser"
             android:exported="false" />
         <activity
             android:name=".features.checkout.presentation.ActivityCheckout"

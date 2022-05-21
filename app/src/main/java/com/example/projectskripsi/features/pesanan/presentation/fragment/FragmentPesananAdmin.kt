@@ -3,29 +3,27 @@ package com.example.projectskripsi.features.pesanan.presentation.fragment
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.pesanan.presentation.adapter.ViewholderPesanan
-import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
-import com.example.projectskripsi.features.pesanan.presentation.ActivityRiwayatAdmin
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
+import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatUser
+import com.example.projectskripsi.features.pesanan.presentation.adapter.PesananAdapter
+import com.example.projectskripsi.features.pesanan.presentation.viewmodel.PesananViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentPesananAdmin : Fragment() {
-    lateinit var databasePesanan: DatabaseReference
-    lateinit var mLayoutManager: LinearLayoutManager
-    lateinit var mRecyclerView: RecyclerView
-    lateinit var btnDiproses: Button
-    lateinit var btnSelesai: Button
-    lateinit var btnDibatalkan: Button
+    private val pesananViewModel: PesananViewModel by viewModel()
+
+    private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var btnDiproses: Button
+    private lateinit var btnSelesai: Button
+    private lateinit var btnDibatalkan: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.admin_fragment_pesanan, container, false)
@@ -42,67 +40,68 @@ class FragmentPesananAdmin : Fragment() {
         mRecyclerView = requireView().findViewById(R.id.recyclerPesanan)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = mLayoutManager
+    }
 
-        databasePesanan = FirebaseDatabase.getInstance().getReference("pesanan")
-        dataPesanan()
+    override fun onStart() {
+        super.onStart()
+        loadData()
     }
 
     //Kategori Data Pesanan
-    private fun dataPesanan() {
-        val query = databasePesanan.child("diproses").orderByChild("status").equalTo("diproses")
-        listData(query)
-        btnDiproses.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
-        btnSelesai.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
-        btnDibatalkan.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
-
+    private fun loadData() {
         btnDiproses.setOnClickListener {
-            val query = databasePesanan.child("diproses").orderByChild("status").equalTo("diproses")
-            listData(query)
-            btnDiproses.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
-            btnSelesai.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
-            btnDibatalkan.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+            listData("diproses")
+            btnDiproses.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+            btnSelesai.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+            btnDibatalkan.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
         }
         btnSelesai.setOnClickListener {
-            val query = databasePesanan.child("selesai").orderByChild("status").equalTo("selesai")
-            listData(query)
-            btnDiproses.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
-            btnSelesai.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
-            btnDibatalkan.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+            listData("selesai")
+            btnDiproses.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+            btnSelesai.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+            btnDibatalkan.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
         }
         btnDibatalkan.setOnClickListener {
-            val query = databasePesanan.child("dibatalkan").orderByChild("status").equalTo("dibatalkan")
-            listData(query)
-            btnDiproses.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
-            btnSelesai.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
-            btnDibatalkan.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+            listData("dibatalkan")
+            btnDiproses.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+            btnSelesai.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+            btnDibatalkan.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
         }
+
+        listData("diproses")
+        btnDiproses.backgroundTintList =
+            ColorStateList.valueOf(resources.getColor(R.color.colorAccent))
+        btnSelesai.backgroundTintList =
+            ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
+        btnDibatalkan.backgroundTintList =
+            ColorStateList.valueOf(resources.getColor(R.color.colorPrimary))
     }
 
     //List Pesanan
-    private fun listData(query: Query){
-        val firebaseRecyclerAdapter = object: FirebaseRecyclerAdapter<Pesanan, ViewholderPesanan>(
-            Pesanan::class.java,
-            R.layout.menu_pesanan,
-            ViewholderPesanan::class.java,
-            query
-        ) {
-            override fun populateViewHolder(viewHolder: ViewholderPesanan, model: Pesanan, position:Int) {
-                viewHolder.setDetails(model)
-            }
-            override fun onCreateViewHolder(parent:ViewGroup, viewType:Int): ViewholderPesanan {
-                val viewHolder = super.onCreateViewHolder(parent, viewType)
-                viewHolder.setOnClickListener(object: ViewholderPesanan.ClickListener {
-                    override fun onItemClick(view:View, position:Int) {
-                        val intent = Intent(view.context, ActivityRiwayatAdmin::class.java)
-                        intent.putExtra("id_pesanan", viewHolder.pesanan.id_pesanan)
-                        intent.putExtra("status", viewHolder.pesanan.status)
+    private fun listData(status: String) {
+        pesananViewModel.getPesanan(status, null)
+            .observe(viewLifecycleOwner) { res ->
+                if (res.data != null) {
+                    val adapter = PesananAdapter(res.data)
+
+                    adapter.onItemClick = { pesanan ->
+                        val intent = Intent(context, ActivityRiwayatUser::class.java)
+                        intent.putExtra("id_pesanan", pesanan.id_pesanan)
+                        intent.putExtra("status", pesanan.status)
                         startActivity(intent)
                     }
-                    override fun onItemLongClick(view:View, position:Int) {}
-                })
-                return viewHolder
+
+                    mRecyclerView.adapter = adapter
+                }
             }
-        }
-        mRecyclerView.adapter = firebaseRecyclerAdapter
     }
 }

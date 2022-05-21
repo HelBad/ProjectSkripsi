@@ -1,14 +1,13 @@
 package com.example.projectskripsi.utils
 
-import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.util.*
 
 class Rupiah {
     companion object {
-        private val formatNumber = DecimalFormat("#,###")
-
-        fun format(value: Number) : String {
-            return "Rp. " + formatNumber.format(value) + ",00"
+        fun format(value: Number): String {
+            return "Rp. " + NumberFormat.getNumberInstance(Locale.US).format(value)
+                .replace(",", ".")
         }
     }
 }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".features.detail.presentation.ActivityDetailUser">
+    tools:context=".features.menu.presentation.ActivityMenuUser">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarDetail"
         android:layout_width="match_parent"

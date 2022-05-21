@@ -2,10 +2,7 @@ package com.example.projectskripsi.features.checkout.presentation
 
 import android.Manifest.permission
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -13,7 +10,10 @@ import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -22,27 +22,30 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.checkout.presentation.adapter.ViewholderCheckout
-import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
-import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
+import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.beranda.presentation.ActivityUtamaUser
-import com.example.projectskripsi.features.detail.presentation.ActivityDetailUser
+import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.features.checkout.domain.entities.User
+import com.example.projectskripsi.features.checkout.presentation.adapter.ViewholderCheckout
+import com.example.projectskripsi.features.checkout.presentation.viewmodel.CheckoutViewModel
+import com.example.projectskripsi.features.menu.presentation.ActivityMenuUser
+import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.utils.Rupiah
 import com.example.projectskripsi.utils.Tanggal
 import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.*
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
-import java.text.NumberFormat
 import java.util.*
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
 
 class ActivityCheckout : AppCompatActivity() {
-    lateinit var databaseCo: DatabaseReference
-    lateinit var SP: SharedPreferences
+    private val checkoutViewModel: CheckoutViewModel by viewModel()
+
+    var databaseCo: DatabaseReference? = null
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
@@ -58,10 +61,11 @@ class ActivityCheckout : AppCompatActivity() {
     lateinit var btnLayoutCo: CardView
     lateinit var kosongCo: TextView
 
-    var formatter: NumberFormat = DecimalFormat("#,###")
-    var id_keranjang = ""
+    var idKeranjang = ""
     var total = 0
     var ongkir = 0
+
+    var user: User? = null
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,52 +85,54 @@ class ActivityCheckout : AppCompatActivity() {
         kosongCo = findViewById(R.id.kosongCo)
 
         alertDialog = AlertDialog.Builder(this)
-        SP = applicationContext.getSharedPreferences("User", Context.MODE_PRIVATE)
-        databaseCo = FirebaseDatabase.getInstance().getReference("keranjang")
-            .child("ready").child(SP.getString("id_user", "").toString())
-        val nama = SP.getString("nama", "")
-        val telp = SP.getString("telp", "")
-        identitasCo.text = "$nama ($telp)"
-
-        mLayoutManager = LinearLayoutManager(this)
-        mRecyclerView = findViewById(R.id.recyclerCo)
-        mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.layoutManager = mLayoutManager
-
-        databaseCo.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (ds in dataSnapshot.children) {
-                    val keranjang = ds.getValue(Keranjang::class.java)
-                    id_keranjang = keranjang!!.id_keranjang
-                    val mTotalPrice = Integer.valueOf(keranjang.total)
-                    total += mTotalPrice
-                    subtotalCo.text = Rupiah.format(total)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
-
-        lokasiSekarang()
-        listKeranjang()
+        loadData()
 
         btnPesanCo.setOnClickListener {
             alertDialog.setMessage("Pesanan akan langsung diproses dan tidak dapat dibatalkan. Cek kembali pesanan anda, Apakah sudah sesuai ?").setCancelable(false)
-                .setPositiveButton("YA", object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id:Int) {
-                        if(validate()){
-                            buatPesanan()
-                            val intent = Intent(this@ActivityCheckout, ActivityUtamaUser::class.java)
-                            intent.putExtra("pesanan", "true")
-                            startActivity(intent)
-                            finish()
+                .setPositiveButton("YA"
+                ) { _, _ ->
+                    if (validate()) {
+                        buatPesanan()
+                        val intent = Intent(this@ActivityCheckout, ActivityUtamaUser::class.java)
+                        intent.putExtra("pesanan", "true")
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+                .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create().show()
+        }
+    }
+
+    private fun loadData() {
+        checkoutViewModel.getUser().observe(this@ActivityCheckout) {
+            if (it is Resource.Success) {
+                user = it.data
+                identitasCo.text = "${user?.nama} (${user?.telp})"
+
+                databaseCo = FirebaseDatabase.getInstance().getReference("keranjang")
+                    .child("ready").child(user?.idUser.toString())
+
+                mLayoutManager = LinearLayoutManager(this)
+                mRecyclerView = findViewById(R.id.recyclerCo)
+                mRecyclerView.setHasFixedSize(true)
+                mRecyclerView.layoutManager = mLayoutManager
+
+                databaseCo?.addValueEventListener(object: ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (ds in dataSnapshot.children) {
+                            val keranjang = ds.getValue(Keranjang::class.java)
+                            idKeranjang = keranjang!!.id_keranjang
+                            val mTotalPrice = Integer.valueOf(keranjang.total)
+                            total += mTotalPrice
+                            subtotalCo.text = Rupiah.format(total)
                         }
                     }
+                    override fun onCancelled(databaseError: DatabaseError) {}
                 })
-                .setNegativeButton("TIDAK", object: DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id:Int) {
-                        dialog.cancel()
-                    }
-                }).create().show()
+
+                lokasiSekarang()
+                listKeranjang()
+            }
         }
     }
 
@@ -159,6 +165,7 @@ class ActivityCheckout : AppCompatActivity() {
             getLocations()
         }
     }
+
     @SuppressLint("MissingPermission")
     private fun getLocations() {
         LocationServices.getFusedLocationProviderClient(this).lastLocation.addOnSuccessListener {
@@ -183,12 +190,16 @@ class ActivityCheckout : AppCompatActivity() {
                 val distanceInMeters: Float = loc1.distanceTo(loc2)
                 jarakCo.text = df.format(distanceInMeters / 1000).toString() + " km"
 
-                if(distanceInMeters in 0.00..10.00) {
-                    ongkir = 5000
-                } else if(distanceInMeters in 10.01..20.00) {
-                    ongkir = 10000
-                } else {
-                    ongkir = 20000
+                ongkir = when (distanceInMeters) {
+                    in 0.00..10.00 -> {
+                        5000
+                    }
+                    in 10.01..20.00 -> {
+                        10000
+                    }
+                    else -> {
+                        20000
+                    }
                 }
                 ongkirCo.text = Rupiah.format(ongkir)
                 totalCo.text = Rupiah.format(total + ongkir)
@@ -225,7 +236,7 @@ class ActivityCheckout : AppCompatActivity() {
                 val viewHolder = super.onCreateViewHolder(parent, viewType)
                 viewHolder.setOnClickListener(object: ViewholderCheckout.ClickListener {
                     override fun onItemClick(view: View, position:Int) {
-                        val intent = Intent(view.context, ActivityDetailUser::class.java)
+                        val intent = Intent(view.context, ActivityMenuUser::class.java)
                         intent.putExtra("id_menu", viewHolder.keranjang.id_menu)
                         startActivity(intent)
                         finish()
@@ -250,44 +261,48 @@ class ActivityCheckout : AppCompatActivity() {
     //Checkout Pesanan
     @SuppressLint("NewApi")
     private fun buatPesanan() {
-        val ref = FirebaseDatabase.getInstance().getReference("pesanan")
-        val id_pesanan  = ref.push().key.toString()
-        val currentTime = Tanggal.format(Date(), "dd MMM YYYY, hh:mm aa")
+        if (user != null) {
+            val ref = FirebaseDatabase.getInstance().getReference("pesanan")
+            val idPesanan  = ref.push().key.toString()
+            val currentTime = Tanggal.format(Date(), "dd MMM YYYY, hh:mm aa")
 
-        val addData = Pesanan(id_pesanan, SP.getString("id_user", "").toString(),
-            id_keranjang, keteranganCo.text.toString(), currentTime.toString(), lokasiCo.text.toString(),
-            total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", "")
-        ref.child("diproses").child(id_pesanan).setValue(addData)
+            val addData = Pesanan(idPesanan, user?.idUser.toString(),
+                idKeranjang, keteranganCo.text.toString(), currentTime, lokasiCo.text.toString(),
+                total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", "")
+            ref.child("diproses").child(idPesanan).setValue(addData)
 
-        databaseCo.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
-                    .child(SP.getString("id_user", "").toString() + " | $id_keranjang").setValue(dataSnapshot.value)
-                databaseCo.removeValue()
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+            databaseCo?.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
+                        .child(user?.idUser.toString() + " | $idKeranjang").setValue(dataSnapshot.value)
+                    databaseCo?.removeValue()
+                }
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
+        }
     }
 
     //Validasi Pesanan
     override fun onStart() {
         super.onStart()
-        databaseCo.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val project = dataSnapshot.childrenCount.toInt()
-                if(project == 0) {
-                    idLayoutCo.visibility = View.GONE
-                    mRecyclerView.visibility = View.GONE
-                    btnLayoutCo.visibility = View.GONE
-                    kosongCo.visibility = View.VISIBLE
-                } else {
-                    idLayoutCo.visibility = View.VISIBLE
-                    mRecyclerView.visibility = View.VISIBLE
-                    btnLayoutCo.visibility = View.VISIBLE
-                    kosongCo.visibility = View.GONE
+        if (databaseCo != null) {
+            databaseCo?.addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val project = dataSnapshot.childrenCount.toInt()
+                    if(project == 0) {
+                        idLayoutCo.visibility = View.GONE
+                        mRecyclerView.visibility = View.GONE
+                        btnLayoutCo.visibility = View.GONE
+                        kosongCo.visibility = View.VISIBLE
+                    } else {
+                        idLayoutCo.visibility = View.VISIBLE
+                        mRecyclerView.visibility = View.VISIBLE
+                        btnLayoutCo.visibility = View.VISIBLE
+                        kosongCo.visibility = View.GONE
+                    }
                 }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
+        }
     }
 }
