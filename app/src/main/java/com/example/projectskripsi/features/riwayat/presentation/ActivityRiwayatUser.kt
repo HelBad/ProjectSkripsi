@@ -2,7 +2,6 @@ package com.example.projectskripsi.features.riwayat.presentation
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,14 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
-import com.example.projectskripsi.features.checkout.presentation.adapter.ViewholderCheckout
 import com.example.projectskripsi.features.riwayat.domain.entities.Pesanan
 import com.example.projectskripsi.features.riwayat.domain.entities.User
+import com.example.projectskripsi.features.riwayat.presentation.adapter.RiwayatAdapter
 import com.example.projectskripsi.features.riwayat.presentation.viewmodel.RiwayatViewModel
 import com.example.projectskripsi.utils.Rupiah
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.google.firebase.database.FirebaseDatabase
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityRiwayatUser : AppCompatActivity() {
@@ -69,7 +65,6 @@ class ActivityRiwayatUser : AppCompatActivity() {
             if (it is Resource.Success) {
                 user = it.data
                 getDetailPesanan()
-                getKeranjang()
             }
         }
     }
@@ -103,6 +98,7 @@ class ActivityRiwayatUser : AppCompatActivity() {
                 val nama = user?.nama
                 val telp = user?.telp
                 identitasRiwayat.text = "$nama ($telp)"
+                getKeranjang()
             }
         }
     }
@@ -125,36 +121,22 @@ class ActivityRiwayatUser : AppCompatActivity() {
 
     //List Keranjang
     private fun listKeranjang() {
-        val query = FirebaseDatabase.getInstance().getReference("keranjang")
-            .child("kosong").child("$idUser | $idKeranjang")
-        val firebaseRecyclerAdapter =
-            object : FirebaseRecyclerAdapter<Keranjang, ViewholderCheckout>(
-                Keranjang::class.java,
-                R.layout.menu_checkout,
-                ViewholderCheckout::class.java,
-                query
-            ) {
-                override fun populateViewHolder(
-                    viewHolder: ViewholderCheckout,
-                    model: Keranjang,
-                    position: Int
-                ) {
-                    viewHolder.setDetails(model)
+        riwayatViewModel.getKeranjang(idKeranjang,idUser).observe(this@ActivityRiwayatUser) {
+            if (it is Resource.Success && it.data != null) {
+                val list = it.data
+                list.forEach { keranjang ->
+                    keranjang.idMenu?.let { idMenu ->
+                        riwayatViewModel.getMenu(idMenu).observe(this@ActivityRiwayatUser) { it1 ->
+                            if (it1 is Resource.Success) {
+                                keranjang.namaMenu = it1.data?.namaMenu
+                            }
+                        }
+                    }
                 }
-
-                override fun onCreateViewHolder(
-                    parent: ViewGroup,
-                    viewType: Int
-                ): ViewholderCheckout {
-                    val viewHolder = super.onCreateViewHolder(parent, viewType)
-                    viewHolder.setOnClickListener(object : ViewholderCheckout.ClickListener {
-                        override fun onItemClick(view: View, position: Int) {}
-                        override fun onItemLongClick(view: View, position: Int) {}
-                    })
-                    return viewHolder
-                }
+                val adapter = RiwayatAdapter(list)
+                mRecyclerView.adapter = adapter
             }
-        mRecyclerView.adapter = firebaseRecyclerAdapter
+        }
     }
 
     override fun onStart() {

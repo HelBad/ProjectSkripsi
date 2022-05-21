@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.beranda.domain.entities.Menu
 import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.utils.Rupiah
 

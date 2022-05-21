@@ -13,5 +13,5 @@ data class KeranjangResponse(
     @SerializedName("jumlah")
     var jumlah: String?,
     @SerializedName("id_user")
-    var idUser: String?
+    var idUser: String?,
 )

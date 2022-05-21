@@ -7,6 +7,7 @@ import com.example.projectskripsi.features.riwayat.domain.entities.User
 import com.example.projectskripsi.features.riwayat.data.source.local.RiwayatLocalDataSource
 import com.example.projectskripsi.features.riwayat.data.source.remote.RiwayatRemoteDataSource
 import com.example.projectskripsi.features.riwayat.domain.entities.Keranjang
+import com.example.projectskripsi.features.riwayat.domain.entities.Menu
 import com.example.projectskripsi.features.riwayat.domain.entities.Pesanan
 import com.example.projectskripsi.features.riwayat.domain.repositories.RiwayatRepository
 import io.reactivex.BackpressureStrategy
@@ -157,6 +158,48 @@ class RiwayatRepositoryImpl constructor(
                                 total = res.total,
                             )
                             result.onNext(Resource.Success(keranjang))
+                        } else {
+                            result.onNext(Resource.Success(null))
+                        }
+                    }
+                    is Response.Empty -> {
+                        result.onNext(Resource.Success(null))
+                    }
+                    is Response.Error -> {
+                        result.onNext(Resource.Error(it.errorMessage, null))
+                    }
+                }
+            }
+
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    @SuppressLint("CheckResult")
+    override fun getMenu(idMenu: String): Flowable<Resource<Menu?>> {
+        val result = PublishSubject.create<Resource<Menu?>>()
+        result.onNext(Resource.Loading())
+
+        remoteDataSource.getMenu(idMenu)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe {
+                when(it){
+                    is Response.Success -> {
+                        val res = it.data
+                        if (res != null) {
+                            val menu = Menu(
+                                    idMenu = res.idMenu,
+                                    namaMenu = res.namaMenu,
+                                    deskripsi = res.deskripsi,
+                                    lemak = res.lemak,
+                                    protein = res.protein,
+                                    kalori = res.kalori,
+                                    karbohidrat = res.karbohidrat,
+                                    harga = res.harga,
+                                    gambar = res.gambar
+                                )
+                            result.onNext(Resource.Success(menu))
                         } else {
                             result.onNext(Resource.Success(null))
                         }

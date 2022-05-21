@@ -3,6 +3,7 @@ package com.example.projectskripsi.features.riwayat.data.source.remote
 import android.util.Log
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.riwayat.data.responses.KeranjangResponse
+import com.example.projectskripsi.features.riwayat.data.responses.MenuResponse
 import com.example.projectskripsi.features.riwayat.data.responses.PesananResponse
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
@@ -35,7 +36,7 @@ class RiwayatRemoteDataSource {
 
                 override fun onCancelled(p0: DatabaseError) {
                     response.onNext(Response.Error(p0.message))
-                    Log.e("PesananRemoteDataSource", p0.message)
+                    Log.e("RiwayatRemoteDataSource", p0.message)
                 }
             })
 
@@ -65,10 +66,9 @@ class RiwayatRemoteDataSource {
 
                 override fun onCancelled(error: DatabaseError) {
                     response.onNext(Response.Error(error.message))
-                    Log.e("PesananRemoteDataSource", error.message)
+                    Log.e("RiwayatRemoteDataSource", error.message)
                 }
-            }
-            )
+            })
 
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
@@ -83,8 +83,8 @@ class RiwayatRemoteDataSource {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         for (snap in snapshot.children) {
-                            val menu = Converter.toObject(snap, KeranjangResponse::class.java)
-                            response.onNext(Response.Success(menu))
+                            val keranjang = Converter.toObject(snap, KeranjangResponse::class.java)
+                            response.onNext(Response.Success(keranjang))
                         }
                     }
                     else {
@@ -94,10 +94,35 @@ class RiwayatRemoteDataSource {
 
                 override fun onCancelled(error: DatabaseError) {
                     response.onNext(Response.Error(error.message))
-                    Log.e("PesananRemoteDataSource", error.message)
+                    Log.e("RiwayatRemoteDataSource", error.message)
                 }
-            }
-            )
+            })
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun getMenu(idMenu: String): Flowable<Response<MenuResponse?>> {
+        val response = PublishSubject.create<Response<MenuResponse?>>()
+
+        firebase.getReference("menu").orderByChild("id_menu")
+            .equalTo(idMenu).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.exists()) {
+                        for (snap in p0.children) {
+                            val menu = Converter.toObject(snap, MenuResponse::class.java)
+                            response.onNext(Response.Success(menu))
+                        }
+
+                    } else {
+                        response.onNext(Response.Empty)
+                    }
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                    response.onNext(Response.Error(p0.message))
+                    Log.e("RiwayatRemoteDataSource", p0.message)
+                }
+            })
 
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }

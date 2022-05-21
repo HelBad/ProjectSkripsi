@@ -6,4 +6,5 @@ data class Keranjang (
     var idMenu: String? = null,
     var jumlah: String? = null,
     var total: String? = null,
+    var namaMenu: String? = null,
 )
