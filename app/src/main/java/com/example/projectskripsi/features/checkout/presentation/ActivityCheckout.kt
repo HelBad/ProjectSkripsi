@@ -10,10 +10,7 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -27,14 +24,12 @@ import com.example.projectskripsi.features.beranda.presentation.ActivityUtamaUse
 import com.example.projectskripsi.features.checkout.domain.entities.User
 import com.example.projectskripsi.features.checkout.presentation.adapter.CheckoutAdapter
 import com.example.projectskripsi.features.checkout.presentation.viewmodel.CheckoutViewModel
-import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.utils.Rupiah
 import com.example.projectskripsi.utils.Tanggal
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.database.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import java.util.*
@@ -56,6 +51,7 @@ class ActivityCheckout : AppCompatActivity() {
     lateinit var idLayoutCo: CardView
     lateinit var btnLayoutCo: CardView
     lateinit var kosongCo: TextView
+    lateinit var loadingCo: ProgressBar
 
     var idKeranjang = ""
     var total = 0
@@ -79,6 +75,7 @@ class ActivityCheckout : AppCompatActivity() {
         idLayoutCo = findViewById(R.id.idLayoutCo)
         btnLayoutCo = findViewById(R.id.btnLayoutCo)
         kosongCo = findViewById(R.id.kosongCo)
+        loadingCo = findViewById(R.id.loadingCo)
 
         alertDialog = AlertDialog.Builder(this)
         loadData()
@@ -120,12 +117,28 @@ class ActivityCheckout : AppCompatActivity() {
     private fun loadKeranjangDetail() {
         user?.idUser?.let { idUser ->
             checkoutViewModel.getDetailKeranjang(idUser).observe(this@ActivityCheckout) {
-                if (it is Resource.Success) {
+                if (it is Resource.Success && it.data != null) {
                     val keranjang = it.data
-                    Log.d("checkout", keranjang.toString())
-                    idKeranjang = keranjang?.idKeranjang.toString()
-                    total += keranjang?.total?.toInt()!!
+                    idKeranjang = keranjang.idKeranjang.toString()
+                    total += keranjang.total?.toInt()!!
+                    loadingCo.visibility = View.GONE
+                    idLayoutCo.visibility = View.VISIBLE
+                    mRecyclerView.visibility = View.VISIBLE
+                    btnLayoutCo.visibility = View.VISIBLE
+                    kosongCo.visibility = View.GONE
                     subtotalCo.text = Rupiah.format(total)
+                } else if (it is Resource.Loading) {
+                    loadingCo.visibility = View.VISIBLE
+                    idLayoutCo.visibility = View.GONE
+                    mRecyclerView.visibility = View.GONE
+                    btnLayoutCo.visibility = View.GONE
+                    kosongCo.visibility = View.VISIBLE
+                } else {
+                    idLayoutCo.visibility = View.GONE
+                    mRecyclerView.visibility = View.GONE
+                    btnLayoutCo.visibility = View.GONE
+                    kosongCo.visibility = View.VISIBLE
+                    loadingCo.visibility = View.GONE
                 }
             }
         }
@@ -288,6 +301,19 @@ class ActivityCheckout : AppCompatActivity() {
                         btnLayoutCo.visibility = View.VISIBLE
                         kosongCo.visibility = View.GONE
                     }
+                    loadingCo.visibility = View.GONE
+                } else if (it is Resource.Loading) {
+                    idLayoutCo.visibility = View.VISIBLE
+                    mRecyclerView.visibility = View.GONE
+                    btnLayoutCo.visibility = View.GONE
+                    kosongCo.visibility = View.GONE
+                    loadingCo.visibility = View.GONE
+                } else {
+                    idLayoutCo.visibility = View.GONE
+                    mRecyclerView.visibility = View.GONE
+                    btnLayoutCo.visibility = View.GONE
+                    kosongCo.visibility = View.VISIBLE
+                    loadingCo.visibility = View.GONE
                 }
             }
         }

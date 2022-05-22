@@ -5,6 +5,7 @@ import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.checkout.data.responses.KeranjangResponse
 import com.example.projectskripsi.features.checkout.data.responses.MenuResponse
 import com.example.projectskripsi.features.checkout.data.responses.PesananResponse
+import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -58,9 +59,57 @@ class CheckoutRemoteDataSource {
 
         val ref = firebase.getReference("pesanan")
         val id = ref.push().key.toString()
-        val data = PesananResponse(id, idUser, idKeranjang, catatan, waktu, lokasi, subtotal, ongkir, totalBayar, status, keterangan)
+        val data = PesananResponse(
+            id,
+            idUser,
+            idKeranjang,
+            catatan,
+            waktu,
+            lokasi,
+            subtotal,
+            ongkir,
+            totalBayar,
+            status,
+            keterangan
+        )
         ref.child("diproses").child(id).setValue(data)
             .addOnCompleteListener {
+                firebase.getReference("keranjang")
+                    .child("ready").child(idUser)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                var keranjang: KeranjangResponse? = null
+                                for (snap in snapshot.children) {
+                                    keranjang =
+                                        Converter.toObject(snap, KeranjangResponse::class.java)
+                                }
+                                Log.d("checkout", keranjang?.id_keranjang.toString())
+                                Log.d("checkout", idKeranjang)
+                                firebase.getReference("keranjang").child("kosong")
+                                    .child("$idUser | $idKeranjang").setValue(keranjang)
+                                    .addOnSuccessListener {
+                                        firebase.getReference("keranjang")
+                                            .child("ready").child(idUser)
+                                            .removeValue().addOnSuccessListener {
+                                                response.onNext(Response.Success(id))
+                                        }
+                                            .addOnFailureListener {
+                                                response.onNext(Response.Error(it.message.toString()))
+                                            }
+                                    }
+                                    .addOnFailureListener {
+                                        response.onNext(Response.Error(it.message.toString()))
+                                    }
+                            } else {
+                                response.onNext(Response.Empty)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            response.onNext(Response.Error(error.message))
+                        }
+                    })
                 response.onNext(Response.Success(id))
             }.addOnCanceledListener {
                 response.onNext(Response.Error("error"))
@@ -83,11 +132,15 @@ class CheckoutRemoteDataSource {
                             val keranjang = Converter.toObject(snap, KeranjangResponse::class.java)
                             if (keranjang != null) {
                                 firebase.getReference("menu").orderByChild("id_menu")
-                                    .equalTo(keranjang.id_menu).addValueEventListener(object : ValueEventListener {
+                                    .equalTo(keranjang.id_menu)
+                                    .addValueEventListener(object : ValueEventListener {
                                         override fun onDataChange(p0: DataSnapshot) {
                                             if (p0.exists()) {
                                                 for (snap2 in p0.children) {
-                                                    val menu = Converter.toObject(snap2, MenuResponse::class.java)
+                                                    val menu = Converter.toObject(
+                                                        snap2,
+                                                        MenuResponse::class.java
+                                                    )
                                                     keranjang.nama_menu = menu?.namaMenu
                                                 }
                                             }

@@ -207,6 +207,37 @@ class MenuRepositoryImpl constructor(
     }
 
     @SuppressLint("CheckResult")
+    override fun hapusMenu(idMenu: String): Flowable<Resource<String?>> {
+        val result = PublishSubject.create<Resource<String?>>()
+        result.onNext(Resource.Loading())
+
+        remoteDataSource.hapusMenu(idMenu)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe {
+                when(it){
+                    is Response.Success -> {
+                        val res = it.data
+                        if (res != null) {
+                            result.onNext(Resource.Success(res))
+                        } else {
+                            result.onNext(Resource.Success(null))
+                        }
+                    }
+                    is Response.Empty -> {
+                        result.onNext(Resource.Success(null))
+                    }
+                    is Response.Error -> {
+                        result.onNext(Resource.Error(it.errorMessage, null))
+                    }
+                }
+            }
+
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    @SuppressLint("CheckResult")
     override fun getUser(): Flowable<Resource<User?>> {
         val result = PublishSubject.create<Resource<User?>>()
         result.onNext(Resource.Loading())

@@ -5,18 +5,14 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.beranda.domain.entities.Penyakit
+import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.edit.presentation.ActivityEdit
 import com.example.projectskripsi.features.menu.presentation.viewmodel.MenuViewModel
 import com.example.projectskripsi.utils.Rupiah
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -35,7 +31,7 @@ class ActivityMenuAdmin : AppCompatActivity() {
     lateinit var btnHapus: Button
 
     lateinit var alertDialog: AlertDialog.Builder
-    var id_menu = ""
+    var idMenu = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +58,7 @@ class ActivityMenuAdmin : AppCompatActivity() {
             .observe(this@ActivityMenuAdmin) { res ->
                 if (res.data != null) {
                     val allocation = res.data
-                    id_menu = allocation.idMenu.toString()
+                    idMenu = allocation.idMenu.toString()
                     namaDetail.text = allocation.namaMenu
                     lemakDetail.text = allocation.lemak
                     proteinDetail.text = allocation.protein
@@ -74,7 +70,7 @@ class ActivityMenuAdmin : AppCompatActivity() {
 
                     btnEdit.setOnClickListener {
                         val intent = Intent(this@ActivityMenuAdmin, ActivityEdit::class.java)
-                        intent.putExtra("id_menu", id_menu)
+                        intent.putExtra("id_menu", idMenu)
                         startActivity(intent)
                     }
 
@@ -82,32 +78,17 @@ class ActivityMenuAdmin : AppCompatActivity() {
                         alertDialog.setMessage("Apakah anda ingin menghapus menu ini ?")
                             .setCancelable(false)
                             .setPositiveButton("YA") { _, _ ->
-                                FirebaseDatabase.getInstance().getReference("menu")
-                                    .child(intent.getStringExtra("id_menu").toString())
-                                    .removeValue()
-                                FirebaseStorage.getInstance().getReference("menu")
-                                    .child(intent.getStringExtra("id_menu").toString()).delete()
-                                FirebaseDatabase.getInstance().getReference("penyakit")
-                                    .orderByChild("id_menu")
-                                    .equalTo(intent.getStringExtra("id_menu"))
-                                    .addListenerForSingleValueEvent(object : ValueEventListener {
-                                        override fun onDataChange(datasnapshot: DataSnapshot) {
-                                            for (snapshot1 in datasnapshot.children) {
-                                                val allocation =
-                                                    snapshot1.getValue(Penyakit::class.java)
-                                                val id_penyakit = allocation?.idPenyakit
-                                                if (id_penyakit != null) {
-                                                    FirebaseDatabase.getInstance()
-                                                        .getReference("penyakit")
-                                                        .child(id_penyakit).removeValue()
-                                                }
-
-                                            }
+                                menuViewModel.hapusMenu(intent.getStringExtra("id_menu").toString())
+                                    .observe(this@ActivityMenuAdmin) {
+                                        if (it is Resource.Success) {
+                                            Toast.makeText(
+                                                this@ActivityMenuAdmin,
+                                                it.data,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            finish()
                                         }
-
-                                        override fun onCancelled(databaseError: DatabaseError) {}
-                                    })
-                                finish()
+                                    }
                             }
                             .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
                             .show()

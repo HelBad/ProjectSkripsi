@@ -13,11 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.pesanan.domain.entities.User
-import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatUser
 import com.example.projectskripsi.features.pesanan.presentation.adapter.PesananAdapter
 import com.example.projectskripsi.features.pesanan.presentation.viewmodel.PesananViewModel
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatUser
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentPesananUser : Fragment() {

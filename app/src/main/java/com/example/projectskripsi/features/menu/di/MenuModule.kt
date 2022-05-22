@@ -21,6 +21,7 @@ val menuModule = module {
     single { GetUserUsecase(get()) }
     single { HapusKeranjangUsecase(get()) }
     single { UpdateKeranjangUsecase(get()) }
+    single { HapusMenuUsecase(get()) }
 
-    viewModel { MenuViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { MenuViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }

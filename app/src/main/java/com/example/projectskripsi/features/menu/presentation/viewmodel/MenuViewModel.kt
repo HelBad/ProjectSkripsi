@@ -16,6 +16,7 @@ class MenuViewModel (
     private val hapusKeranjangUsecase: HapusKeranjangUsecase,
     private val buatKeranjangUsecase: BuatKeranjangUsecase,
     private val updateKeranjangUsecase: UpdateKeranjangUsecase,
+    private val hapusMenuUsecase: HapusMenuUsecase,
     private val getUserUsecase: GetUserUsecase,
 ) : ViewModel() {
     fun getDetailMenu(id: String): LiveData<Resource<Menu?>> {
@@ -73,6 +74,12 @@ class MenuViewModel (
                     idUser
                 )
             )
+        )
+    }
+
+    fun hapusMenu(id: String): LiveData<Resource<String?>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            hapusMenuUsecase.run(HapusMenuUsecase.HapusMenuParams(id))
         )
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -12,33 +11,38 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
+import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.beranda.presentation.ActivityUtamaAdmin
 import com.example.projectskripsi.features.edit.domain.entities.Menu
 import com.example.projectskripsi.features.edit.domain.entities.Penyakit
+import com.example.projectskripsi.features.edit.presentation.viewmodel.EditViewModel
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityEdit : AppCompatActivity() {
-    lateinit var namaMenu: EditText
-    lateinit var deskripsiMenu: EditText
-    lateinit var hargaMenu: EditText
-    lateinit var gambarMenu: TextView
-    lateinit var lemakMenu: EditText
-    lateinit var proteinMenu: EditText
-    lateinit var kaloriMenu: EditText
-    lateinit var karbohidratMenu: EditText
-    lateinit var btnSimpan: Button
+    private val editViewModel: EditViewModel by viewModel()
 
-    lateinit var alertDialog: AlertDialog.Builder
-    lateinit var databaseReference: DatabaseReference
-    lateinit var storageReference: StorageReference
-    lateinit var databaseAi: DatabaseReference
-    lateinit var uri: Uri
-    var url: Uri? = null
-    var statusMenu = ""
-    var idMenu = ""
-    var idPenyakit = ""
+    private lateinit var namaMenu: EditText
+    private lateinit var deskripsiMenu: EditText
+    private lateinit var hargaMenu: EditText
+    private lateinit var gambarMenu: TextView
+    private lateinit var lemakMenu: EditText
+    private lateinit var proteinMenu: EditText
+    private lateinit var kaloriMenu: EditText
+    private lateinit var karbohidratMenu: EditText
+    private lateinit var btnSimpan: Button
+
+    private lateinit var alertDialog: AlertDialog.Builder
+//    private lateinit var databaseReference: DatabaseReference
+//    private lateinit var storageReference: StorageReference
+//    private lateinit var databaseAi: DatabaseReference
+    private lateinit var uri: Uri
+    private var url: Uri? = null
+    private var statusMenu = ""
+    private var idMenu = ""
+    private var idPenyakit = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +59,9 @@ class ActivityEdit : AppCompatActivity() {
         btnSimpan = findViewById(R.id.btnSimpan)
 
         alertDialog = AlertDialog.Builder(this)
-        databaseReference = FirebaseDatabase.getInstance().getReference("menu")
-        storageReference = FirebaseStorage.getInstance().getReference("menu")
-        databaseAi = FirebaseDatabase.getInstance().getReference("penyakit")
+//        databaseReference = FirebaseDatabase.getInstance().getReference("menu")
+//        storageReference = FirebaseStorage.getInstance().getReference("menu")
+//        databaseAi = FirebaseDatabase.getInstance().getReference("penyakit")
         loadMenu()
 
         gambarMenu.setOnClickListener {
@@ -87,56 +91,59 @@ class ActivityEdit : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             if (requestCode == 0) {
-                if (statusMenu == "ada") {
-                    idMenu = intent.getStringExtra("id_menu").toString()
-                } else {
-                    idMenu = databaseReference.push().key.toString()
-                }
+//                idMenu = if (statusMenu == "ada") {
+//                    intent.getStringExtra("id_menu").toString()
+//                } else {
+//                    databaseReference.push().key.toString()
+//                }
                 uri = data!!.data!!
-                val mStorage = storageReference.child(idMenu)
-                try {
-                    mStorage.putFile(uri).addOnFailureListener {}.addOnSuccessListener {
-                        mStorage.downloadUrl.addOnCompleteListener { taskSnapshot ->
-                            url = taskSnapshot.result
-                            gambarMenu.text = url.toString()
-                        }
+                editViewModel.uploadGambar(idMenu, uri).observe(this@ActivityEdit) {
+                    if (it is Resource.Success && it.data != null) {
+                        url = it.data
+                        gambarMenu.text = url.toString()
+                    } else if (it is Resource.Error) {
+                        Toast.makeText(this@ActivityEdit, it.message, Toast.LENGTH_SHORT).show()
                     }
-                } catch (ex: Exception) {
-                    Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show()
                 }
+//                val mStorage = storageReference.child(idMenu)
+//                try {
+//                    mStorage.putFile(uri).addOnFailureListener {}.addOnSuccessListener {
+//                        mStorage.downloadUrl.addOnCompleteListener { taskSnapshot ->
+//                            url = taskSnapshot.result
+//                            gambarMenu.text = url.toString()
+//                        }
+//                    }
+//                } catch (ex: Exception) {
+//                }
             }
         }
     }
 
     //Load Data Menu
     private fun loadMenu() {
-        databaseReference.orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(datasnapshot: DataSnapshot) {
-                    for (snapshot1 in datasnapshot.children) {
-                        val allocation = snapshot1.getValue(Menu::class.java)
-                        Log.d("edit", allocation.toString())
-                        namaMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.namaMenu)
-                        deskripsiMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.deskripsi)
-                        lemakMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.lemak)
-                        proteinMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.protein)
-                        kaloriMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.kalori)
-                        karbohidratMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.karbohidrat)
-                        hargaMenu.text =
-                            Editable.Factory.getInstance().newEditable(allocation?.harga)
-                        gambarMenu.text = allocation?.gambar
-                        statusMenu = "ada"
-                    }
+        editViewModel.getDetailMenu(intent.getStringExtra("id_menu").toString())
+            .observe(this@ActivityEdit) {
+                if (it is Resource.Success && it.data != null) {
+                    val menu = it.data
+                    idMenu = menu.idMenu.toString()
+                    namaMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.namaMenu)
+                    deskripsiMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.deskripsi)
+                    lemakMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.lemak)
+                    proteinMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.protein)
+                    kaloriMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.kalori)
+                    karbohidratMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.karbohidrat)
+                    hargaMenu.text =
+                        Editable.Factory.getInstance().newEditable(menu.harga)
+                    gambarMenu.text = menu.gambar
+                    statusMenu = "ada"
                 }
-
-                override fun onCancelled(databaseError: DatabaseError) {}
-            })
+            }
     }
 
     //Validasi Data Menu
@@ -180,20 +187,7 @@ class ActivityEdit : AppCompatActivity() {
     private fun tambahData() {
         if (statusMenu == "ada") {
             idMenu = intent.getStringExtra("id_menu").toString()
-            databaseReference.child(idMenu).child("id_menu").setValue(idMenu)
-            databaseReference.child(idMenu).child("nama_menu").setValue(namaMenu.text.toString())
-            databaseReference.child(idMenu).child("deskripsi")
-                .setValue(deskripsiMenu.text.toString())
-            databaseReference.child(idMenu).child("lemak").setValue(lemakMenu.text.toString())
-            databaseReference.child(idMenu).child("protein").setValue(proteinMenu.text.toString())
-            databaseReference.child(idMenu).child("kalori").setValue(kaloriMenu.text.toString())
-            databaseReference.child(idMenu).child("karbohidrat")
-                .setValue(karbohidratMenu.text.toString())
-            databaseReference.child(idMenu).child("harga").setValue(hargaMenu.text.toString())
-            databaseReference.child(idMenu).child("gambar").setValue(gambarMenu.text.toString())
-        } else {
-            idMenu = databaseReference.push().key.toString()
-            val addData = Menu(
+            editViewModel.updateMenu(
                 idMenu,
                 namaMenu.text.toString(),
                 deskripsiMenu.text.toString(),
@@ -204,7 +198,45 @@ class ActivityEdit : AppCompatActivity() {
                 hargaMenu.text.toString(),
                 gambarMenu.text.toString()
             )
-            databaseReference.child(idMenu).setValue(addData)
+//            databaseReference.child(idMenu).child("id_menu").setValue(idMenu)
+//            databaseReference.child(idMenu).child("nama_menu").setValue(namaMenu.text.toString())
+//            databaseReference.child(idMenu).child("deskripsi")
+//                .setValue(deskripsiMenu.text.toString())
+//            databaseReference.child(idMenu).child("lemak").setValue(lemakMenu.text.toString())
+//            databaseReference.child(idMenu).child("protein").setValue(proteinMenu.text.toString())
+//            databaseReference.child(idMenu).child("kalori").setValue(kaloriMenu.text.toString())
+//            databaseReference.child(idMenu).child("karbohidrat")
+//                .setValue(karbohidratMenu.text.toString())
+//            databaseReference.child(idMenu).child("harga").setValue(hargaMenu.text.toString())
+//            databaseReference.child(idMenu).child("gambar").setValue(gambarMenu.text.toString())
+        } else {
+            editViewModel.buatMenu(
+                namaMenu.text.toString(),
+                deskripsiMenu.text.toString(),
+                lemakMenu.text.toString(),
+                proteinMenu.text.toString(),
+                kaloriMenu.text.toString(),
+                karbohidratMenu.text.toString(),
+                hargaMenu.text.toString(),
+                gambarMenu.text.toString()
+            ).observe(this@ActivityEdit) {
+                if (it is Resource.Success && it.data != null) {
+                    idMenu = it.data
+                }
+            }
+//            idMenu = databaseReference.push().key.toString()
+//            val addData = Menu(
+//                idMenu,
+//                namaMenu.text.toString(),
+//                deskripsiMenu.text.toString(),
+//                lemakMenu.text.toString(),
+//                proteinMenu.text.toString(),
+//                kaloriMenu.text.toString(),
+//                karbohidratMenu.text.toString(),
+//                hargaMenu.text.toString(),
+//                gambarMenu.text.toString()
+//            )
+//            databaseReference.child(idMenu).setValue(addData)
         }
     }
 
@@ -284,36 +316,60 @@ class ActivityEdit : AppCompatActivity() {
                 + (kaloriPenyakit2 - kalori) + (karbohidratPenyakit2 - karbohidrat)) / jumlahData)
 
         if (statusMenu == "ada") {
-            databaseAi.orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(datasnapshot: DataSnapshot) {
-                        for (snapshot1 in datasnapshot.children) {
-                            val allocation = snapshot1.getValue(Penyakit::class.java)
-                            idPenyakit = allocation?.idPenyakit.toString()
-                            databaseAi.child(idPenyakit).child("id_penyakit").setValue(idPenyakit)
-                            databaseAi.child(idPenyakit).child("id_menu").setValue(idMenu)
-                            databaseAi.child(idPenyakit).child("sehat").setValue(sehat.toString())
-                            databaseAi.child(idPenyakit).child("diabetes")
-                                .setValue(diabetes.toString())
-                            databaseAi.child(idPenyakit).child("obesitas")
-                                .setValue(obesitas.toString())
-                            databaseAi.child(idPenyakit).child("anemia").setValue(anemia.toString())
-                        }
+            editViewModel.getDetailPenyakit(
+                intent.getStringExtra("id_menu").toString()
+            ).observe(this@ActivityEdit) {
+                if (it is Resource.Success && it.data != null) {
+                    val penyakit = it.data
+                    penyakit.idPenyakit?.let { idPenyakit ->
+                        editViewModel.updatePenyakit(
+                            idPenyakit,
+                            idMenu,
+                            sehat.toString(),
+                            diabetes.toString(),
+                            obesitas.toString(),
+                            anemia.toString()
+                        )
                     }
-
-                    override fun onCancelled(databaseError: DatabaseError) {}
-                })
+                }
+            }
+//            databaseAi.orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
+//                .addListenerForSingleValueEvent(object : ValueEventListener {
+//                    override fun onDataChange(datasnapshot: DataSnapshot) {
+//                        for (snapshot1 in datasnapshot.children) {
+//                            val allocation = snapshot1.getValue(Penyakit::class.java)
+//                            idPenyakit = allocation?.idPenyakit.toString()
+//                            databaseAi.child(idPenyakit).child("id_penyakit").setValue(idPenyakit)
+//                            databaseAi.child(idPenyakit).child("id_menu").setValue(idMenu)
+//                            databaseAi.child(idPenyakit).child("sehat").setValue(sehat.toString())
+//                            databaseAi.child(idPenyakit).child("diabetes")
+//                                .setValue(diabetes.toString())
+//                            databaseAi.child(idPenyakit).child("obesitas")
+//                                .setValue(obesitas.toString())
+//                            databaseAi.child(idPenyakit).child("anemia").setValue(anemia.toString())
+//                        }
+//                    }
+//
+//                    override fun onCancelled(databaseError: DatabaseError) {}
+//                })
         } else {
-            idPenyakit = databaseAi.push().key.toString()
-            val addData = Penyakit(
-                idPenyakit,
+            editViewModel.buatPenyakit(
                 idMenu,
                 sehat.toString(),
                 diabetes.toString(),
                 obesitas.toString(),
                 anemia.toString()
             )
-            databaseAi.child(idPenyakit).setValue(addData)
+//            idPenyakit = databaseAi.push().key.toString()
+//            val addData = Penyakit(
+//                idPenyakit,
+//                idMenu,
+//                sehat.toString(),
+//                diabetes.toString(),
+//                obesitas.toString(),
+//                anemia.toString()
+//            )
+//            databaseAi.child(idPenyakit).setValue(addData)
         }
     }
 }
