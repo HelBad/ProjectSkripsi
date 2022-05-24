@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
+import com.example.projectskripsi.features.riwayat.domain.entities.Keranjang
 import com.example.projectskripsi.features.riwayat.domain.entities.User
 import com.example.projectskripsi.features.riwayat.presentation.adapter.RiwayatAdapter
 import com.example.projectskripsi.features.riwayat.presentation.viewmodel.RiwayatViewModel
@@ -123,42 +124,42 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
                                 val nama = user?.nama
                                 val telp = user?.telp
                                 identitasRiwayat.text = "$nama ($telp)"
-                            }
-                        }
-                    }
 
-                    riwayatViewModel.getDetailKeranjang(
-                        pesanan.id_keranjang.toString(),
-                        pesanan.id_user.toString()
-                    ).observe(this@ActivityRiwayatAdmin) { r2 ->
-                        if (r2 is Resource.Success) {
-                            val keranjang = r2.data
-                            idKeranjang = keranjang?.idKeranjang.toString()
-                            idUser = keranjang?.idUser.toString()
-                            listKeranjang()
-                        }
-                    }
+                                riwayatViewModel.getDetailKeranjang(
+                                    pesanan.id_keranjang.toString(),
+                                    pesanan.id_user.toString()
+                                ).observe(this@ActivityRiwayatAdmin) { r2 ->
+                                    if (r2 is Resource.Success) {
+                                        val keranjang = r2.data
+                                        idKeranjang = keranjang?.idKeranjang.toString()
+                                        this.idUser = keranjang?.idUser.toString()
+                                        listKeranjang()
+                                    }
+                                }
 
-                    btnBatal.setOnClickListener {
-                        alertDialog.setMessage("Apakah anda yakin membatalkan pesanan ini ?")
-                            .setCancelable(false)
-                            .setPositiveButton("YA") { _, _ ->
-                                if (validate()) {
-                                    pesananBatal()
+                                btnBatal.setOnClickListener {
+                                    alertDialog.setMessage("Apakah anda yakin membatalkan pesanan ini ?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("YA") { _, _ ->
+                                            if (validate()) {
+                                                pesananBatal()
+                                            }
+                                        }
+                                        .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
+                                        .show()
+                                }
+
+                                btnSelesai.setOnClickListener {
+                                    alertDialog.setMessage("Apakah anda yakin mengakhiri pesanan ini ?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("YA") { _, _ ->
+                                            pesananSelesai()
+                                        }
+                                        .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
+                                        .show()
                                 }
                             }
-                            .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
-                            .show()
-                    }
-
-                    btnSelesai.setOnClickListener {
-                        alertDialog.setMessage("Apakah anda yakin mengakhiri pesanan ini ?")
-                            .setCancelable(false)
-                            .setPositiveButton("YA") { _, _ ->
-                                pesananSelesai()
-                            }
-                            .setNegativeButton("TIDAK") { dialog, _ -> dialog.cancel() }.create()
-                            .show()
+                        }
                     }
                 }
             }
@@ -167,11 +168,23 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
 
     //List Keranjang
     private fun listKeranjang() {
+        val list = arrayListOf<Keranjang>()
+
         user?.idUser?.let { idUser ->
             riwayatViewModel.getKeranjang(idKeranjang, idUser).observe(this@ActivityRiwayatAdmin) {
                 if (it is Resource.Success && it.data != null) {
-                    val adapter = RiwayatAdapter(it.data)
-                    mRecyclerView.adapter = adapter
+                    it.data.forEach { keranjang ->
+                        keranjang.idMenu?.let { idMenu ->
+                            riwayatViewModel.getMenu(idMenu).observe(this@ActivityRiwayatAdmin) { it1 ->
+                                if (it1 is Resource.Success) {
+                                    keranjang.namaMenu = it1.data?.namaMenu
+                                    list.add(keranjang)
+                                    val adapter = RiwayatAdapter(list)
+                                    mRecyclerView.adapter = adapter
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

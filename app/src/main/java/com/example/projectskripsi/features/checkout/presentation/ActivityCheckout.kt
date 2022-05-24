@@ -8,7 +8,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.beranda.presentation.ActivityUtamaUser
+import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.features.checkout.domain.entities.User
 import com.example.projectskripsi.features.checkout.presentation.adapter.CheckoutAdapter
 import com.example.projectskripsi.features.checkout.presentation.viewmodel.CheckoutViewModel
@@ -231,12 +231,23 @@ class ActivityCheckout : AppCompatActivity() {
 
     //List Keranjang
     private fun listKeranjang() {
+        val listKeranjang = arrayListOf<Keranjang>()
+
         user?.idUser?.let { idUser ->
             checkoutViewModel.getKeranjang(idUser).observe(this@ActivityCheckout) {
                 if (it is Resource.Success && it.data != null) {
-                    val list = it.data
-                    val adapter = CheckoutAdapter(list)
-                    mRecyclerView.adapter = adapter
+                    it.data.forEach { keranjang ->
+                        keranjang.idMenu?.let { idMenu ->
+                            checkoutViewModel.getDetailMenu(idMenu).observe(this@ActivityCheckout) { it1 ->
+                                if (it1 is Resource.Success && it1.data != null) {
+                                    keranjang.namaMenu = it1.data.namaMenu
+                                    listKeranjang.add(keranjang)
+                                    val adapter = CheckoutAdapter(listKeranjang)
+                                    mRecyclerView.adapter = adapter
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -264,22 +275,6 @@ class ActivityCheckout : AppCompatActivity() {
             ).observe(this@ActivityCheckout) {
 
             }
-//            val ref = FirebaseDatabase.getInstance().getReference("pesanan")
-//            val idPesanan  = ref.push().key.toString()
-//
-//            val addData = Pesanan(idPesanan, user?.idUser.toString(),
-//                idKeranjang, keteranganCo.text.toString(), currentTime, lokasiCo.text.toString(),
-//                total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", "")
-//            ref.child("diproses").child(idPesanan).setValue(addData)
-//
-//            databaseCo?.addListenerForSingleValueEvent(object : ValueEventListener {
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    FirebaseDatabase.getInstance().getReference("keranjang").child("kosong")
-//                        .child(user?.idUser.toString() + " | $idKeranjang").setValue(dataSnapshot.value)
-//                    databaseCo?.removeValue()
-//                }
-//                override fun onCancelled(databaseError: DatabaseError) {}
-//            })
         }
     }
 

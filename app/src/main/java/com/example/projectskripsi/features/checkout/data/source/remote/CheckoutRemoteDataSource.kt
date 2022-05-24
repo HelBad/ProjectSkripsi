@@ -14,6 +14,9 @@ import com.google.firebase.database.ValueEventListener
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class CheckoutRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
@@ -79,15 +82,16 @@ class CheckoutRemoteDataSource {
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
-                                var keranjang: KeranjangResponse? = null
+                                val listKeranjang = hashMapOf<String?, KeranjangResponse>()
                                 for (snap in snapshot.children) {
-                                    keranjang =
+                                    val keranjang =
                                         Converter.toObject(snap, KeranjangResponse::class.java)
+                                    if (keranjang != null) {
+                                        listKeranjang[keranjang.id_keranjang] = keranjang
+                                    }
                                 }
-                                Log.d("checkout", keranjang?.id_keranjang.toString())
-                                Log.d("checkout", idKeranjang)
                                 firebase.getReference("keranjang").child("kosong")
-                                    .child("$idUser | $idKeranjang").setValue(keranjang)
+                                    .child("$idUser | $idKeranjang").setValue(listKeranjang)
                                     .addOnSuccessListener {
                                         firebase.getReference("keranjang")
                                             .child("ready").child(idUser)
@@ -131,29 +135,9 @@ class CheckoutRemoteDataSource {
                         for (snap in snapshot.children) {
                             val keranjang = Converter.toObject(snap, KeranjangResponse::class.java)
                             if (keranjang != null) {
-                                firebase.getReference("menu").orderByChild("id_menu")
-                                    .equalTo(keranjang.id_menu)
-                                    .addValueEventListener(object : ValueEventListener {
-                                        override fun onDataChange(p0: DataSnapshot) {
-                                            if (p0.exists()) {
-                                                for (snap2 in p0.children) {
-                                                    val menu = Converter.toObject(
-                                                        snap2,
-                                                        MenuResponse::class.java
-                                                    )
-                                                    keranjang.nama_menu = menu?.namaMenu
-                                                }
-                                            }
-                                        }
-
-                                        override fun onCancelled(p0: DatabaseError) {
-
-                                        }
-                                    })
                                 list.add(keranjang)
                             }
                         }
-
                         response.onNext(Response.Success(list))
                     } else {
                         response.onNext(Response.Empty)
@@ -163,6 +147,31 @@ class CheckoutRemoteDataSource {
                 override fun onCancelled(error: DatabaseError) {
                     response.onNext(Response.Error(error.message))
                     Log.e("CheckoutRemoteDataSource", error.message)
+                }
+            })
+
+        return response.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    fun getDetailMenu(id: String): Flowable<Response<MenuResponse?>> {
+        val response = PublishSubject.create<Response<MenuResponse?>>()
+
+        firebase.getReference("menu").orderByChild("id_menu").equalTo(id)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (snap in snapshot.children) {
+                            val menu = Converter.toObject(snap, MenuResponse::class.java)
+                            response.onNext(Response.Success(menu))
+                        }
+                    } else {
+                        response.onNext(Response.Empty)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    response.onNext(Response.Error(error.message))
+                    Log.e(this.javaClass.name, error.message)
                 }
             })
 

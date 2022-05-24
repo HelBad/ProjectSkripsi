@@ -6,17 +6,16 @@ import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.UseCase
 import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.features.checkout.domain.entities.Menu
 import com.example.projectskripsi.features.checkout.domain.entities.User
-import com.example.projectskripsi.features.checkout.domain.usecases.BuatPesananUsecase
-import com.example.projectskripsi.features.checkout.domain.usecases.GetDetailKeranjangUsecase
-import com.example.projectskripsi.features.checkout.domain.usecases.GetKeranjangUsecase
-import com.example.projectskripsi.features.checkout.domain.usecases.GetUserUsecase
+import com.example.projectskripsi.features.checkout.domain.usecases.*
 
 class CheckoutViewModel(
     private val getUserUsecase: GetUserUsecase,
     private val getDetailKeranjangUsecase: GetDetailKeranjangUsecase,
     private val getKeranjangUsecase: GetKeranjangUsecase,
     private val buatPesananUsecase: BuatPesananUsecase,
+    private val getDetailMenuUsecase: GetDetailMenuUsecase,
 ) : ViewModel() {
     fun getUser(): LiveData<Resource<User?>> {
         return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(UseCase.NoParams()))
@@ -64,6 +63,14 @@ class CheckoutViewModel(
                     status,
                     keterangan
                 )
+            )
+        )
+    }
+
+    fun getDetailMenu(id: String): LiveData<Resource<Menu?>> {
+        return LiveDataReactiveStreams.fromPublisher(
+            getDetailMenuUsecase.run(
+                GetDetailMenuUsecase.GetDetailMenuParams(id)
             )
         )
     }

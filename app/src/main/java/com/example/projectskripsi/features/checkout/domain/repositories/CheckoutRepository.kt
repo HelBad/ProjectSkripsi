@@ -2,6 +2,7 @@ package com.example.projectskripsi.features.checkout.domain.repositories
 
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.features.checkout.domain.entities.Menu
 import com.example.projectskripsi.features.checkout.domain.entities.User
 import io.reactivex.Flowable
 
@@ -24,4 +25,6 @@ interface CheckoutRepository {
     fun getDetailKeranjang(idUser: String): Flowable<Resource<Keranjang?>>
 
     fun getKeranjang(idUser: String): Flowable<Resource<ArrayList<Keranjang>>>
+
+    fun getDetailMenu(id: String): Flowable<Resource<Menu?>>
 }

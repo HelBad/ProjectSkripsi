@@ -6,6 +6,7 @@ import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.checkout.data.source.local.CheckoutLocalDataSource
 import com.example.projectskripsi.features.checkout.data.source.remote.CheckoutRemoteDataSource
 import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
+import com.example.projectskripsi.features.checkout.domain.entities.Menu
 import com.example.projectskripsi.features.checkout.domain.entities.User
 import com.example.projectskripsi.features.checkout.domain.repositories.CheckoutRepository
 import io.reactivex.BackpressureStrategy
@@ -151,6 +152,48 @@ class CheckoutRepositoryImpl constructor(
                     }
                     is Response.Empty -> {
                         result.onNext(Resource.Success(arrayListOf()))
+                    }
+                    is Response.Error -> {
+                        result.onNext(Resource.Error(it.errorMessage, null))
+                    }
+                }
+            }
+
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    @SuppressLint("CheckResult")
+    override fun getDetailMenu(id: String): Flowable<Resource<Menu?>> {
+        val result = PublishSubject.create<Resource<Menu?>>()
+        result.onNext(Resource.Loading())
+
+        remoteDataSource.getDetailMenu(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe {
+                when(it){
+                    is Response.Success -> {
+                        val res = it.data
+                        if (res != null) {
+                            val menu = Menu(
+                                idMenu = res.idMenu,
+                                namaMenu = res.namaMenu,
+                                deskripsi = res.deskripsi,
+                                lemak = res.lemak,
+                                protein = res.protein,
+                                kalori = res.kalori,
+                                karbohidrat = res.karbohidrat,
+                                harga = res.harga,
+                                gambar = res.gambar,
+                            )
+                            result.onNext(Resource.Success(menu))
+                        } else {
+                            result.onNext(Resource.Success(null))
+                        }
+                    }
+                    is Response.Empty -> {
+                        result.onNext(Resource.Success(null))
                     }
                     is Response.Error -> {
                         result.onNext(Resource.Error(it.errorMessage, null))

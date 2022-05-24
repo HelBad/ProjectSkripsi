@@ -1,6 +1,7 @@
 package com.example.projectskripsi.features.riwayat.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
+import com.example.projectskripsi.features.riwayat.domain.entities.Keranjang
 import com.example.projectskripsi.features.riwayat.domain.entities.Pesanan
 import com.example.projectskripsi.features.riwayat.domain.entities.User
 import com.example.projectskripsi.features.riwayat.presentation.adapter.RiwayatAdapter
@@ -121,20 +123,22 @@ class ActivityRiwayatUser : AppCompatActivity() {
 
     //List Keranjang
     private fun listKeranjang() {
+        val list = arrayListOf<Keranjang>()
+
         riwayatViewModel.getKeranjang(idKeranjang, idUser).observe(this@ActivityRiwayatUser) {
             if (it is Resource.Success && it.data != null) {
-                val list = it.data
-                list.forEach { keranjang ->
+                it.data.forEach { keranjang ->
                     keranjang.idMenu?.let { idMenu ->
                         riwayatViewModel.getMenu(idMenu).observe(this@ActivityRiwayatUser) { it1 ->
                             if (it1 is Resource.Success) {
                                 keranjang.namaMenu = it1.data?.namaMenu
+                                list.add(keranjang)
+                                val adapter = RiwayatAdapter(list)
+                                mRecyclerView.adapter = adapter
                             }
                         }
                     }
                 }
-                val adapter = RiwayatAdapter(list)
-                mRecyclerView.adapter = adapter
             }
         }
     }
