@@ -21,14 +21,13 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentBerandaUser : Fragment() {
     private val berandaViewModel: BerandaViewModel by viewModel()
-
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
     lateinit var keranjangBeranda: ImageView
     lateinit var spinnerBeranda: Spinner
     lateinit var penyakitBeranda: TextView
     var listPenyakit = arrayListOf<Penyakit>()
-    val rekomendasiPenyakit = arrayOf("Sehat", "Obesitas", "Diabetes", "Anemia")
+    val rekomendasiPenyakit = arrayOf("Sehat", "Diabetes", "Jantung", "Kelelahan", "Obesitas", "Sembelit")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_beranda, container, false)
@@ -64,22 +63,18 @@ class FragmentBerandaUser : Fragment() {
                 listPenyakit.addAll(res.data)
             }
         }
-
         berandaViewModel.getMenu().observe(viewLifecycleOwner) { res ->
             val adapter = res.data?.let {
                 BerandaUserAdapter(it, listPenyakit, rekomendasiPenyakit[0])
             }
-
             adapter?.onItemClick = { menu ->
                 val intent = Intent(context, ActivityMenuUser::class.java)
-                intent.putExtra("id_menu", menu.idMenu)
+                intent.putExtra("id_menu", menu.id_menu)
                 startActivity(intent)
             }
-
             mRecyclerView.adapter = adapter
         }
     }
-
 
     //Pilih Penyakit
     fun pilihPenyakit() {
@@ -92,13 +87,11 @@ class FragmentBerandaUser : Fragment() {
                     val adapter = res.data?.let {
                         BerandaUserAdapter(it, listPenyakit, rekomendasiPenyakit[position])
                     }
-
                     adapter?.onItemClick = { menu ->
                         val intent = Intent(context, ActivityMenuUser::class.java)
-                        intent.putExtra("id_menu", menu.idMenu)
+                        intent.putExtra("id_menu", menu.id_menu)
                         startActivity(intent)
                     }
-
                     mRecyclerView.adapter = adapter
                 }
             }

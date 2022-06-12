@@ -1,11 +1,10 @@
 package com.example.projectskripsi.features.riwayat.data.responses
 
-
 import com.google.gson.annotations.SerializedName
 
 data class UserResponse(
     @SerializedName("id_user")
-    var idUser: String?,
+    var id_user: String?,
     @SerializedName("nama")
     var nama: String?,
     @SerializedName("email")
@@ -13,7 +12,7 @@ data class UserResponse(
     @SerializedName("password")
     var password: String?,
     @SerializedName("tgl_lahir")
-    var tglLahir: String?,
+    var tgl_lahir: String?,
     @SerializedName("gender")
     var gender: String?,
     @SerializedName("alamat")

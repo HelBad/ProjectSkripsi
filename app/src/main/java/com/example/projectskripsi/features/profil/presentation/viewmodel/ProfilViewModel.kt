@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.profil.domain.entities.User
 import com.example.projectskripsi.features.profil.domain.usecases.GetUserUsecase
 import com.example.projectskripsi.features.profil.domain.usecases.SaveUserUsecase
@@ -16,7 +16,7 @@ class ProfilViewModel constructor(
     private val updateUserUsecase: UpdateUserUsecase,
 ) : ViewModel() {
     fun getUser(): LiveData<Resource<User?>> {
-        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(UseCase.NoParams()))
+        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(Usecase.NoParams()))
     }
 
     fun saveUser(

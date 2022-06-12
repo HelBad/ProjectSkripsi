@@ -49,44 +49,78 @@ class BerandaUserAdapter(
             val imgListmenu = mView.findViewById(R.id.imgListmenu) as ImageView
             val kategoriListmenu = mView.findViewById(R.id.kategoriListmenu) as TextView
 
-            namaListmenu.text = menu.namaMenu
+            namaListmenu.text = menu.nama_menu
             hargaListmenu.text = menu.harga?.toInt()?.let { Rupiah.format(it) }
             deskripsiListmenu.text = menu.deskripsi
             Picasso.get().load(menu.gambar).into(imgListmenu)
 
             for (list in listPenyakit) {
-                if(list.idMenu == menu.idMenu) {
+                if(list.id_menu == menu.id_menu) {
                     if(pilihKategori == "Sehat") {
-                        if(list.sehat?.toInt() in -2..3) {
+                        if(list.sehat!!.toDouble() <= 1.375) {
+                            kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
+                        } else if(list.sehat!!.toDouble() > 1.375 && list.sehat!!.toDouble() <= 3.125) {
+                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
+                        } else {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
-                        } else {
-                            kategoriListmenu.text = "Kategori : Kurang Baik"
-                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                        }
-                    } else if(pilihKategori == "Obesitas") {
-                        if(list.obesitas?.toInt() in -2..3) {
-                            kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
-                            kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
-                        } else {
-                            kategoriListmenu.text = "Kategori : Kurang Baik"
-                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                         }
                     } else if(pilihKategori == "Diabetes") {
-                        if(list.diabetes?.toInt() in -2..3) {
+                        if (list.diabetes!!.toDouble() <= 1.375) {
+                            kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
+                        } else if (list.diabetes!!.toDouble() > 1.375 && list.diabetes!!.toDouble() <= 3.125) {
+                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
+                        } else {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
-                        } else {
-                            kategoriListmenu.text = "Kategori : Kurang Baik"
-                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
                         }
-                    } else if(pilihKategori == "Anemia") {
-                        if(list.anemia?.toInt() in -2..3) {
+                    } else if(pilihKategori == "Jantung") {
+                        if (list.jantung!!.toDouble() <= 1.375) {
+                            kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
+                        } else if (list.jantung!!.toDouble() > 1.375 && list.jantung!!.toDouble() <= 3.125) {
+                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
+                        } else {
                             kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
-                        } else {
-                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                        }
+                    } else if(pilihKategori == "Kelelahan") {
+                        if (list.kelelahan!!.toDouble() <= 1.375) {
+                            kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                             kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
+                        } else if (list.kelelahan!!.toDouble() > 1.375 && list.kelelahan!!.toDouble() <= 3.125) {
+                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
+                        } else {
+                            kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
+                        }
+                    } else if(pilihKategori == "Obesitas") {
+                        if (list.obesitas!!.toDouble() <= 1.375) {
+                            kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
+                        } else if (list.obesitas!!.toDouble() > 1.375 && list.obesitas!!.toDouble() <= 3.125) {
+                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
+                        } else {
+                            kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
+                        }
+                    } else if(pilihKategori == "Sembelit") {
+                        if (list.sembelit!!.toDouble() <= 1.375) {
+                            kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
+                        } else if (list.sembelit!!.toDouble() > 1.375 && list.sembelit!!.toDouble() <= 3.125) {
+                            kategoriListmenu.text = "Kategori : Kurang Baik"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
+                        } else {
+                            kategoriListmenu.text = "Kategori : Baik Dikonsumsi"
+                            kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                         }
                     }
                 }

@@ -40,7 +40,6 @@ class RiwayatRemoteDataSource {
                     Log.e("RiwayatRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -66,7 +65,6 @@ class RiwayatRemoteDataSource {
                     Log.e("RiwayatRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -96,7 +94,6 @@ class RiwayatRemoteDataSource {
                     Log.e("RiwayatRemoteDataSource", error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -124,7 +121,6 @@ class RiwayatRemoteDataSource {
                     Log.e("RiwayatRemoteDataSource", error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -139,7 +135,6 @@ class RiwayatRemoteDataSource {
                             val menu = Converter.toObject(snap, MenuResponse::class.java)
                             response.onNext(Response.Success(menu))
                         }
-
                     } else {
                         response.onNext(Response.Empty)
                     }
@@ -150,7 +145,6 @@ class RiwayatRemoteDataSource {
                     Log.e("RiwayatRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -199,7 +193,6 @@ class RiwayatRemoteDataSource {
             }.addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

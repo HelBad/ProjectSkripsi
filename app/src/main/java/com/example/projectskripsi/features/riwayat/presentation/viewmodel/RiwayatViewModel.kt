@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
-import com.example.projectskripsi.features.checkout.domain.usecases.BuatPesananUsecase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.riwayat.domain.entities.Keranjang
 import com.example.projectskripsi.features.riwayat.domain.entities.Menu
 import com.example.projectskripsi.features.riwayat.domain.entities.Pesanan
@@ -22,7 +21,7 @@ class RiwayatViewModel(
     private val updatePesananUsecase: UpdatePesananUsecase,
 ) : ViewModel() {
     fun getUser(): LiveData<Resource<User?>> {
-        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(UseCase.NoParams()))
+        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(Usecase.NoParams()))
     }
 
     fun getUser(id: String): LiveData<Resource<User?>> {

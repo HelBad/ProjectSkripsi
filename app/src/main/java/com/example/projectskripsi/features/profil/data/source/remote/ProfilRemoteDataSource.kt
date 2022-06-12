@@ -44,7 +44,6 @@ class ProfilRemoteDataSource {
             .addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

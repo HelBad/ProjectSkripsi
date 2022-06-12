@@ -52,5 +52,4 @@ class ActivityLoading : AppCompatActivity() {
         }
         backgrond.start()
     }
-
 }

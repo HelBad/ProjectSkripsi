@@ -5,7 +5,6 @@ import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.checkout.data.responses.KeranjangResponse
 import com.example.projectskripsi.features.checkout.data.responses.MenuResponse
 import com.example.projectskripsi.features.checkout.data.responses.PesananResponse
-import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.utils.Converter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,9 +13,6 @@ import com.google.firebase.database.ValueEventListener
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 
 class CheckoutRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
@@ -42,7 +38,6 @@ class CheckoutRemoteDataSource {
                     Log.e("CheckoutRemoteDataSource", error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -120,7 +115,6 @@ class CheckoutRemoteDataSource {
             }.addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -149,7 +143,6 @@ class CheckoutRemoteDataSource {
                     Log.e("CheckoutRemoteDataSource", error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -174,7 +167,6 @@ class CheckoutRemoteDataSource {
                     Log.e(this.javaClass.name, error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

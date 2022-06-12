@@ -30,11 +30,11 @@ class ProfilRepositoryImpl constructor(
             .take(1)
             .subscribe {
                 val user = User(
-                    idUser = it?.id_user,
+                    id_user = it?.id_user,
                     nama = it?.nama,
                     email = it?.email,
                     password = it?.password,
-                    tglLahir = it?.tgl_lahir,
+                    tgl_lahir = it?.tgl_lahir,
                     gender = it?.gender,
                     alamat = it?.alamat,
                     telp = it?.telp,
@@ -72,7 +72,6 @@ class ProfilRepositoryImpl constructor(
                     result.onNext(Resource.Error(it))
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -113,8 +112,6 @@ class ProfilRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
-
 }

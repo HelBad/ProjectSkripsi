@@ -69,7 +69,6 @@ class PesananRemoteDataSource {
                 Log.e("PesananRemoteDataSource", p0.message)
             }
         })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -98,9 +97,7 @@ class PesananRemoteDataSource {
                     response.onNext(Response.Error(error.message))
                     Log.e("PesananRemoteDataSource", error.message)
                 }
-            }
-            )
-
+            })
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -128,7 +125,6 @@ class PesananRemoteDataSource {
                     Log.e("PesananRemoteDataSource", error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

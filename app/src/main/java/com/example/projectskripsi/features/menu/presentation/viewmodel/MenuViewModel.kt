@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.menu.domain.entities.Keranjang
 import com.example.projectskripsi.features.menu.domain.entities.Menu
 import com.example.projectskripsi.features.menu.domain.entities.User
@@ -85,7 +85,7 @@ class MenuViewModel (
 
     fun getUser(): LiveData<Resource<User?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            getUserUsecase.run(UseCase.NoParams())
+            getUserUsecase.run(Usecase.NoParams())
         )
     }
 }

@@ -36,7 +36,6 @@ import java.util.*
 
 class ActivityCheckout : AppCompatActivity() {
     private val checkoutViewModel: CheckoutViewModel by viewModel()
-
     lateinit var alertDialog: AlertDialog.Builder
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
@@ -56,7 +55,6 @@ class ActivityCheckout : AppCompatActivity() {
     var idKeranjang = ""
     var total = 0
     var ongkir = 0
-
     var user: User? = null
 
     @SuppressLint("MissingPermission")
@@ -115,11 +113,11 @@ class ActivityCheckout : AppCompatActivity() {
     }
 
     private fun loadKeranjangDetail() {
-        user?.idUser?.let { idUser ->
-            checkoutViewModel.getDetailKeranjang(idUser).observe(this@ActivityCheckout) {
+        user?.id_user?.let { id_user ->
+            checkoutViewModel.getDetailKeranjang(id_user).observe(this@ActivityCheckout) {
                 if (it is Resource.Success && it.data != null) {
                     val keranjang = it.data
-                    idKeranjang = keranjang.idKeranjang.toString()
+                    idKeranjang = keranjang.id_keranjang.toString()
                     total += keranjang.total?.toInt()!!
                     loadingCo.visibility = View.GONE
                     idLayoutCo.visibility = View.VISIBLE
@@ -233,14 +231,14 @@ class ActivityCheckout : AppCompatActivity() {
     private fun listKeranjang() {
         val listKeranjang = arrayListOf<Keranjang>()
 
-        user?.idUser?.let { idUser ->
-            checkoutViewModel.getKeranjang(idUser).observe(this@ActivityCheckout) {
+        user?.id_user?.let { id_user ->
+            checkoutViewModel.getKeranjang(id_user).observe(this@ActivityCheckout) {
                 if (it is Resource.Success && it.data != null) {
                     it.data.forEach { keranjang ->
-                        keranjang.idMenu?.let { idMenu ->
+                        keranjang.id_menu?.let { idMenu ->
                             checkoutViewModel.getDetailMenu(idMenu).observe(this@ActivityCheckout) { it1 ->
                                 if (it1 is Resource.Success && it1.data != null) {
-                                    keranjang.namaMenu = it1.data.namaMenu
+                                    keranjang.nama_menu = it1.data.nama_menu
                                     listKeranjang.add(keranjang)
                                     val adapter = CheckoutAdapter(listKeranjang)
                                     mRecyclerView.adapter = adapter
@@ -269,7 +267,7 @@ class ActivityCheckout : AppCompatActivity() {
             val currentTime = Tanggal.format(Date(), "dd MMM YYYY, hh:mm aa")
 
             checkoutViewModel.buatPesanan(
-                user?.idUser.toString(),
+                user?.id_user.toString(),
                 idKeranjang, keteranganCo.text.toString(), currentTime, lokasiCo.text.toString(),
                 total.toString(), ongkir.toString(), (total + ongkir).toString(), "diproses", ""
             ).observe(this@ActivityCheckout) {
@@ -281,7 +279,7 @@ class ActivityCheckout : AppCompatActivity() {
     //Validasi Pesanan
     override fun onStart() {
         super.onStart()
-        user?.idUser?.let { idUser ->
+        user?.id_user?.let { idUser ->
             checkoutViewModel.getKeranjang(idUser).observe(this@ActivityCheckout) {
                 if (it is Resource.Success && it.data != null) {
                     val list = it.data

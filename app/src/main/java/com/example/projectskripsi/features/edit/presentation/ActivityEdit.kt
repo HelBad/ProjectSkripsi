@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -13,17 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.projectskripsi.R
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.features.beranda.presentation.ActivityUtamaAdmin
-import com.example.projectskripsi.features.edit.domain.entities.Menu
-import com.example.projectskripsi.features.edit.domain.entities.Penyakit
 import com.example.projectskripsi.features.edit.presentation.viewmodel.EditViewModel
-import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import org.koin.android.viewmodel.ext.android.viewModel
+import kotlin.math.absoluteValue
 
 class ActivityEdit : AppCompatActivity() {
     private val editViewModel: EditViewModel by viewModel()
-
     private lateinit var namaMenu: EditText
     private lateinit var deskripsiMenu: EditText
     private lateinit var hargaMenu: EditText
@@ -35,14 +31,10 @@ class ActivityEdit : AppCompatActivity() {
     private lateinit var btnSimpan: Button
 
     private lateinit var alertDialog: AlertDialog.Builder
-//    private lateinit var databaseReference: DatabaseReference
-//    private lateinit var storageReference: StorageReference
-//    private lateinit var databaseAi: DatabaseReference
     private lateinit var uri: Uri
     private var url: Uri? = null
     private var statusMenu = ""
-    private var idMenu = ""
-    private var idPenyakit = ""
+    private var id_menu = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +51,6 @@ class ActivityEdit : AppCompatActivity() {
         btnSimpan = findViewById(R.id.btnSimpan)
 
         alertDialog = AlertDialog.Builder(this)
-//        databaseReference = FirebaseDatabase.getInstance().getReference("menu")
-//        storageReference = FirebaseStorage.getInstance().getReference("menu")
-//        databaseAi = FirebaseDatabase.getInstance().getReference("penyakit")
         loadMenu()
 
         gambarMenu.setOnClickListener {
@@ -91,30 +80,17 @@ class ActivityEdit : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             if (requestCode == 0) {
-//                idMenu = if (statusMenu == "ada") {
-//                    intent.getStringExtra("id_menu").toString()
-//                } else {
-//                    databaseReference.push().key.toString()
-//                }
                 uri = data!!.data!!
-                editViewModel.uploadGambar(idMenu, uri).observe(this@ActivityEdit) {
+                id_menu = intent.getStringExtra("id_menu").toString()
+                editViewModel.uploadGambar(id_menu, uri).observe(this@ActivityEdit) {
                     if (it is Resource.Success && it.data != null) {
                         url = it.data
                         gambarMenu.text = url.toString()
+                        Log.d(url.toString(), "karbo")
                     } else if (it is Resource.Error) {
                         Toast.makeText(this@ActivityEdit, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
-//                val mStorage = storageReference.child(idMenu)
-//                try {
-//                    mStorage.putFile(uri).addOnFailureListener {}.addOnSuccessListener {
-//                        mStorage.downloadUrl.addOnCompleteListener { taskSnapshot ->
-//                            url = taskSnapshot.result
-//                            gambarMenu.text = url.toString()
-//                        }
-//                    }
-//                } catch (ex: Exception) {
-//                }
             }
         }
     }
@@ -125,9 +101,9 @@ class ActivityEdit : AppCompatActivity() {
             .observe(this@ActivityEdit) {
                 if (it is Resource.Success && it.data != null) {
                     val menu = it.data
-                    idMenu = menu.idMenu.toString()
+                    id_menu = menu.id_menu.toString()
                     namaMenu.text =
-                        Editable.Factory.getInstance().newEditable(menu.namaMenu)
+                        Editable.Factory.getInstance().newEditable(menu.nama_menu)
                     deskripsiMenu.text =
                         Editable.Factory.getInstance().newEditable(menu.deskripsi)
                     lemakMenu.text =
@@ -186,9 +162,9 @@ class ActivityEdit : AppCompatActivity() {
     //Simpan Data Menu
     private fun tambahData() {
         if (statusMenu == "ada") {
-            idMenu = intent.getStringExtra("id_menu").toString()
+            id_menu = intent.getStringExtra("id_menu").toString()
             editViewModel.updateMenu(
-                idMenu,
+                id_menu,
                 namaMenu.text.toString(),
                 deskripsiMenu.text.toString(),
                 lemakMenu.text.toString(),
@@ -198,17 +174,6 @@ class ActivityEdit : AppCompatActivity() {
                 hargaMenu.text.toString(),
                 gambarMenu.text.toString()
             )
-//            databaseReference.child(idMenu).child("id_menu").setValue(idMenu)
-//            databaseReference.child(idMenu).child("nama_menu").setValue(namaMenu.text.toString())
-//            databaseReference.child(idMenu).child("deskripsi")
-//                .setValue(deskripsiMenu.text.toString())
-//            databaseReference.child(idMenu).child("lemak").setValue(lemakMenu.text.toString())
-//            databaseReference.child(idMenu).child("protein").setValue(proteinMenu.text.toString())
-//            databaseReference.child(idMenu).child("kalori").setValue(kaloriMenu.text.toString())
-//            databaseReference.child(idMenu).child("karbohidrat")
-//                .setValue(karbohidratMenu.text.toString())
-//            databaseReference.child(idMenu).child("harga").setValue(hargaMenu.text.toString())
-//            databaseReference.child(idMenu).child("gambar").setValue(gambarMenu.text.toString())
         } else {
             editViewModel.buatMenu(
                 namaMenu.text.toString(),
@@ -221,99 +186,169 @@ class ActivityEdit : AppCompatActivity() {
                 gambarMenu.text.toString()
             ).observe(this@ActivityEdit) {
                 if (it is Resource.Success && it.data != null) {
-                    idMenu = it.data
+                    id_menu = it.data
                 }
             }
-//            idMenu = databaseReference.push().key.toString()
-//            val addData = Menu(
-//                idMenu,
-//                namaMenu.text.toString(),
-//                deskripsiMenu.text.toString(),
-//                lemakMenu.text.toString(),
-//                proteinMenu.text.toString(),
-//                kaloriMenu.text.toString(),
-//                karbohidratMenu.text.toString(),
-//                hargaMenu.text.toString(),
-//                gambarMenu.text.toString()
-//            )
-//            databaseReference.child(idMenu).setValue(addData)
         }
     }
 
     //AI Rekomendasi Menu
     private fun rekomendasi() {
-        val jumlahData = 4
-        var lemak = 0
-        var protein = 0
-        var kalori = 0
-        var karbohidrat = 0
+        val jumlahData = 8
+        val lemakSehat = 1
+        val proteinSehat = 1
+        val kaloriSehat = 1
+        val karbohidratSehat = 1
+        var lemakK1 = 0
+        var proteinK1 = 0
+        var kaloriK1 = 0
+        var karbohidratK1 = 0
+        var lemakK2 = 0
+        var proteinK2 = 0
+        var kaloriK2 = 0
+        var karbohidratK2 = 0
+        var lemakK3 = 0
+        var proteinK3 = 0
+        var kaloriK3 = 0
+        var karbohidratK3 = 0
+        var lemakK4 = 0
+        var proteinK4 = 0
+        var kaloriK4 = 0
+        var karbohidratK4 = 0
+        var lemakK5 = 0
+        var proteinK5 = 0
+        var kaloriK5 = 0
+        var karbohidratK5 = 0
 
-        val lemakSehat = 0
-        val proteinSehat = 0
-        val kaloriSehat = 0
-        val karbohidratSehat = 0
-        val lemakPenyakit1 = 1
-        val proteinPenyakit1 = 1
-        val kaloriPenyakit1 = 1
-        val karbohidratPenyakit1 = 1
-        val lemakPenyakit2 = -1
-        val proteinPenyakit2 = -1
-        val kaloriPenyakit2 = -1
-        val karbohidratPenyakit2 = -1
-
+        //Kandungan Lemak
         when {
-            lemakMenu.text.toString().toInt() < 11 -> {
-                lemak = -1
+            lemakMenu.text.toString().toDouble() < 10.0 -> {
+                lemakK1 = 1
+                lemakK2 = 1
+                lemakK3 = 0
+                lemakK4 = 1
+                lemakK5 = 1
             }
-            lemakMenu.text.toString().toInt() in 11..22 -> {
-                lemak = 0
+            lemakMenu.text.toString().toDouble() in 10.0..25.0 -> {
+                lemakK1 = 1
+                lemakK2 = 1
+                lemakK3 = 1
+                lemakK4 = 1
+                lemakK5 = 1
             }
-            lemakMenu.text.toString().toInt() > 22 -> {
-                lemak = 1
-            }
-        }
-        when {
-            proteinMenu.text.toString().toInt() < 7 -> {
-                protein = -1
-            }
-            proteinMenu.text.toString().toInt() in 7..20 -> {
-                protein = 0
-            }
-            proteinMenu.text.toString().toInt() > 20 -> {
-                protein = 1
-            }
-        }
-        when {
-            kaloriMenu.text.toString().toInt() < 350 -> {
-                kalori = -1
-            }
-            kaloriMenu.text.toString().toInt() in 350..650 -> {
-                kalori = 0
-            }
-            kaloriMenu.text.toString().toInt() > 650 -> {
-                kalori = 1
-            }
-        }
-        when {
-            karbohidratMenu.text.toString().toInt() < 35 -> {
-                karbohidrat = -1
-            }
-            karbohidratMenu.text.toString().toInt() in 35..65 -> {
-                karbohidrat = 0
-            }
-            karbohidratMenu.text.toString().toInt() > 65 -> {
-                karbohidrat = 1
+            lemakMenu.text.toString().toDouble() > 25.0 -> {
+                lemakK1 = 1
+                lemakK2 = 0
+                lemakK3 = 1
+                lemakK4 = 0
+                lemakK5 = 0
             }
         }
 
-        val sehat = (jumlahData * ((lemakSehat - lemak) + (proteinSehat - protein)
-                + (kaloriSehat - kalori) + (karbohidratSehat - karbohidrat)) / jumlahData)
-        val diabetes = (jumlahData * ((lemakPenyakit1 - lemak) + (proteinPenyakit1 - protein)
-                + (kaloriPenyakit1 - kalori) + (karbohidratPenyakit1 - karbohidrat)) / jumlahData)
-        val obesitas = (jumlahData * ((lemakPenyakit1 - lemak) + (proteinPenyakit1 - protein)
-                + (kaloriPenyakit1 - kalori) + (karbohidratPenyakit1 - karbohidrat)) / jumlahData)
-        val anemia = (jumlahData * ((lemakPenyakit2 - lemak) + (proteinPenyakit2 - protein)
-                + (kaloriPenyakit2 - kalori) + (karbohidratPenyakit2 - karbohidrat)) / jumlahData)
+        //Kandungan Protein
+        when {
+            proteinMenu.text.toString().toDouble() < 8.8 -> {
+                proteinK1 = 1
+                proteinK2 = 0
+                proteinK3 = 0
+                proteinK4 = 1
+                proteinK5 = 1
+            }
+            proteinMenu.text.toString().toDouble() in 8.8..22.0 -> {
+                proteinK1 = 1
+                proteinK2 = 1
+                proteinK3 = 1
+                proteinK4 = 1
+                proteinK5 = 1
+            }
+            proteinMenu.text.toString().toDouble() > 22.0 -> {
+                proteinK1 = 0
+                proteinK2 = 1
+                proteinK3 = 1
+                proteinK4 = 0
+                proteinK5 = 0
+            }
+        }
+
+        //Kandungan Kalori
+        when {
+            kaloriMenu.text.toString().toDouble() < 300.0 -> {
+                kaloriK1 = 0
+                kaloriK2 = 0
+                kaloriK3 = 1
+                kaloriK4 = 0
+                kaloriK5 = 0
+            }
+            kaloriMenu.text.toString().toDouble() in 300.0..750.0 -> {
+                kaloriK1 = 1
+                kaloriK2 = 1
+                kaloriK3 = 1
+                kaloriK4 = 1
+                kaloriK5 = 1
+            }
+            kaloriMenu.text.toString().toDouble() > 750.0 -> {
+                kaloriK1 = 0
+                kaloriK2 = 0
+                kaloriK3 = 1
+                kaloriK4 = 0
+                kaloriK5 = 0
+            }
+        }
+
+        //Kandungan Karbohidrat
+        when {
+            karbohidratMenu.text.toString().toDouble() < 30.0 -> {
+                karbohidratK1 = 0
+                karbohidratK2 = 0
+                karbohidratK3 = 1
+                karbohidratK4 = 0
+                karbohidratK5 = 0
+            }
+            karbohidratMenu.text.toString().toDouble() in 30.0..75.0 -> {
+                karbohidratK1 = 1
+                karbohidratK2 = 1
+                karbohidratK3 = 1
+                karbohidratK4 = 1
+                karbohidratK5 = 1
+            }
+            karbohidratMenu.text.toString().toDouble() > 75.0 -> {
+                karbohidratK1 = 0
+                karbohidratK2 = 0
+                karbohidratK3 = 1
+                karbohidratK4 = 0
+                karbohidratK5 = 0
+            }
+        }
+
+        //Slope One Algorithm untuk Sehat
+        val devSehat = (((lemakSehat - lemakSehat) + (proteinSehat - proteinSehat) + (kaloriSehat - kaloriSehat)
+                + (karbohidratSehat - karbohidratSehat)).absoluteValue).toDouble() / jumlahData.toDouble()
+        val pSehat = devSehat + (lemakSehat + proteinSehat + kaloriSehat + karbohidratSehat).toDouble()
+
+        //Slope One Algorithm untuk Diabetes
+        val devK1 = (((lemakK1 - lemakSehat) + (proteinK1 - proteinSehat) + (kaloriK1 - kaloriSehat)
+                + (karbohidratK1 - karbohidratSehat)).absoluteValue).toDouble() / jumlahData.toDouble()
+        val pK1 = devK1 + (lemakK1 + proteinK1 + kaloriK1 + karbohidratK1).toDouble()
+
+        //Slope One Algorithm untuk Jantung
+        val devK2 = (((lemakK2 - lemakSehat) + (proteinK2 - proteinSehat) + (kaloriK2 - kaloriSehat)
+                + (karbohidratK2 - karbohidratSehat)).absoluteValue).toDouble() / jumlahData.toDouble()
+        val pK2 = devK2 + (lemakK2 + proteinK2 + kaloriK2 + karbohidratK2).toDouble()
+
+        //Slope One Algorithm untuk Kelelahan
+        val devK3 = (((lemakK3 - lemakSehat) + (proteinK3 - proteinSehat) + (kaloriK3 - kaloriSehat)
+                + (karbohidratK3 - karbohidratSehat)).absoluteValue).toDouble() / jumlahData.toDouble()
+        val pK3 = devK3 + (lemakK3 + proteinK3 + kaloriK3 + karbohidratK3).toDouble()
+
+        //Slope One Algorithm untuk Obesitas
+        val devK4 = (((lemakK4 - lemakSehat) + (proteinK4 - proteinSehat) + (kaloriK4 - kaloriSehat)
+                + (karbohidratK4 - karbohidratSehat)).absoluteValue).toDouble() / jumlahData.toDouble()
+        val pK4 = devK4 + (lemakK4 + proteinK4 + kaloriK4 + karbohidratK4).toDouble()
+
+        //Slope One Algorithm untuk Sembelit
+        val devK5 = (((lemakK5 - lemakSehat) + (proteinK5 - proteinSehat) + (kaloriK5 - kaloriSehat)
+                + (karbohidratK5 - karbohidratSehat)).absoluteValue).toDouble() / jumlahData.toDouble()
+        val pK5 = devK5 + (lemakK5 + proteinK5 + kaloriK5 + karbohidratK5).toDouble()
 
         if (statusMenu == "ada") {
             editViewModel.getDetailPenyakit(
@@ -321,55 +356,19 @@ class ActivityEdit : AppCompatActivity() {
             ).observe(this@ActivityEdit) {
                 if (it is Resource.Success && it.data != null) {
                     val penyakit = it.data
-                    penyakit.idPenyakit?.let { idPenyakit ->
+                    penyakit.id_penyakit?.let { idPenyakit ->
                         editViewModel.updatePenyakit(
-                            idPenyakit,
-                            idMenu,
-                            sehat.toString(),
-                            diabetes.toString(),
-                            obesitas.toString(),
-                            anemia.toString()
+                            idPenyakit, id_menu, pSehat.toString(), pK1.toString(), pK2.toString(),
+                            pK3.toString(), pK4.toString(), pK5.toString()
                         )
                     }
                 }
             }
-//            databaseAi.orderByChild("id_menu").equalTo(intent.getStringExtra("id_menu"))
-//                .addListenerForSingleValueEvent(object : ValueEventListener {
-//                    override fun onDataChange(datasnapshot: DataSnapshot) {
-//                        for (snapshot1 in datasnapshot.children) {
-//                            val allocation = snapshot1.getValue(Penyakit::class.java)
-//                            idPenyakit = allocation?.idPenyakit.toString()
-//                            databaseAi.child(idPenyakit).child("id_penyakit").setValue(idPenyakit)
-//                            databaseAi.child(idPenyakit).child("id_menu").setValue(idMenu)
-//                            databaseAi.child(idPenyakit).child("sehat").setValue(sehat.toString())
-//                            databaseAi.child(idPenyakit).child("diabetes")
-//                                .setValue(diabetes.toString())
-//                            databaseAi.child(idPenyakit).child("obesitas")
-//                                .setValue(obesitas.toString())
-//                            databaseAi.child(idPenyakit).child("anemia").setValue(anemia.toString())
-//                        }
-//                    }
-//
-//                    override fun onCancelled(databaseError: DatabaseError) {}
-//                })
         } else {
             editViewModel.buatPenyakit(
-                idMenu,
-                sehat.toString(),
-                diabetes.toString(),
-                obesitas.toString(),
-                anemia.toString()
+                id_menu, pSehat.toString(), pK1.toString(), pK2.toString(), pK3.toString(),
+                pK4.toString(), pK5.toString()
             )
-//            idPenyakit = databaseAi.push().key.toString()
-//            val addData = Penyakit(
-//                idPenyakit,
-//                idMenu,
-//                sehat.toString(),
-//                diabetes.toString(),
-//                obesitas.toString(),
-//                anemia.toString()
-//            )
-//            databaseAi.child(idPenyakit).setValue(addData)
         }
     }
 }

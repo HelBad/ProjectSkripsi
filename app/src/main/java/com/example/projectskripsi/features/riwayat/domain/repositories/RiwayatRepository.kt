@@ -1,7 +1,6 @@
 package com.example.projectskripsi.features.riwayat.domain.repositories
 
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.riwayat.domain.entities.User
 import com.example.projectskripsi.features.riwayat.domain.entities.Keranjang
 import com.example.projectskripsi.features.riwayat.domain.entities.Menu

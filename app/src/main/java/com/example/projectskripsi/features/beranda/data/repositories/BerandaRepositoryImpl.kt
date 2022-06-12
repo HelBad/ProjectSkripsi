@@ -32,8 +32,8 @@ class BerandaRepositoryImpl constructor(
                         val list = arrayListOf<Menu>()
                         it.data.map { res ->
                             val menu = Menu(
-                                idMenu = res.idMenu,
-                                namaMenu = res.namaMenu,
+                                id_menu = res.id_menu,
+                                nama_menu = res.nama_menu,
                                 deskripsi = res.deskripsi,
                                 lemak = res.lemak,
                                 protein = res.protein,
@@ -54,7 +54,6 @@ class BerandaRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -73,16 +72,17 @@ class BerandaRepositoryImpl constructor(
                         val list = arrayListOf<Penyakit>()
                         it.data.map { res ->
                             val penyakit = Penyakit(
-                                idPenyakit = res.idPenyakit,
-                                idMenu = res.idMenu,
+                                id_penyakit = res.id_penyakit,
+                                id_menu = res.id_menu,
                                 sehat = res.sehat,
                                 diabetes = res.diabetes,
+                                jantung = res.jantung,
+                                kelelahan = res.kelelahan,
                                 obesitas = res.obesitas,
-                                anemia = res.anemia,
+                                sembelit = res.sembelit
                             )
                             list.add(penyakit)
                         }
-
                         result.onNext(Resource.Success(list))
                     }
                     is Response.Empty -> {
@@ -93,7 +93,6 @@ class BerandaRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

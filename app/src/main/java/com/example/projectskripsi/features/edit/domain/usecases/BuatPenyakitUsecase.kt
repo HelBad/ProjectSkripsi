@@ -1,21 +1,24 @@
 package com.example.projectskripsi.features.edit.domain.usecases
 
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.edit.domain.repositories.EditRepository
 import io.reactivex.Flowable
 
 class BuatPenyakitUsecase(private val repository: EditRepository) :
-    UseCase<Flowable<Resource<String?>>, BuatPenyakitUsecase.BuatPenyakitParams>() {
+    Usecase<Flowable<Resource<String?>>, BuatPenyakitUsecase.BuatPenyakitParams>() {
     override fun run(params: BuatPenyakitParams) = repository.buatPenyakit(
-        params.idMenu, params.sehat, params.diabetes, params.obesitas, params.anemia
+        params.id_menu, params.sehat, params.diabetes, params.jantung, params.kelelahan,
+        params.obesitas, params.sembelit
     )
 
     data class BuatPenyakitParams(
-        val idMenu: String,
+        val id_menu: String,
         val sehat: String,
         val diabetes: String,
+        val jantung: String,
+        val kelelahan: String,
         val obesitas: String,
-        val anemia: String,
+        val sembelit: String
     )
 }

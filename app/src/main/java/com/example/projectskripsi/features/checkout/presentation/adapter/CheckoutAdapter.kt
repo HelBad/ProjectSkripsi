@@ -40,7 +40,7 @@ class CheckoutAdapter(
             val hargaCheckout = mView.findViewById(R.id.hargaCheckout) as TextView
             val jumlahCheckout = mView.findViewById(R.id.jumlahCheckout) as TextView
 
-            namaCheckout.text = keranjang.namaMenu
+            namaCheckout.text = keranjang.nama_menu
             hargaCheckout.text = keranjang.total?.toInt()?.let { Rupiah.format(it) }
             jumlahCheckout.text = keranjang.jumlah
         }

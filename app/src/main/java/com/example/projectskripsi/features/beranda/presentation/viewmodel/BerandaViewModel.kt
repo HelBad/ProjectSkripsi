@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.beranda.domain.entities.Menu
 import com.example.projectskripsi.features.beranda.domain.entities.Penyakit
 import com.example.projectskripsi.features.beranda.domain.usecases.GetMenuUsecase
@@ -16,13 +16,13 @@ class BerandaViewModel constructor(
 ) : ViewModel() {
     fun getMenu() : LiveData<Resource<ArrayList<Menu>>> {
         return LiveDataReactiveStreams.fromPublisher(
-            getMenuUsecase.run(UseCase.NoParams())
+            getMenuUsecase.run(Usecase.NoParams())
         )
     }
 
     fun getPenyakit() : LiveData<Resource<ArrayList<Penyakit>>> {
         return LiveDataReactiveStreams.fromPublisher(
-            getPenyakitUsecase.run(UseCase.NoParams())
+            getPenyakitUsecase.run(Usecase.NoParams())
         )
     }
 }

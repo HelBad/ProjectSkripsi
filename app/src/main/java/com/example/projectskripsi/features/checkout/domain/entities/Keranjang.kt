@@ -1,10 +1,10 @@
 package com.example.projectskripsi.features.checkout.domain.entities
 
 data class Keranjang (
-    var idKeranjang: String? = null,
-    var idUser: String? = null,
-    var idMenu: String? = null,
+    var id_keranjang: String? = null,
+    var id_user: String? = null,
+    var id_menu: String? = null,
     var jumlah: String? = null,
     var total: String? = null,
-    var namaMenu: String? = null,
+    var nama_menu: String? = null
 )

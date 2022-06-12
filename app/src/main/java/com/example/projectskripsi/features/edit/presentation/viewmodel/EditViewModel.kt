@@ -24,15 +24,15 @@ class EditViewModel(
         )
     }
 
-    fun getDetailPenyakit(idMenu: String): LiveData<Resource<Penyakit?>> {
+    fun getDetailPenyakit(id_menu: String): LiveData<Resource<Penyakit?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            getDetailPenyakitUsecase.run(GetDetailPenyakitUsecase.GetDetailPenyakitParams(idMenu))
+            getDetailPenyakitUsecase.run(GetDetailPenyakitUsecase.GetDetailPenyakitParams(id_menu))
         )
     }
 
-    fun uploadGambar(idMenu: String, uri: Uri): LiveData<Resource<Uri?>> {
+    fun uploadGambar(id_menu: String, uri: Uri): LiveData<Resource<Uri?>> {
         return LiveDataReactiveStreams.fromPublisher(
-            uploadGambarUsecase.run(UploadGambarUsecase.UploadGambarParams(idMenu, uri))
+            uploadGambarUsecase.run(UploadGambarUsecase.UploadGambarParams(id_menu, uri))
         )
     }
 
@@ -91,16 +91,18 @@ class EditViewModel(
     }
 
     fun buatPenyakit(
-        idMenu: String,
+        id_menu: String,
         sehat: String,
         diabetes: String,
+        jantung: String,
+        kelelahan: String,
         obesitas: String,
-        anemia: String,
+        sembelit: String
     ): LiveData<Resource<String?>> {
         return LiveDataReactiveStreams.fromPublisher(
             buatPenyakitUsecase.run(
                 BuatPenyakitUsecase.BuatPenyakitParams(
-                    idMenu, sehat, diabetes, obesitas, anemia
+                    id_menu, sehat, diabetes, jantung, kelelahan, obesitas, sembelit
                 )
             )
         )
@@ -108,15 +110,18 @@ class EditViewModel(
 
     fun updatePenyakit(
         id: String,
-        idMenu: String,
+        id_menu: String,
         sehat: String,
         diabetes: String,
+        jantung: String,
+        kelelahan: String,
         obesitas: String,
-        anemia: String,
+        sembelit: String
     ): LiveData<Resource<String?>> {
         return LiveDataReactiveStreams.fromPublisher(
             updatePenyakitUsecase.run(
-                UpdatePenyakitUsecase.UpdatePenyakitParams(id, idMenu, sehat, diabetes, obesitas, anemia)
+                UpdatePenyakitUsecase.UpdatePenyakitParams(id, id_menu, sehat, diabetes, jantung,
+                    kelelahan, obesitas, sembelit)
             )
         )
     }

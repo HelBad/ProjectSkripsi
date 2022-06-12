@@ -32,11 +32,11 @@ class AuthRepositoryImpl constructor(
                 is Response.Success -> {
                     if (it.data != null) {
                         val user = User(
-                            idUser = it.data.id_user,
+                            id_user = it.data.id_user,
                             nama = it.data.nama,
                             email = it.data.email,
                             password = it.data.password,
-                            tglLahir = it.data.tgl_lahir,
+                            tgl_lahir = it.data.tgl_lahir,
                             gender = it.data.gender,
                             alamat = it.data.alamat,
                             telp = it.data.telp,
@@ -56,7 +56,6 @@ class AuthRepositoryImpl constructor(
                 }
             }
         }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -74,11 +73,11 @@ class AuthRepositoryImpl constructor(
                     is Response.Success -> {
                         if (it.data != null) {
                             val user = User(
-                                idUser = it.data.id_user,
+                                id_user = it.data.id_user,
                                 nama = it.data.nama,
                                 email = it.data.email,
                                 password = it.data.password,
-                                tglLahir = it.data.tgl_lahir,
+                                tgl_lahir = it.data.tgl_lahir,
                                 gender = it.data.gender,
                                 alamat = it.data.alamat,
                                 telp = it.data.telp,
@@ -98,7 +97,6 @@ class AuthRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -113,11 +111,11 @@ class AuthRepositoryImpl constructor(
             .take(1)
             .subscribe {
                 val user = User(
-                    idUser = it?.id_user,
+                    id_user = it?.id_user,
                     nama = it?.nama,
                     email = it?.email,
                     password = it?.password,
-                    tglLahir = it?.tgl_lahir,
+                    tgl_lahir = it?.tgl_lahir,
                     gender = it?.gender,
                     alamat = it?.alamat,
                     telp = it?.telp,
@@ -125,7 +123,6 @@ class AuthRepositoryImpl constructor(
                 )
                 result.onNext(Resource.Success(user))
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -145,7 +142,6 @@ class AuthRepositoryImpl constructor(
                     result.onNext(Resource.Error(it))
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

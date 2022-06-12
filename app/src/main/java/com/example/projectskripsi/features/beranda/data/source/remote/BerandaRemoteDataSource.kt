@@ -13,7 +13,6 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
-
 class BerandaRemoteDataSource {
     val firebase = FirebaseDatabase.getInstance()
 
@@ -29,7 +28,6 @@ class BerandaRemoteDataSource {
                             val menu = Converter.toObject(snap, MenuResponse::class.java)
                             if (menu != null) list.add(menu)
                         }
-
                         response.onNext(Response.Success(list))
                     }
                     else {
@@ -41,7 +39,6 @@ class BerandaRemoteDataSource {
                     Log.e("BerandaRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -56,7 +53,6 @@ class BerandaRemoteDataSource {
                             val penyakit = Converter.toObject(snap, PenyakitResponse::class.java)
                             if (penyakit != null) list.add(penyakit)
                         }
-
                         response.onNext(Response.Success(list))
                     }
                     else {
@@ -68,7 +64,6 @@ class BerandaRemoteDataSource {
                     Log.e("BerandaRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

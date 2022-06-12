@@ -22,7 +22,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityRiwayatAdmin : AppCompatActivity() {
     private val riwayatViewModel: RiwayatViewModel by viewModel()
-
     private lateinit var alertDialog: AlertDialog.Builder
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mRecyclerView: RecyclerView
@@ -131,8 +130,8 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
                                 ).observe(this@ActivityRiwayatAdmin) { r2 ->
                                     if (r2 is Resource.Success) {
                                         val keranjang = r2.data
-                                        idKeranjang = keranjang?.idKeranjang.toString()
-                                        this.idUser = keranjang?.idUser.toString()
+                                        idKeranjang = keranjang?.id_keranjang.toString()
+                                        this.idUser = keranjang?.id_user.toString()
                                         listKeranjang()
                                     }
                                 }
@@ -170,14 +169,14 @@ class ActivityRiwayatAdmin : AppCompatActivity() {
     private fun listKeranjang() {
         val list = arrayListOf<Keranjang>()
 
-        user?.idUser?.let { idUser ->
+        user?.id_user?.let { idUser ->
             riwayatViewModel.getKeranjang(idKeranjang, idUser).observe(this@ActivityRiwayatAdmin) {
                 if (it is Resource.Success && it.data != null) {
                     it.data.forEach { keranjang ->
-                        keranjang.idMenu?.let { idMenu ->
+                        keranjang.id_menu?.let { idMenu ->
                             riwayatViewModel.getMenu(idMenu).observe(this@ActivityRiwayatAdmin) { it1 ->
                                 if (it1 is Resource.Success) {
-                                    keranjang.namaMenu = it1.data?.namaMenu
+                                    keranjang.nama_menu = it1.data?.nama_menu
                                     list.add(keranjang)
                                     val adapter = RiwayatAdapter(list)
                                     mRecyclerView.adapter = adapter

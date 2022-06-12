@@ -5,7 +5,6 @@ import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.Response
 import com.example.projectskripsi.features.pesanan.data.source.local.PesananLocalDataSource
 import com.example.projectskripsi.features.pesanan.data.source.remote.PesananRemoteDataSource
-import com.example.projectskripsi.features.pesanan.domain.entities.Keranjang
 import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.features.pesanan.domain.entities.User
 import com.example.projectskripsi.features.pesanan.domain.repositories.PesananRepository
@@ -32,11 +31,11 @@ class PesananRepositoryImpl constructor(
             .take(1)
             .subscribe {
                 val user = User(
-                    idUser = it?.idUser,
+                    id_user = it?.id_user,
                     nama = it?.nama,
                     email = it?.email,
                     password = it?.password,
-                    tglLahir = it?.tglLahir,
+                    tgl_lahir = it?.tgl_lahir,
                     gender = it?.gender,
                     alamat = it?.alamat,
                     telp = it?.telp,
@@ -44,7 +43,6 @@ class PesananRepositoryImpl constructor(
                 )
                 result.onNext(Resource.Success(user))
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -64,15 +62,15 @@ class PesananRepositoryImpl constructor(
                         val list = arrayListOf<Pesanan>()
                         it.data.map { res ->
                             val pesanan = Pesanan(
-                                id_pesanan = res.idPesanan,
-                                id_user = res.idUser,
-                                id_keranjang = res.idKeranjang,
+                                id_pesanan = res.id_pesanan,
+                                id_user = res.id_user,
+                                id_keranjang = res.id_keranjang,
                                 catatan = res.catatan,
                                 waktu = res.waktu,
                                 lokasi = res.lokasi,
                                 subtotal = res.subtotal,
                                 ongkir = res.ongkir,
-                                total_bayar = res.totalBayar,
+                                total_bayar = res.total_bayar,
                                 status = res.status,
                                 keterangan = res.keterangan,
                             )
@@ -88,7 +86,6 @@ class PesananRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

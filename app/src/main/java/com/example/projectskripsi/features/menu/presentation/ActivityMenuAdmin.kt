@@ -18,7 +18,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityMenuAdmin : AppCompatActivity() {
     private val menuViewModel: MenuViewModel by viewModel()
-
     lateinit var namaDetail: TextView
     lateinit var imgDetail: ImageView
     lateinit var lemakDetail: TextView
@@ -58,8 +57,8 @@ class ActivityMenuAdmin : AppCompatActivity() {
             .observe(this@ActivityMenuAdmin) { res ->
                 if (res.data != null) {
                     val allocation = res.data
-                    idMenu = allocation.idMenu.toString()
-                    namaDetail.text = allocation.namaMenu
+                    idMenu = allocation.id_menu.toString()
+                    namaDetail.text = allocation.nama_menu
                     lemakDetail.text = allocation.lemak
                     proteinDetail.text = allocation.protein
                     kaloriDetail.text = allocation.kalori

@@ -21,7 +21,6 @@ import java.util.*
 
 class FragmentProfilUser : Fragment() {
     private val profilViewModel: ProfilViewModel by viewModel()
-
     private lateinit var alertDialog: AlertDialog.Builder
     private lateinit var profilNama: EditText
     private lateinit var profilEmail: EditText
@@ -35,7 +34,6 @@ class FragmentProfilUser : Fragment() {
     private lateinit var btnKeluar: Button
 
     var user: User? = null
-
     @SuppressLint("NewApi")
     val date : Calendar = Calendar.getInstance()
 
@@ -104,7 +102,7 @@ class FragmentProfilUser : Fragment() {
                 profilNama.setText(it.data?.nama)
                 profilEmail.setText(it.data?.email)
                 profilPassword.setText(it.data?.password)
-                profilTanggal.text = it.data?.tglLahir
+                profilTanggal.text = it.data?.tgl_lahir
                 profilGender.text = it.data?.gender
                 profilAlamat.setText(it.data?.alamat)
                 profilTelp.setText(it.data?.telp)
@@ -175,18 +173,18 @@ class FragmentProfilUser : Fragment() {
     private fun saveData() {
         if (user != null) {
             profilViewModel.updateUser(
-                user?.idUser ?: "",
+                user?.id_user ?: "",
                 user?.nama ?: "",
                 user?.email ?: "",
                 user?.password ?: "",
-                user?.tglLahir ?: "",
+                user?.tgl_lahir ?: "",
                 user?.gender ?: "",
                 user?.alamat ?: "",
                 user?.telp ?: "",
                 user?.level ?: ""
             ).observe(viewLifecycleOwner) { res ->
                 if (res is Resource.Success) {
-                    profilViewModel.saveUser(user?.idUser, user?.nama, user?.email, user?.password, user?.tglLahir, user?.gender, user?.alamat, user?.telp, user?.level)
+                    profilViewModel.saveUser(user?.id_user, user?.nama, user?.email, user?.password, user?.tgl_lahir, user?.gender, user?.alamat, user?.telp, user?.level)
                         .observe(viewLifecycleOwner) { res1 ->
                             if (res1 is Resource.Success) {
                                 Toast.makeText(activity, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()

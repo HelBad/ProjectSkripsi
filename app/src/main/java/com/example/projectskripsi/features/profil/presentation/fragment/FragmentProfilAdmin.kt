@@ -19,7 +19,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentProfilAdmin : Fragment() {
     private val profilViewModel: ProfilViewModel by viewModel()
-
     private lateinit var alertDialog: AlertDialog.Builder
     private lateinit var profilEmail: EditText
     private lateinit var profilPassword: EditText
@@ -103,18 +102,18 @@ class FragmentProfilAdmin : Fragment() {
     private fun saveData() {
         if (user != null) {
             profilViewModel.updateUser(
-                user?.idUser ?: "",
+                user?.id_user ?: "",
                 user?.nama ?: "",
                 user?.email ?: "",
                 user?.password ?: "",
-                user?.tglLahir ?: "",
+                user?.tgl_lahir ?: "",
                 user?.gender ?: "",
                 user?.alamat ?: "",
                 user?.telp ?: "",
                 user?.level ?: ""
             ).observe(viewLifecycleOwner) { res ->
                     if (res is Resource.Success) {
-                        profilViewModel.saveUser(user?.idUser, user?.nama, user?.email, user?.password, user?.tglLahir, user?.gender, user?.alamat, user?.telp, user?.level)
+                        profilViewModel.saveUser(user?.id_user, user?.nama, user?.email, user?.password, user?.tgl_lahir, user?.gender, user?.alamat, user?.telp, user?.level)
                             .observe(viewLifecycleOwner) { res1 ->
                                 if (res1 is Resource.Success) {
                                     Toast.makeText(activity, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()

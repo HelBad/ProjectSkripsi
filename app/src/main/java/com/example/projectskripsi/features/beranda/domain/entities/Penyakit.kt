@@ -1,10 +1,12 @@
 package com.example.projectskripsi.features.beranda.domain.entities
 
 data class Penyakit (
-    var idPenyakit: String? = null,
-    var idMenu: String? = null,
+    var id_penyakit: String? = null,
+    var id_menu: String? = null,
     var sehat: String? = null,
     var diabetes: String? = null,
+    var jantung: String? = null,
+    var kelelahan: String? = null,
     var obesitas: String? = null,
-    var anemia: String? = null,
+    var sembelit: String? = null
 )

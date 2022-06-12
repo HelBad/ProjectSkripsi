@@ -18,7 +18,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityMenuUser : AppCompatActivity() {
     private val menuViewModel: MenuViewModel by viewModel()
-
     private lateinit var namaDetail: TextView
     private lateinit var imgDetail: ImageView
     private lateinit var lemakDetail: TextView
@@ -34,7 +33,6 @@ class ActivityMenuUser : AppCompatActivity() {
     private lateinit var btnHapus: Button
 
     private var user: User? = null
-
     private var countJumlah = 0
     private var idKeranjang = ""
     private var idMenu = ""
@@ -75,8 +73,8 @@ class ActivityMenuUser : AppCompatActivity() {
                 if (res.data != null) {
                     val detail = res.data
 
-                    idMenu = detail.idMenu.toString()
-                    namaDetail.text = detail.namaMenu
+                    idMenu = detail.id_menu.toString()
+                    namaDetail.text = detail.nama_menu
                     lemakDetail.text = detail.lemak
                     proteinDetail.text = detail.protein
                     kaloriDetail.text = detail.kalori
@@ -95,7 +93,7 @@ class ActivityMenuUser : AppCompatActivity() {
                         finish()
                     }
                     btnHapus.setOnClickListener {
-                        user?.idUser?.let { it1 ->
+                        user?.id_user?.let { it1 ->
                             menuViewModel.hapusPesanan(idKeranjang, it1)
                         }
                         finish()
@@ -110,7 +108,7 @@ class ActivityMenuUser : AppCompatActivity() {
         val jumlah = jumlahDetail.text.toString()
 
         if (statusKeranjang == "ready") {
-            user?.idUser?.let {
+            user?.id_user?.let {
                 menuViewModel.updatePesanan(
                     idKeranjang,
                     jumlah,
@@ -119,7 +117,7 @@ class ActivityMenuUser : AppCompatActivity() {
                 )
             }
         } else {
-            user?.idUser?.let {
+            user?.id_user?.let {
                 menuViewModel.buatPesanan(it, idMenu, jumlah, total)
                     .observe(this@ActivityMenuUser) { res ->
                         if (res is Resource.Success && res.data != null) {
@@ -132,14 +130,13 @@ class ActivityMenuUser : AppCompatActivity() {
 
     //Cek Data Pesanan
     private fun cekData() {
-        user?.idUser?.let {
+        user?.id_user?.let {
             menuViewModel.getDetailKeranjang(idMenu, it).observe(this@ActivityMenuUser) { res ->
                 if (res is Resource.Success) {
                     val keranjang = res.data
-                    if (keranjang?.idKeranjang != null) {
-                        jumlahDetail.text =
-                            Editable.Factory.getInstance().newEditable(keranjang.jumlah)
-                        idKeranjang = keranjang.idKeranjang.toString()
+                    if (keranjang?.id_keranjang != null) {
+                        jumlahDetail.text = Editable.Factory.getInstance().newEditable(keranjang.jumlah)
+                        idKeranjang = keranjang.id_keranjang.toString()
                         statusKeranjang = "ready"
                     }
                 }

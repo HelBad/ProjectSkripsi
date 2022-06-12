@@ -32,11 +32,11 @@ class CheckoutRepositoryImpl constructor(
             .take(1)
             .subscribe {
                 val user = User(
-                    idUser = it?.idUser,
+                    id_user = it?.id_user,
                     nama = it?.nama,
                     email = it?.email,
                     password = it?.password,
-                    tglLahir = it?.tglLahir,
+                    tgl_lahir = it?.tgl_lahir,
                     gender = it?.gender,
                     alamat = it?.alamat,
                     telp = it?.telp,
@@ -44,7 +44,6 @@ class CheckoutRepositoryImpl constructor(
                 )
                 result.onNext(Resource.Success(user))
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -82,7 +81,6 @@ class CheckoutRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -101,9 +99,9 @@ class CheckoutRepositoryImpl constructor(
                         val res = it.data
                         if (res != null) {
                             val keranjang = Keranjang(
-                                idKeranjang = res.id_keranjang,
-                                idUser = res.id_user,
-                                idMenu = res.id_menu,
+                                id_keranjang = res.id_keranjang,
+                                id_user = res.id_user,
+                                id_menu = res.id_menu,
                                 jumlah = res.jumlah,
                                 total = res.total,
                             )
@@ -120,7 +118,6 @@ class CheckoutRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -139,12 +136,12 @@ class CheckoutRepositoryImpl constructor(
                         val list = arrayListOf<Keranjang>()
                         it.data.map { res ->
                             val keranjang = Keranjang(
-                                    idKeranjang = res.id_keranjang,
-                                    idUser = res.id_user,
-                                    idMenu = res.id_menu,
+                                    id_keranjang = res.id_keranjang,
+                                    id_user = res.id_user,
+                                    id_menu = res.id_menu,
                                     jumlah = res.jumlah,
                                     total = res.total,
-                                    namaMenu = res.nama_menu,
+                                    nama_menu = res.nama_menu,
                                 )
                             list.add(keranjang)
                         }
@@ -158,7 +155,6 @@ class CheckoutRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -177,8 +173,8 @@ class CheckoutRepositoryImpl constructor(
                         val res = it.data
                         if (res != null) {
                             val menu = Menu(
-                                idMenu = res.idMenu,
-                                namaMenu = res.namaMenu,
+                                id_menu = res.id_menu,
+                                nama_menu = res.nama_menu,
                                 deskripsi = res.deskripsi,
                                 lemak = res.lemak,
                                 protein = res.protein,
@@ -200,7 +196,6 @@ class CheckoutRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

@@ -1,6 +1,5 @@
 package com.example.projectskripsi.features.checkout.data.responses
 
-
 import com.google.gson.annotations.SerializedName
 
 data class KeranjangResponse(

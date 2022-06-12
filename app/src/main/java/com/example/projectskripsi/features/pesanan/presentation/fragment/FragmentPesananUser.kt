@@ -20,7 +20,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentPesananUser : Fragment() {
     private val pesananViewModel: PesananViewModel by viewModel()
-
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var btnDiproses: Button
@@ -104,7 +103,7 @@ class FragmentPesananUser : Fragment() {
 
     //List Pesanan
     private fun listData(status: String) {
-        user?.idUser?.let {
+        user?.id_user?.let {
             pesananViewModel.getPesanan(status, it)
                 .observe(viewLifecycleOwner) { res ->
                     if (res.data != null) {
@@ -116,7 +115,6 @@ class FragmentPesananUser : Fragment() {
                             intent.putExtra("status", pesanan.status)
                             startActivity(intent)
                         }
-
                         mRecyclerView.adapter = adapter
                     }
                 }

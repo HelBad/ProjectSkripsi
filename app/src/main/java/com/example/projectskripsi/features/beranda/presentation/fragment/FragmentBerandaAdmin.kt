@@ -17,7 +17,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentBerandaAdmin : Fragment() {
     private val berandaViewModel: BerandaViewModel by viewModel()
-
     lateinit var mLayoutManager: LinearLayoutManager
     lateinit var mRecyclerView: RecyclerView
 
@@ -61,13 +60,11 @@ class FragmentBerandaAdmin : Fragment() {
             val adapter = res.data?.let {
                 BerandaAdminAdapter(it)
             }
-
             adapter?.onItemClick = { menu ->
                 val intent = Intent(context, ActivityMenuAdmin::class.java)
-                intent.putExtra("id_menu", menu.idMenu)
+                intent.putExtra("id_menu", menu.id_menu)
                 startActivity(intent)
             }
-
             mRecyclerView.adapter = adapter
         }
     }

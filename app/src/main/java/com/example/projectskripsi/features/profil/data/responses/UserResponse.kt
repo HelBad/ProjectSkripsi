@@ -1,6 +1,5 @@
 package com.example.projectskripsi.features.profil.data.responses
 
-
 import com.google.gson.annotations.SerializedName
 
 data class UserResponse(

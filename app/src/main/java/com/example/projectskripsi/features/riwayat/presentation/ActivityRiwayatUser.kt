@@ -1,7 +1,6 @@
 package com.example.projectskripsi.features.riwayat.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,7 +19,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ActivityRiwayatUser : AppCompatActivity() {
     private val riwayatViewModel: RiwayatViewModel by viewModel()
-
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var identitasRiwayat: TextView
@@ -35,7 +33,6 @@ class ActivityRiwayatUser : AppCompatActivity() {
 
     var idUser = ""
     var idKeranjang = ""
-
     private var user: User? = null
     private var pesanan: Pesanan? = null
 
@@ -113,8 +110,8 @@ class ActivityRiwayatUser : AppCompatActivity() {
             ).observe(this@ActivityRiwayatUser) {
                 if (it is Resource.Success) {
                     val keranjang = it.data
-                    idKeranjang = keranjang?.idKeranjang.toString()
-                    idUser = keranjang?.idUser.toString()
+                    idKeranjang = keranjang?.id_keranjang.toString()
+                    idUser = keranjang?.id_user.toString()
                     listKeranjang()
                 }
             }
@@ -128,10 +125,10 @@ class ActivityRiwayatUser : AppCompatActivity() {
         riwayatViewModel.getKeranjang(idKeranjang, idUser).observe(this@ActivityRiwayatUser) {
             if (it is Resource.Success && it.data != null) {
                 it.data.forEach { keranjang ->
-                    keranjang.idMenu?.let { idMenu ->
+                    keranjang.id_menu?.let { idMenu ->
                         riwayatViewModel.getMenu(idMenu).observe(this@ActivityRiwayatUser) { it1 ->
                             if (it1 is Resource.Success) {
-                                keranjang.namaMenu = it1.data?.namaMenu
+                                keranjang.nama_menu = it1.data?.nama_menu
                                 list.add(keranjang)
                                 val adapter = RiwayatAdapter(list)
                                 mRecyclerView.adapter = adapter

@@ -44,7 +44,7 @@ class BerandaAdminAdapter(
             val deskripsiListmenu = mView.findViewById(R.id.deskripsiListmenuAdmin) as TextView
             val imgListmenu = mView.findViewById(R.id.imgListmenuAdmin) as ImageView
 
-            namaListmenu.text = menu.namaMenu
+            namaListmenu.text = menu.nama_menu
             hargaListmenu.text = menu.harga?.toInt()?.let { Rupiah.format(it) }
             deskripsiListmenu.text = menu.deskripsi
             Picasso.get().load(menu.gambar).into(imgListmenu)

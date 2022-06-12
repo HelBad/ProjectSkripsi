@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.checkout.domain.entities.Keranjang
 import com.example.projectskripsi.features.checkout.domain.entities.Menu
 import com.example.projectskripsi.features.checkout.domain.entities.User
@@ -18,7 +18,7 @@ class CheckoutViewModel(
     private val getDetailMenuUsecase: GetDetailMenuUsecase,
 ) : ViewModel() {
     fun getUser(): LiveData<Resource<User?>> {
-        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(UseCase.NoParams()))
+        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(Usecase.NoParams()))
     }
 
     fun getDetailKeranjang(idUser: String): LiveData<Resource<Keranjang?>> {

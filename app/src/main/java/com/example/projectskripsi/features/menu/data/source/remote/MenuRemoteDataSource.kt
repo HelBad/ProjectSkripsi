@@ -40,7 +40,6 @@ class MenuRemoteDataSource {
                     Log.e("DetailRemoteDataSource", error.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -68,9 +67,7 @@ class MenuRemoteDataSource {
                     response.onNext(Response.Error(error.message))
                     Log.e("DetailRemoteDataSource", error.message)
                 }
-            }
-            )
-
+            })
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -91,7 +88,6 @@ class MenuRemoteDataSource {
             .addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -120,7 +116,6 @@ class MenuRemoteDataSource {
             .addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -151,7 +146,6 @@ class MenuRemoteDataSource {
             .addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -196,7 +190,6 @@ class MenuRemoteDataSource {
             .addOnFailureListener {
                 response.onNext(Response.Error(it.message.toString()))
             }
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

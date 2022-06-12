@@ -15,11 +15,11 @@ class PesananLocalDataSource {
         )
 
         val user = UserResponse(
-            idUser = sp.getString("id_user", null),
+            id_user = sp.getString("id_user", null),
             nama = sp.getString("nama", null),
             email = sp.getString("email", null),
             password = sp.getString("password", null),
-            tglLahir = sp.getString("tgl_lahir", null),
+            tgl_lahir = sp.getString("tgl_lahir", null),
             gender = sp.getString("gender", null),
             alamat = sp.getString("alamat", null),
             telp = sp.getString("telp", null),

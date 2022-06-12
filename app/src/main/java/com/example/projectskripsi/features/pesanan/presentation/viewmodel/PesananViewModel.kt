@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.ViewModel
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
-import com.example.projectskripsi.features.pesanan.domain.entities.Keranjang
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.pesanan.domain.entities.Pesanan
 import com.example.projectskripsi.features.pesanan.domain.entities.User
 import com.example.projectskripsi.features.pesanan.domain.usecases.*
@@ -15,7 +14,7 @@ class PesananViewModel(
     private val getPesananUsecase: GetPesananUsecase
 ) : ViewModel() {
     fun getUser(): LiveData<Resource<User?>> {
-        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(UseCase.NoParams()))
+        return LiveDataReactiveStreams.fromPublisher(getUserUsecase.run(Usecase.NoParams()))
     }
 
     fun getPesanan(status: String, idUser: String?): LiveData<Resource<ArrayList<Pesanan>>> {

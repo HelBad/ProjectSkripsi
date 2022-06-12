@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectskripsi.R
-import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatUser
 import com.example.projectskripsi.features.pesanan.presentation.adapter.PesananAdapter
 import com.example.projectskripsi.features.pesanan.presentation.viewmodel.PesananViewModel
 import com.example.projectskripsi.features.riwayat.presentation.ActivityRiwayatAdmin
@@ -19,7 +18,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class FragmentPesananAdmin : Fragment() {
     private val pesananViewModel: PesananViewModel by viewModel()
-
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var btnDiproses: Button
@@ -100,7 +98,6 @@ class FragmentPesananAdmin : Fragment() {
                         intent.putExtra("status", pesanan.status)
                         startActivity(intent)
                     }
-
                     mRecyclerView.adapter = adapter
                 }
             }

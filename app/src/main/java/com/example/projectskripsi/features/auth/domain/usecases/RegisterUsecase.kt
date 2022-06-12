@@ -1,13 +1,13 @@
 package com.example.projectskripsi.features.auth.domain.usecases
 
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.auth.domain.entities.User
 import com.example.projectskripsi.features.auth.domain.repositories.AuthRepository
 import io.reactivex.Flowable
 
 class RegisterUsecase(private val repository: AuthRepository) :
-    UseCase<Flowable<Resource<User?>>, RegisterUsecase.RegisterParams>() {
+    Usecase<Flowable<Resource<User?>>, RegisterUsecase.RegisterParams>() {
 
     override fun run(params: RegisterParams) = repository.register(
         nama = params.nama.toString(),

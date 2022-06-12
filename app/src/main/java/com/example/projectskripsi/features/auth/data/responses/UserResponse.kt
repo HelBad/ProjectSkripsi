@@ -1,6 +1,5 @@
 package com.example.projectskripsi.features.auth.data.responses
 
-
 import com.google.gson.annotations.SerializedName
 
 data class UserResponse(

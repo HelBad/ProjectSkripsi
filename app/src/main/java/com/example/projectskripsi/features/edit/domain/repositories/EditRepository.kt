@@ -2,7 +2,6 @@ package com.example.projectskripsi.features.edit.domain.repositories
 
 import android.net.Uri
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.features.edit.data.responses.PenyakitResponse
 import com.example.projectskripsi.features.edit.domain.entities.Menu
 import com.example.projectskripsi.features.edit.domain.entities.Penyakit
 import io.reactivex.Flowable
@@ -10,10 +9,10 @@ import io.reactivex.Flowable
 interface EditRepository {
     fun getDetailMenu(id: String): Flowable<Resource<Menu?>>
 
-    fun getDetailPenyakit(idMenu: String): Flowable<Resource<Penyakit?>>
+    fun getDetailPenyakit(id_menu: String): Flowable<Resource<Penyakit?>>
 
     fun buatMenu(
-        nama: String,
+        nama_menu: String,
         deskripsi: String,
         lemak: String,
         protein: String,
@@ -24,8 +23,8 @@ interface EditRepository {
     ): Flowable<Resource<String?>>
 
     fun updateMenu(
-        id: String,
-        nama: String,
+        id_menu: String,
+        nama_menu: String,
         deskripsi: String,
         lemak: String,
         protein: String,
@@ -36,24 +35,28 @@ interface EditRepository {
     ): Flowable<Resource<String?>>
 
     fun buatPenyakit(
-        idMenu: String,
+        id_menu: String,
         sehat: String,
         diabetes: String,
+        jantung: String,
+        kelelahan: String,
         obesitas: String,
-        anemia: String,
+        sembelit: String
     ): Flowable<Resource<String?>>
 
     fun updatePenyakit(
-        id: String,
-        idMenu: String,
+        id_penyakit: String,
+        id_menu: String,
         sehat: String,
         diabetes: String,
+        jantung: String,
+        kelelahan: String,
         obesitas: String,
-        anemia: String,
+        sembelit: String
     ): Flowable<Resource<String?>>
 
     fun uploadGambar(
-        idMenu: String,
-        uri: Uri,
+        id_menu: String,
+        uri: Uri
     ): Flowable<Resource<Uri?>>
 }

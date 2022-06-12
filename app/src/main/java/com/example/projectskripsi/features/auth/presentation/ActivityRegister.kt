@@ -152,11 +152,11 @@ class ActivityRegister : AppCompatActivity() {
                     val user = res.data
                     if (user != null) {
                         viewModel.saveUser(
-                            user.idUser,
+                            user.id_user,
                             user.nama,
                             user.email,
                             user.password,
-                            user.tglLahir,
+                            user.tgl_lahir,
                             user.gender,
                             user.alamat,
                             user.telp,
@@ -165,7 +165,6 @@ class ActivityRegister : AppCompatActivity() {
                         val intent = Intent(this@ActivityRegister, ActivityUtamaUser::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
-
                     }
                     else {
                         btnRegister.isClickable = true

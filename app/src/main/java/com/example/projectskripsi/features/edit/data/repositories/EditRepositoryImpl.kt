@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import com.example.projectskripsi.core.Resource
 import com.example.projectskripsi.core.Response
-import com.example.projectskripsi.features.edit.data.responses.PenyakitResponse
 import com.example.projectskripsi.features.edit.data.source.remote.EditRemoteDataSource
 import com.example.projectskripsi.features.edit.domain.entities.Menu
 import com.example.projectskripsi.features.edit.domain.entities.Penyakit
@@ -19,11 +18,11 @@ class EditRepositoryImpl constructor(
     private val remoteDataSource: EditRemoteDataSource,
 ) : EditRepository {
     @SuppressLint("CheckResult")
-    override fun getDetailMenu(id: String): Flowable<Resource<Menu?>> {
+    override fun getDetailMenu(id_menu: String): Flowable<Resource<Menu?>> {
         val result = PublishSubject.create<Resource<Menu?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.getDetailMenu(id)
+        remoteDataSource.getDetailMenu(id_menu)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -33,8 +32,8 @@ class EditRepositoryImpl constructor(
                         val res = it.data
                         if (res != null) {
                             val menu = Menu(
-                                idMenu = res.id_menu,
-                                namaMenu = res.nama_menu,
+                                id_menu = res.id_menu,
+                                nama_menu = res.nama_menu,
                                 deskripsi = res.deskripsi,
                                 lemak = res.lemak,
                                 protein = res.protein,
@@ -56,16 +55,15 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     @SuppressLint("CheckResult")
-    override fun getDetailPenyakit(idMenu: String): Flowable<Resource<Penyakit?>> {
+    override fun getDetailPenyakit(id_menu: String): Flowable<Resource<Penyakit?>> {
         val result = PublishSubject.create<Resource<Penyakit?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.getDetailPenyakit(idMenu)
+        remoteDataSource.getDetailPenyakit(id_menu)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -75,12 +73,14 @@ class EditRepositoryImpl constructor(
                         val res = it.data
                         if (res != null) {
                             val penyakit = Penyakit(
-                                idPenyakit = res.id_penyakit,
-                                idMenu = res.id_menu,
+                                id_penyakit = res.id_penyakit,
+                                id_menu = res.id_menu,
                                 sehat = res.sehat,
                                 diabetes = res.diabetes,
+                                jantung = res.jantung,
+                                kelelahan = res.kelelahan,
                                 obesitas = res.obesitas,
-                                anemia = res.anemia,
+                                sembelit = res.sembelit
                             )
                             result.onNext(Resource.Success(penyakit))
                         } else {
@@ -95,7 +95,6 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -144,7 +143,6 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -195,22 +193,23 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     @SuppressLint("CheckResult")
     override fun buatPenyakit(
-        idMenu: String,
+        id_menu: String,
         sehat: String,
         diabetes: String,
+        jantung: String,
+        kelelahan: String,
         obesitas: String,
-        anemia: String
+        sembelit: String
     ): Flowable<Resource<String?>> {
         val result = PublishSubject.create<Resource<String?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.buatPenyakit(idMenu, sehat, diabetes, obesitas, anemia)
+        remoteDataSource.buatPenyakit(id_menu, sehat, diabetes, jantung, kelelahan, obesitas, sembelit)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -232,23 +231,24 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     @SuppressLint("CheckResult")
     override fun updatePenyakit(
-        id: String,
-        idMenu: String,
+        id_penyakit: String,
+        id_menu: String,
         sehat: String,
         diabetes: String,
+        jantung: String,
+        kelelahan: String,
         obesitas: String,
-        anemia: String
+        sembelit: String
     ): Flowable<Resource<String?>> {
         val result = PublishSubject.create<Resource<String?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.updatePenyakit(id, idMenu, sehat, diabetes, obesitas, anemia)
+        remoteDataSource.updatePenyakit(id_penyakit, id_menu, sehat, diabetes, jantung, kelelahan, obesitas, sembelit)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -270,16 +270,15 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     @SuppressLint("CheckResult")
-    override fun uploadGambar(idMenu: String, uri: Uri): Flowable<Resource<Uri?>> {
+    override fun uploadGambar(id_menu: String, uri: Uri): Flowable<Resource<Uri?>> {
         val result = PublishSubject.create<Resource<Uri?>>()
         result.onNext(Resource.Loading())
 
-        remoteDataSource.uploadGambar(idMenu, uri)
+        remoteDataSource.uploadGambar(id_menu, uri)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
@@ -301,8 +300,6 @@ class EditRepositoryImpl constructor(
                     }
                 }
             }
-
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
-
 }

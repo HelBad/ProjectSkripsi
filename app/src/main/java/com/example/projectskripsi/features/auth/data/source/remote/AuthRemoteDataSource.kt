@@ -31,7 +31,6 @@ class AuthRemoteDataSource {
                                 break
                             }
                         }
-
                         if (user == null) {
                             response.onNext(Response.Empty)
                         }
@@ -45,7 +44,6 @@ class AuthRemoteDataSource {
                     Log.e("AuthRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -77,7 +75,6 @@ class AuthRemoteDataSource {
                     Log.e("AuthRemoteDataSource", p0.message)
                 }
             })
-
         return response.toFlowable(BackpressureStrategy.BUFFER)
     }
 }

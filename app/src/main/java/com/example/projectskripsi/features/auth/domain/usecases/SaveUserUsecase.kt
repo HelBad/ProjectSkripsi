@@ -1,12 +1,12 @@
 package com.example.projectskripsi.features.auth.domain.usecases
 
 import com.example.projectskripsi.core.Resource
-import com.example.projectskripsi.core.UseCase
+import com.example.projectskripsi.core.Usecase
 import com.example.projectskripsi.features.auth.domain.repositories.AuthRepository
 import io.reactivex.Flowable
 
 class SaveUserUsecase(private val repository: AuthRepository) :
-    UseCase<Flowable<Resource<String?>>, SaveUserUsecase.SaveUserParams>() {
+    Usecase<Flowable<Resource<String?>>, SaveUserUsecase.SaveUserParams>() {
 
     override fun run(params: SaveUserParams) = repository.saveUser(
         id = params.id,

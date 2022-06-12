@@ -52,11 +52,11 @@ class ActivityLogin : AppCompatActivity() {
                             val user = res.data
                             if (user != null) {
                                 viewModel.saveUser(
-                                    user.idUser,
+                                    user.id_user,
                                     user.nama,
                                     user.email,
                                     user.password,
-                                    user.tglLahir,
+                                    user.tgl_lahir,
                                     user.gender,
                                     user.alamat,
                                     user.telp,
