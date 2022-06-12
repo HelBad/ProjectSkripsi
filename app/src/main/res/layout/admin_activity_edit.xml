@@ -199,7 +199,7 @@
                     android:background="@android:color/white"
                     android:gravity="center_vertical"
                     android:hint="Masukkan Lemak"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/gray"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -236,7 +236,7 @@
                     android:background="@android:color/white"
                     android:gravity="center_vertical"
                     android:hint="Masukkan Protein"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/gray"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -273,7 +273,7 @@
                     android:background="@android:color/white"
                     android:gravity="center_vertical"
                     android:hint="Masukkan Kalori"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/gray"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -310,7 +310,7 @@
                     android:background="@android:color/white"
                     android:gravity="center_vertical"
                     android:hint="Masukkan Karbohidrat"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/gray"
                     android:textSize="15dp" />
             </LinearLayout>

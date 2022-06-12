@@ -60,7 +60,7 @@ class FragmentBeranda : Fragment() {
 
     //Pilih Penyakit
     fun pilihPenyakit() {
-        val rekomendasiPenyakit = arrayOf("Sehat", "Obesitas", "Diabetes", "Anemia")
+        val rekomendasiPenyakit = arrayOf("Sehat", "Diabetes", "Jantung", "Kelelahan", "Obesitas", "Sembelit")
         spinnerBeranda.adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1, rekomendasiPenyakit)
         spinnerBeranda.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
