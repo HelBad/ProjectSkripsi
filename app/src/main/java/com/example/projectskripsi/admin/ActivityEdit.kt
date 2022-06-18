@@ -239,7 +239,7 @@ class ActivityEdit : AppCompatActivity() {
                 lemakK5 = 1
             }
             lemakMenu.text.toString().toDouble() > 25.0 -> {
-                lemakK1 = 1
+                lemakK1 = 0
                 lemakK2 = 0
                 lemakK3 = 1
                 lemakK4 = 0

@@ -42,10 +42,10 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
         for (list in listPenyakit) {
             if(list.id_menu == menu.id_menu) {
                 if(pilihKategori == "Sehat") {
-                    if(list.sehat.toDouble() <= 1.375) {
+                    if(list.sehat.toDouble() <= 2.4) {
                         kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                    } else if(list.sehat.toDouble() > 1.375 && list.sehat.toDouble() <= 3.125) {
+                    } else if(list.sehat.toDouble() > 2.4 && list.sehat.toDouble() <= 3.2) {
                         kategoriListmenu.text = "Kategori : Kurang Baik"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
                     } else {
@@ -53,10 +53,10 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     }
                 } else if(pilihKategori == "Diabetes") {
-                    if (list.diabetes.toDouble() <= 1.375) {
+                    if (list.diabetes.toDouble() <= 2.4) {
                         kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                    } else if (list.diabetes.toDouble() > 1.375 && list.diabetes.toDouble() <= 3.125) {
+                    } else if (list.diabetes.toDouble() > 2.4 && list.diabetes.toDouble() <= 3.2) {
                         kategoriListmenu.text = "Kategori : Kurang Baik"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
                     } else {
@@ -64,10 +64,10 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     }
                 } else if(pilihKategori == "Jantung") {
-                    if (list.jantung.toDouble() <= 1.375) {
+                    if (list.jantung.toDouble() <= 2.4) {
                         kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                    } else if (list.jantung.toDouble() > 1.375 && list.jantung.toDouble() <= 3.125) {
+                    } else if (list.jantung.toDouble() > 2.4 && list.jantung.toDouble() <= 3.2) {
                         kategoriListmenu.text = "Kategori : Kurang Baik"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
                     } else {
@@ -75,10 +75,10 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     }
                 } else if(pilihKategori == "Kelelahan") {
-                    if (list.kelelahan.toDouble() <= 1.375) {
+                    if (list.kelelahan.toDouble() <= 2.4) {
                         kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                    } else if (list.kelelahan.toDouble() > 1.375 && list.kelelahan.toDouble() <= 3.125) {
+                    } else if (list.kelelahan.toDouble() > 2.4 && list.kelelahan.toDouble() <= 3.2) {
                         kategoriListmenu.text = "Kategori : Kurang Baik"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
                     } else {
@@ -86,10 +86,10 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     }
                 } else if(pilihKategori == "Obesitas") {
-                    if (list.obesitas.toDouble() <= 1.375) {
+                    if (list.obesitas.toDouble() <= 2.4) {
                         kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                    } else if (list.obesitas.toDouble() > 1.375 && list.obesitas.toDouble() <= 3.125) {
+                    } else if (list.obesitas.toDouble() > 2.4 && list.obesitas.toDouble() <= 3.2) {
                         kategoriListmenu.text = "Kategori : Kurang Baik"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
                     } else {
@@ -97,10 +97,10 @@ class ViewholderBeranda(itemView: View): RecyclerView.ViewHolder(itemView) {
                         kategoriListmenu.setTextColor(Color.parseColor("#FF239D58"))
                     }
                 } else if(pilihKategori == "Sembelit") {
-                    if (list.sembelit.toDouble() <= 1.375) {
+                    if (list.sembelit.toDouble() <= 2.4) {
                         kategoriListmenu.text = "Kategori : Buruk Dikonsumsi"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF0000"))
-                    } else if (list.sembelit.toDouble() > 1.375 && list.sembelit.toDouble() <= 3.125) {
+                    } else if (list.sembelit.toDouble() > 2.4 && list.sembelit.toDouble() <= 3.2) {
                         kategoriListmenu.text = "Kategori : Kurang Baik"
                         kategoriListmenu.setTextColor(Color.parseColor("#FFFF6333"))
                     } else {
